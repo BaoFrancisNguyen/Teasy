@@ -1,0 +1,509 @@
+{% extends "base.html" %}
+
+{% block title %}Comparaison des Segments Clients{% endblock %}
+
+{% block extra_css %}
+<style>
+    .segment-card {
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        overflow: hidden;
+        border-left: 5px solid transparent;
+    }
+    
+    .segment-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .segment-card.tech_enthusiast {
+        border-left-color: #3b82f6;
+    }
+    
+    .segment-card.practical_user {
+        border-left-color: #9333ea;
+    }
+    
+    .segment-card.budget_conscious {
+        border-left-color: #f59e0b;
+    }
+    
+    .segment-card.quality_seeker {
+        border-left-color: #10b981;
+    }
+    
+    .segment-card.brand_loyal {
+        border-left-color: #ef4444;
+    }
+    
+    .segment-card.eco_conscious {
+        border-left-color: #0ea5e9;
+    }
+    
+    .segment-badge {
+        font-size: 0.85rem;
+        padding: 0.35rem 0.65rem;
+        border-radius: 50rem;
+    }
+    
+    .segment-badge.tech_enthusiast {
+        background-color: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+        border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .segment-badge.practical_user {
+        background-color: rgba(147, 51, 234, 0.1);
+        color: #9333ea;
+        border: 1px solid rgba(147, 51, 234, 0.2);
+    }
+    
+    .segment-badge.budget_conscious {
+        background-color: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+        border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    
+    .segment-badge.quality_seeker {
+        background-color: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    
+    .segment-badge.brand_loyal {
+        background-color: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    
+    .segment-badge.eco_conscious {
+        background-color: rgba(14, 165, 233, 0.1);
+        color: #0ea5e9;
+        border: 1px solid rgba(14, 165, 233, 0.2);
+    }
+    
+    .segment-feature {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 12px;
+        border-radius: 4px;
+        margin-bottom: 5px;
+        background-color: #f8f9fa;
+    }
+    
+    .feature-name {
+        font-weight: 500;
+    }
+    
+    .feature-value {
+        font-weight: 600;
+    }
+    
+    .spider-chart {
+        height: 300px;
+    }
+    
+    .brand-pref-chart {
+        height: 200px;
+    }
+    
+    .word-cloud {
+        height: 200px;
+        text-align: center;
+    }
+    
+    .aspect-item {
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .aspect-item.positive {
+        background-color: rgba(16, 185, 129, 0.1);
+    }
+    
+    .aspect-item.neutral {
+        background-color: rgba(245, 158, 11, 0.1);
+    }
+    
+    .aspect-item.negative {
+        background-color: rgba(239, 68, 68, 0.1);
+    }
+    
+    .overview-stat {
+        text-align: center;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        background-color: #f8f9fa;
+    }
+    
+    .overview-stat h3 {
+        margin-bottom: 0;
+        font-weight: 600;
+    }
+    
+    .overview-stat p {
+        color: #6c757d;
+        margin-bottom: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="bi bi-people"></i> Comparaison des Segments Clients</h1>
+        <div>
+            <a href="{{ url_for('sentiment_analysis') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Retour à l'analyse
+            </a>
+            <button class="btn btn-primary ms-2" id="exportReportBtn">
+                <i class="bi bi-file-earmark-pdf"></i> Exporter
+            </button>
+        </div>
+    </div>
+    
+    <!-- Vue d'ensemble des segments -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-pie-chart"></i> Répartition des segments clients</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="segmentsDistributionChart" style="height: 350px;"></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        {% for segment in segments %}
+                        <div class="col-md-6">
+                            <div class="overview-stat">
+                                <h3>{{ segment.count }}</h3>
+                                <p>{{ segment.name }}</p>
+                                <div class="progress mt-2" style="height: 6px;">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ segment.percentage }}%; background-color: {{ segment.color }};" aria-valuenow="{{ segment.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Analyse comparative -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-graph-up"></i> Analyse comparative des segments</h5>
+        </div>
+        <div class="card-body">
+            <div id="radarComparisonChart" style="height: 450px;"></div>
+        </div>
+    </div>
+    
+    <!-- Cartes détaillées des segments -->
+    <div class="row">
+        {% for segment in segments %}
+        <div class="col-md-4 mb-4">
+            <div class="card segment-card {{ segment.id }} h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <span class="segment-badge {{ segment.id }}">{{ segment.name }}</span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6>Profil type</h6>
+                        <p>{{ segment.description }}</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Caractéristiques</h6>
+                        {% for feature in segment.features %}
+                        <div class="segment-feature">
+                            <span class="feature-name">{{ feature.name }}</span>
+                            <span class="feature-value">{{ feature.value }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Préférences et attentes</h6>
+                        <ul class="list-group list-group-flush">
+                            {% for preference in segment.preferences %}
+                            <li class="list-group-item">{{ preference }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Préférences de marques par segment -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-award"></i> Préférences de marques par segment</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="brandPreferencesChart" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sentiment par aspect et segment -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-tags"></i> Sentiment par aspect et segment</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="aspectSentimentHeatmap" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mots-clés distinctifs par segment -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-chat-quote"></i> Mots-clés distinctifs par segment</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for segment in segments %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">
+                                <span class="segment-badge {{ segment.id }}">{{ segment.name }}</span>
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="wordCloud{{ segment.id }}" class="word-cloud"></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Récupérer les données de segmentation
+    const segmentData = {{ segment_data|tojson }};
+    
+    // Initialiser les graphiques
+    initSegmentCharts(segmentData);
+    
+    // Gestionnaire pour l'exportation du rapport
+    document.getElementById('exportReportBtn').addEventListener('click', function() {
+        exportToPDF();
+    });
+});
+
+// Fonction pour initialiser les graphiques
+function initSegmentCharts(data) {
+    // Graphique de distribution des segments
+    const segmentNames = data.segments.map(s => s.name);
+    const segmentCounts = data.segments.map(s => s.count);
+    const segmentColors = data.segments.map(s => s.color);
+    
+    const pieData = [{
+        type: 'pie',
+        labels: segmentNames,
+        values: segmentCounts,
+        marker: {
+            colors: segmentColors
+        },
+        textinfo: 'percent+label',
+        hoverinfo: 'label+value+percent',
+        hole: 0.4
+    }];
+    
+    Plotly.newPlot('segmentsDistributionChart', pieData, {
+        title: 'Répartition des segments clients',
+        height: 350
+    });
+    
+    // Graphique radar de comparaison
+    const aspects = data.radar_aspects || [];
+    
+    // Préparer les traces pour chaque segment
+    const radarTraces = data.segments.map(segment => {
+        return {
+            type: 'scatterpolar',
+            r: aspects.map(aspect => segment.aspect_scores[aspect] || 0),
+            theta: aspects,
+            fill: 'toself',
+            name: segment.name,
+            line: {
+                color: segment.color
+            }
+        };
+    });
+    
+    Plotly.newPlot('radarComparisonChart', radarTraces, {
+        polar: {
+            radialaxis: {
+                visible: true,
+                range: [0, 1]
+            }
+        },
+        showlegend: true,
+        height: 450
+    });
+    
+    // Graphique des préférences de marques
+    const brands = data.top_brands || [];
+    const brandTraces = data.segments.map(segment => {
+        return {
+            x: brands,
+            y: brands.map(brand => segment.brand_preferences[brand] || 0),
+            type: 'bar',
+            name: segment.name,
+            marker: {
+                color: segment.color
+            }
+        };
+    });
+    
+    Plotly.newPlot('brandPreferencesChart', brandTraces, {
+        title: 'Préférences de marques par segment',
+        barmode: 'group',
+        height: 400,
+        margin: { t: 30, r: 10, l: 50, b: 100 },
+        xaxis: {
+            tickangle: -45
+        }
+    });
+    
+    // Heatmap des sentiments par aspect et segment
+    const aspectSentimentZ = data.segments.map(segment => {
+        return aspects.map(aspect => segment.aspect_scores[aspect] || 0);
+    });
+    
+    const heatmapData = [{
+        z: aspectSentimentZ,
+        x: aspects,
+        y: segmentNames,
+        type: 'heatmap',
+        colorscale: [
+            [0, '#ef4444'],    // Rouge pour les sentiments négatifs
+            [0.5, '#f59e0b'],  // Orange pour les sentiments neutres
+            [1, '#10b981']     // Vert pour les sentiments positifs
+        ],
+        zmin: -1,
+        zmax: 1
+    }];
+    
+    Plotly.newPlot('aspectSentimentHeatmap', heatmapData, {
+        title: 'Sentiment par aspect et segment',
+        height: 400,
+        margin: { t: 30, r: 50, l: 150, b: 80 },
+        xaxis: {
+            tickangle: -45
+        }
+    });
+    
+    // Nuages de mots-clés par segment
+    data.segments.forEach(segment => {
+        if (segment.keywords && segment.keywords.length > 0) {
+            createWordCloud(`wordCloud${segment.id}`, segment.keywords);
+        }
+    });
+}
+
+// Fonction pour créer un nuage de mots-clés
+function createWordCloud(elementId, keywords) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    
+    // Utiliser D3 Cloud pour créer le nuage de mots-clés
+    // (Implémentation simplifiée)
+    const maxFreq = Math.max(...keywords.map(kw => kw.count));
+    const words = keywords.map(kw => ({
+        text: kw.word,
+        size: 10 + (kw.count / maxFreq * 30)
+    }));
+    
+    // Afficher les mots-clés comme des pills pour la démo
+    element.innerHTML = '';
+    words.forEach(word => {
+        const span = document.createElement('span');
+        span.textContent = word.text;
+        span.style.fontSize = `${word.size}px`;
+        span.style.display = 'inline-block';
+        span.style.padding = '5px 10px';
+        span.style.margin = '5px';
+        span.style.borderRadius = '20px';
+        span.style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
+        span.style.color = '#0b7886';
+        element.appendChild(span);
+    });
+}
+
+// Fonction pour exporter la page en PDF
+function exportToPDF() {
+    // Créer un spinner pour indiquer le chargement
+    const spinner = document.createElement('div');
+    spinner.className = 'spinner-border text-primary';
+    spinner.style.position = 'fixed';
+    spinner.style.top = '50%';
+    spinner.style.left = '50%';
+    spinner.style.zIndex = '9999';
+    document.body.appendChild(spinner);
+    
+    // Utiliser la bibliothèque html2canvas pour convertir la page en image
+    html2canvas(document.body).then(canvas => {
+        // Créer un PDF
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        
+        // Dimensions
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = 210; // A4 width in mm
+        const pageHeight = 295; // A4 height in mm
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+        
+        // Ajouter l'image au PDF
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+        
+        // Ajouter des pages supplémentaires si nécessaire
+        while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+        }
+        
+        // Télécharger le PDF
+        pdf.save('Analyse_Segments_Clients.pdf');
+        
+        // Supprimer le spinner
+        document.body.removeChild(spinner);
+    });
+}
+</script>
+{% endblock %}

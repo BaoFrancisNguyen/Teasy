@@ -1,0 +1,360 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" 
+    crossorigin=""/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.1/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.1/dist/MarkerCluster.Default.css" />
+<style>
+    #sales-map {
+        height: 500px;
+        width: 100%;
+        z-index: 1;
+    }
+    .map-container {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255,255,0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="my-4">
+                <i class="bi bi-geo-alt-fill text-primary me-2"></i>Cartographie des Ventes
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label for="start-date" class="form-label">Date de début</label>
+                            <input type="date" class="form-control" id="start-date">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="end-date" class="form-label">Date de fin</label>
+                            <input type="date" class="form-control" id="end-date">
+                        </div>
+                        <div class="col-md-4">
+                            <button id="generate-map" class="btn btn-primary w-100">
+                                <i class="bi bi-map me-2"></i>Générer la Carte
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card map-container">
+                <div id="sales-map" class="card-body p-0"></div>
+                <div id="map-loading" class="loading-overlay d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Statistiques Géographiques</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="geographical-stats">
+                            <thead>
+                                <tr>
+                                    <th>Ville</th>
+                                    <th>Magasins</th>
+                                    <th>Total Ventes (€)</th>
+                                    <th>Panier Moyen (€)</th>
+                                    <th>Transactions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stats-body">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">
+                                        Aucune donnée - Générez une carte
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Charger Leaflet manuellement avec des scripts séparés -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.1/dist/leaflet.markercluster.js" crossorigin=""></script>
+
+<script>
+// Ajouter un gestionnaire d'erreurs global
+window.addEventListener('error', function(event) {
+    console.error('Erreur globale :', event.error);
+    alert('Une erreur s\'est produite : ' + event.error);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Débogage détaillé du chargement des scripts
+    console.log('Scripts Leaflet :');
+    console.log('Leaflet chargé :', typeof L !== 'undefined');
+    console.log('Objet L :', L);
+    console.log('MarkerCluster chargé :', typeof L.MarkerClusterGroup !== 'undefined');
+
+    // Vérification exhaustive
+    if (typeof L === 'undefined') {
+        console.error('ERREUR CRITIQUE : Leaflet non chargé');
+        
+        // Créer un message d'erreur visible
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'alert alert-danger';
+        errorDiv.innerHTML = `
+            <strong>Erreur de chargement :</strong><br>
+            Les bibliothèques cartographiques n'ont pas pu être chargées.<br>
+            Vérifiez votre connexion internet et le chargement des scripts.
+        `;
+        
+        // Remplacer la carte par le message d'erreur
+        const salesMapDiv = document.getElementById('sales-map');
+        salesMapDiv.innerHTML = '';
+        salesMapDiv.appendChild(errorDiv);
+        
+        return;
+    }
+
+    // Reste du code JavaScript précédent...
+    const startDateInput = document.getElementById('start-date');
+    const endDateInput = document.getElementById('end-date');
+    const generateMapBtn = document.getElementById('generate-map');
+    const salesMapDiv = document.getElementById('sales-map');
+    const mapLoadingOverlay = document.getElementById('map-loading');
+    const statsBody = document.getElementById('stats-body');
+
+    // Configuration initiale des dates
+    const today = new Date();
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(today.getMonth() - 3);
+
+    startDateInput.value = threeMonthsAgo.toISOString().split('T')[0];
+    endDateInput.value = today.toISOString().split('T')[0];
+
+    // Variables pour la carte
+    let currentMap = null;
+    let currentMarkerLayer = null;
+
+    // Fonction pour afficher le chargement
+    function showLoading() {
+        mapLoadingOverlay.classList.remove('d-none');
+        generateMapBtn.disabled = true;
+        generateMapBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Chargement...';
+    }
+
+    // Fonction pour masquer le chargement
+    function hideLoading() {
+        mapLoadingOverlay.classList.add('d-none');
+        generateMapBtn.disabled = false;
+        generateMapBtn.innerHTML = '<i class="bi bi-map me-2"></i>Générer la Carte';
+    }
+
+    // Gestionnaire de génération de la carte
+    generateMapBtn.addEventListener('click', function() {
+        // Les mêmes fonctionnalités que précédemment
+        const startDate = startDateInput.value;
+        const endDate = endDateInput.value;
+
+        // Afficher le chargement
+        showLoading();
+
+        // Réinitialiser le tableau de statistiques
+        statsBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        // Générer la carte des ventes
+        fetch('/api/generate_sales_map', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                date_debut: startDate,
+                date_fin: endDate
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Vider la div de la carte
+                salesMapDiv.innerHTML = '';
+
+                // Créer une nouvelle carte
+                currentMap = L.map('sales-map').setView([46.2276, 2.2137], 6);
+
+                // Ajouter un fond de carte
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(currentMap);
+
+                // Parser les données de la carte
+                const mapData = JSON.parse(data.map_data);
+
+                // Créer un calque de marqueurs
+                currentMarkerLayer = L.markerClusterGroup().addTo(currentMap);
+
+                // Ajouter les marqueurs
+                mapData.markers.forEach(marker => {
+                    // Créer un marqueur personnalisé
+                    const customMarker = L.circleMarker(
+                        [marker.latitude, marker.longitude], 
+                        {
+                            radius: 8 + (marker.sales_normalized * 12),
+                            fillColor: marker.color,
+                            color: marker.color,
+                            weight: 1,
+                            opacity: 1,
+                            fillOpacity: 0.7
+                        }
+                    );
+
+                    // Ajouter une popup
+                    customMarker.bindPopup(`
+                        <strong>${marker.name}</strong><br>
+                        Ventes: ${marker.sales.toFixed(2)} €<br>
+                        Transactions: ${marker.transactions}
+                    `);
+
+                    // Ajouter au calque de marqueurs
+                    currentMarkerLayer.addLayer(customMarker);
+                });
+
+                // Ajuster la vue de la carte
+                if (currentMarkerLayer.getLayers().length > 0) {
+                    currentMap.fitBounds(currentMarkerLayer.getBounds());
+                }
+            } else {
+                // Gérer les erreurs de carte
+                salesMapDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        ${data.error || 'Impossible de générer la carte'}
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            console.error('Erreur de génération de carte:', error);
+            salesMapDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    Erreur de connexion : ${error.message}
+                </div>
+            `;
+            hideLoading();
+        });
+
+        // Charger les statistiques géographiques
+        fetch('/api/geographical_sales_analysis', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                date_debut: startDate,
+                date_fin: endDate
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+
+            if (data.success) {
+                // Vider le corps du tableau
+                statsBody.innerHTML = '';
+
+                // Cas où aucune donnée n'est disponible
+                if (data.stats.length === 0) {
+                    statsBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                Aucune donnée disponible pour la période sélectionnée
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                // Ajouter les statistiques au tableau
+                data.stats.sort((a, b) => b.total_ventes - a.total_ventes)
+                    .forEach(stat => {
+                        const row = `
+                            <tr>
+                                <td>${stat.ville || 'N/A'}</td>
+                                <td>${stat.nb_magasins || 0}</td>
+                                <td>${Number(stat.total_ventes).toFixed(2)}</td>
+                                <td>${Number(stat.panier_moyen).toFixed(2)}</td>
+                                <td>${stat.nb_transactions || 0}</td>
+                            </tr>
+                        `;
+                        statsBody.innerHTML += row;
+                    });
+            } else {
+                // Afficher un message d'erreur
+                statsBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center text-danger">
+                            ${data.error || 'Impossible de récupérer les statistiques'}
+                        </td>
+                    </tr>
+                `;
+            }
+        })
+        .catch(error => {
+            hideLoading();
+            console.error('Erreur de récupération des statistiques:', error);
+            statsBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center text-danger">
+                        Erreur de connexion : ${error.message}
+                    </td>
+                </tr>
+            `;
+        });
+    });
+});
+</script>
+{% endblock %}

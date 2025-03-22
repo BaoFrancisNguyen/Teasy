@@ -1,0 +1,805 @@
+{% extends "base.html" %}
+
+{% block title %}Analyse de Sentiments par Segment Client{% endblock %}
+
+{% block extra_css %}
+<style>
+    .sentiment-card {
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        overflow: hidden;
+        border-left: 5px solid transparent;
+    }
+    
+    .sentiment-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .sentiment-card.positive {
+        border-left-color: #10b981;
+    }
+    
+    .sentiment-card.neutral {
+        border-left-color: #f59e0b;
+    }
+    
+    .sentiment-card.negative {
+        border-left-color: #ef4444;
+    }
+    
+    .sentiment-badge {
+        font-size: 0.85rem;
+        padding: 0.35rem 0.65rem;
+        border-radius: 50rem;
+    }
+    
+    .sentiment-badge.positive {
+        background-color: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    
+    .sentiment-badge.neutral {
+        background-color: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+        border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    
+    .sentiment-badge.negative {
+        background-color: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    
+    .aspect-item {
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .aspect-item.positive {
+        background-color: rgba(16, 185, 129, 0.1);
+    }
+    
+    .aspect-item.neutral {
+        background-color: rgba(245, 158, 11, 0.1);
+    }
+    
+    .aspect-item.negative {
+        background-color: rgba(239, 68, 68, 0.1);
+    }
+    
+    .sentiment-pill {
+        width: 10px;
+        height: 10px;
+        display: inline-block;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+    
+    .sentiment-pill.positive {
+        background-color: #10b981;
+    }
+    
+    .sentiment-pill.neutral {
+        background-color: #f59e0b;
+    }
+    
+    .sentiment-pill.negative {
+        background-color: #ef4444;
+    }
+    
+    .segment-tag {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 4px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+    
+    .segment-tag.tech_enthusiast {
+        background-color: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+        border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .segment-tag.practical_user {
+        background-color: rgba(147, 51, 234, 0.1);
+        color: #9333ea;
+        border: 1px solid rgba(147, 51, 234, 0.2);
+    }
+    
+    .segment-tag.budget_conscious {
+        background-color: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+        border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    
+    .segment-tag.quality_seeker {
+        background-color: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    
+    .segment-tag.brand_loyal {
+        background-color: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    
+    .segment-tag.eco_conscious {
+        background-color: rgba(14, 165, 233, 0.1);
+        color: #0ea5e9;
+        border: 1px solid rgba(14, 165, 233, 0.2);
+    }
+    
+    .filter-section {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .radar-chart {
+        height: 300px;
+    }
+    
+    .product-table tr:hover {
+        background-color: rgba(16, 185, 129, 0.05);
+    }
+    
+    .review-card {
+        border-left: 3px solid #ccc;
+        transition: all 0.2s ease;
+    }
+    
+    .review-card:hover {
+        border-left-width: 5px;
+    }
+    
+    .review-card.positive {
+        border-left-color: #10b981;
+    }
+    
+    .review-card.neutral {
+        border-left-color: #f59e0b;
+    }
+    
+    .review-card.negative {
+        border-left-color: #ef4444;
+    }
+    
+    .keyword-cloud {
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .keyword {
+        display: inline-block;
+        margin: 5px;
+        padding: 5px 10px;
+        background-color: rgba(16, 185, 129, 0.1);
+        border-radius: 20px;
+        color: #0b7886;
+        font-weight: 500;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="bi bi-emoji-smile"></i> Analyse de Sentiments par Segment Client</h1>
+        <div>
+            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Retour
+            </a>
+            <button class="btn btn-primary ms-2" id="refreshDataBtn">
+                <i class="bi bi-arrow-repeat"></i> Actualiser
+            </button>
+        </div>
+    </div>
+    
+    <!-- Filtres -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-funnel"></i> Filtres</h5>
+        </div>
+        <div class="card-body">
+            <form id="filterForm">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="categoryFilter" class="form-label">Catégorie de produit</label>
+                            <select class="form-select" id="categoryFilter" name="product_category">
+                                <option value="all">Toutes les catégories</option>
+                                {% for category in categories %}
+                                <option value="{{ category }}">{{ category }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="segmentFilter" class="form-label">Segment client</label>
+                            <select class="form-select" id="segmentFilter" name="segment">
+                                <option value="all">Tous les segments</option>
+                                {% for segment in segments %}
+                                <option value="{{ segment }}">{{ segment }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="timeFilter" class="form-label">Période</label>
+                            <select class="form-select" id="timeFilter" name="time_period">
+                                <option value="7d">7 derniers jours</option>
+                                <option value="30d" selected>30 derniers jours</option>
+                                <option value="6m">6 derniers mois</option>
+                                <option value="1y">12 derniers mois</option>
+                                <option value="all">Tout</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="sentimentFilter" class="form-label">Sentiment</label>
+                            <select class="form-select" id="sentimentFilter" name="sentiment">
+                                <option value="all">Tous les sentiments</option>
+                                <option value="positive">Positif</option>
+                                <option value="neutral">Neutre</option>
+                                <option value="negative">Négatif</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search"></i> Appliquer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Tableaux de bord -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <!-- Sentiment global -->
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-graph-up"></i> Sentiment global</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div id="overallSentimentGauge" style="height: 200px;"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <h6>Distribution des sentiments</h6>
+                                <div id="sentimentDistribution" style="height: 200px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h3 id="reviewCount">{{ sentiment_data.overall_sentiment.review_count }}</h3>
+                                <p class="text-muted mb-0">Avis analysés</p>
+                            </div>
+                            <div>
+                                <h3 id="positivePct">{{ sentiment_data.overall_sentiment.positive_percent|round }}%</h3>
+                                <p class="text-muted mb-0">Avis positifs</p>
+                            </div>
+                            <div>
+                                <h3 id="neutralPct">{{ sentiment_data.overall_sentiment.neutral_percent|round }}%</h3>
+                                <p class="text-muted mb-0">Avis neutres</p>
+                            </div>
+                            <div>
+                                <h3 id="negativePct">{{ sentiment_data.overall_sentiment.negative_percent|round }}%</h3>
+                                <p class="text-muted mb-0">Avis négatifs</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <!-- Top aspects -->
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-tags"></i> Aspects les plus mentionnés</h5>
+                </div>
+                <div class="card-body">
+                    <div id="aspectsChart" style="height: 280px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Comparaison par segment -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-people"></i> Comparaison par segment client</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="segmentComparisonChart" style="height: 350px;"></div>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="mb-3">Préférences par segment</h6>
+                    <div id="segmentPreferencesTable">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Segment</th>
+                                        <th>Aspects valorisés</th>
+                                        <th>Sentiment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for segment_name, segment_data in sentiment_data.by_segment.items() %}
+                                    <tr>
+                                        <td>
+                                            <span class="segment-tag {{ segment_name }}">{{ segment_name }}</span>
+                                        </td>
+                                        <td>
+                                            <!-- À remplir par JavaScript -->
+                                        </td>
+                                        <td>
+                                            {% set sentiment = 'positive' if segment_data.score >= 0.05 else ('negative' if segment_data.score <= -0.05 else 'neutral') %}
+                                            <span class="sentiment-badge {{ sentiment }}">
+                                                {% if sentiment == 'positive' %}
+                                                <i class="bi bi-emoji-smile me-1"></i> Positif
+                                                {% elif sentiment == 'neutral' %}
+                                                <i class="bi bi-emoji-neutral me-1"></i> Neutre
+                                                {% else %}
+                                                <i class="bi bi-emoji-frown me-1"></i> Négatif
+                                                {% endif %}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Analyse par marque et catégorie -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <!-- Top marques -->
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-award"></i> Marques les mieux notées</h5>
+                </div>
+                <div class="card-body">
+                    <div id="brandRankingChart" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <!-- Catégories -->
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-grid"></i> Sentiment par catégorie</h5>
+                </div>
+                <div class="card-body">
+                    <div id="categorySentimentChart" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Nuage de mots-clés -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-chat-text"></i> Mots-clés les plus fréquents</h5>
+        </div>
+        <div class="card-body">
+            <div class="keyword-cloud">
+                {% for keyword in keywords %}
+                <span class="keyword" style="font-size: {{ (keyword.count / max_count * 1.5 + 1)|round(1) }}rem">
+                    {{ keyword.word }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Derniers avis -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-chat-quote"></i> Derniers avis</h5>
+            <a href="#" class="text-decoration-none" id="viewAllReviewsBtn">Voir tous les avis</a>
+        </div>
+        <div class="card-body">
+            <div id="recentReviews">
+                {% for review in recent_reviews %}
+                {% set sentiment = 'positive' if review.sentiment_score >= 0.05 else ('negative' if review.sentiment_score <= -0.05 else 'neutral') %}
+                <div class="card review-card {{ sentiment }} mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="card-title mb-0">{{ review.product_name }}</h6>
+                            <span class="sentiment-badge {{ sentiment }}">
+                                {% if sentiment == 'positive' %}
+                                <i class="bi bi-emoji-smile me-1"></i> Positif
+                                {% elif sentiment == 'neutral' %}
+                                <i class="bi bi-emoji-neutral me-1"></i> Neutre
+                                {% else %}
+                                <i class="bi bi-emoji-frown me-1"></i> Négatif
+                                {% endif %}
+                            </span>
+                        </div>
+                        <p class="card-text">{{ review.review_text }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                Par <span class="fw-bold">{{ review.reviewer_name }}</span>
+                                <span class="segment-tag {{ review.segment }}">{{ review.segment }}</span>
+                            </small>
+                            <small class="text-muted">{{ review.review_date }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="text-center">
+                <button id="loadMoreReviewsBtn" class="btn btn-outline-primary mt-3">
+                    <i class="bi bi-plus-circle"></i> Charger plus
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Données d'initialisation (remplacées par les données réelles via API)
+    const sentimentData = {{ sentiment_data|tojson }};
+    
+    // Initialiser les graphiques avec les données
+    initCharts(sentimentData);
+    
+    // Gestionnaire pour le formulaire de filtres
+    document.getElementById('filterForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Récupérer les valeurs des filtres
+        const filters = {
+            product_category: document.getElementById('categoryFilter').value,
+            segment: document.getElementById('segmentFilter').value,
+            time_period: document.getElementById('timeFilter').value,
+            sentiment: document.getElementById('sentimentFilter').value
+        };
+        
+        // Appeler l'API avec les filtres
+        fetchSentimentData(filters);
+    });
+    
+    // Gestionnaire pour le bouton d'actualisation
+    document.getElementById('refreshDataBtn').addEventListener('click', function() {
+        // Réinitialiser les filtres
+        document.getElementById('filterForm').reset();
+        
+        // Actualiser les données
+        fetchSentimentData({});
+    });
+    
+    // Charger plus d'avis
+    document.getElementById('loadMoreReviewsBtn').addEventListener('click', function() {
+        loadMoreReviews();
+    });
+    
+    // Afficher tous les avis
+    document.getElementById('viewAllReviewsBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        showAllReviews();
+    });
+});
+
+// Fonction pour initialiser les graphiques
+function initCharts(data) {
+    // Jauge du sentiment global
+    const overallSentiment = data.overall_sentiment.score;
+    const sentimentGauge = {
+        type: "indicator",
+        mode: "gauge+number",
+        value: overallSentiment,
+        gauge: {
+            axis: { range: [-1, 1], tickwidth: 1 },
+            bar: { color: getColorForSentiment(overallSentiment) },
+            steps: [
+                { range: [-1, -0.05], color: "rgba(239, 68, 68, 0.2)" },
+                { range: [-0.05, 0.05], color: "rgba(245, 158, 11, 0.2)" },
+                { range: [0.05, 1], color: "rgba(16, 185, 129, 0.2)" }
+            ],
+            threshold: {
+                line: { color: "red", width: 4 },
+                thickness: 0.75,
+                value: 0
+            }
+        }
+    };
+    
+    Plotly.newPlot('overallSentimentGauge', [sentimentGauge], {
+        title: "Score de sentiment",
+        height: 200,
+        margin: { t: 40, r: 25, l: 25, b: 10 }
+    });
+    
+    // Distribution des sentiments
+    const sentimentDistribution = {
+        type: 'pie',
+        values: [
+            data.overall_sentiment.positive_percent,
+            data.overall_sentiment.neutral_percent,
+            data.overall_sentiment.negative_percent
+        ],
+        labels: ['Positif', 'Neutre', 'Négatif'],
+        marker: {
+            colors: ['#10b981', '#f59e0b', '#ef4444']
+        },
+        textinfo: 'percent',
+        hoverinfo: 'label+percent',
+        hole: 0.4
+    };
+    
+    Plotly.newPlot('sentimentDistribution', [sentimentDistribution], {
+        height: 200,
+        margin: { t: 0, r: 0, l: 0, b: 0 }
+    });
+    
+    // Graphique des aspects
+    const aspects = data.top_aspects || [];
+    const aspectNames = aspects.map(a => a.name);
+    const aspectScores = aspects.map(a => a.score);
+    const aspectColors = aspectScores.map(score => getColorForSentiment(score));
+    
+    const aspectsChart = {
+        type: 'bar',
+        x: aspectNames,
+        y: aspectScores,
+        marker: {
+            color: aspectColors
+        }
+    };
+    
+    Plotly.newPlot('aspectsChart', [aspectsChart], {
+        height: 280,
+        margin: { t: 10, r: 10, l: 40, b: 50 },
+        xaxis: {
+            tickangle: -45
+        }
+    });
+    
+    // Comparaison par segment
+    const segments = Object.keys(data.by_segment || {});
+    const segmentScores = segments.map(s => data.by_segment[s].score);
+    const segmentColors = segmentScores.map(score => getColorForSentiment(score));
+    
+    const segmentChart = {
+        type: 'bar',
+        x: segments,
+        y: segmentScores,
+        marker: {
+            color: segmentColors
+        }
+    };
+    
+    Plotly.newPlot('segmentComparisonChart', [segmentChart], {
+        title: 'Sentiment par segment',
+        height: 350,
+        margin: { t: 30, r: 10, l: 40, b: 50 },
+        xaxis: {
+            tickangle: -45
+        }
+    });
+    
+    // Classement des marques
+    const brands = Object.keys(data.by_brand || {}).slice(0, 10);
+    const brandScores = brands.map(b => data.by_brand[b].score);
+    const brandColors = brandScores.map(score => getColorForSentiment(score));
+    
+    const brandChart = {
+        type: 'bar',
+        x: brands,
+        y: brandScores,
+        marker: {
+            color: brandColors
+        }
+    };
+    
+    Plotly.newPlot('brandRankingChart', [brandChart], {
+        height: 300,
+        margin: { t: 10, r: 10, l: 40, b: 80 },
+        xaxis: {
+            tickangle: -45
+        }
+    });
+    
+    // Sentiment par catégorie
+    const categories = Object.keys(data.by_category || {});
+    const categoryScores = categories.map(c => data.by_category[c].score);
+    const categoryColors = categoryScores.map(score => getColorForSentiment(score));
+    
+    const categoryChart = {
+        type: 'bar',
+        x: categories,
+        y: categoryScores,
+        marker: {
+            color: categoryColors
+        }
+    };
+    
+    Plotly.newPlot('categorySentimentChart', [categoryChart], {
+        height: 300,
+        margin: { t: 10, r: 10, l: 40, b: 80 },
+        xaxis: {
+            tickangle: -45
+        }
+    });
+}
+
+// Fonction pour récupérer les données de sentiment via API
+function fetchSentimentData(filters) {
+    // Construire l'URL avec les filtres
+    let url = '/api/sentiment_data?';
+    for (const [key, value] of Object.entries(filters)) {
+        if (value && value !== 'all') {
+            url += `${key}=${encodeURIComponent(value)}&`;
+        }
+    }
+    
+    // Afficher un indicateur de chargement
+    // ...
+    
+    // Appeler l'API
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Mettre à jour les graphiques avec les nouvelles données
+                initCharts(data);
+                
+                // Mettre à jour les compteurs
+                document.getElementById('reviewCount').textContent = data.overall_sentiment.review_count;
+                document.getElementById('positivePct').textContent = Math.round(data.overall_sentiment.positive_percent) + '%';
+                document.getElementById('neutralPct').textContent = Math.round(data.overall_sentiment.neutral_percent) + '%';
+                document.getElementById('negativePct').textContent = Math.round(data.overall_sentiment.negative_percent) + '%';
+                
+                // Mettre à jour les avis récents
+                updateRecentReviews(data.recent_reviews || []);
+            } else {
+                console.error('Erreur lors de la récupération des données:', data.error);
+                // Afficher un message d'erreur
+                // ...
+            }
+        })
+        .catch(error => {
+            console.error('Erreur réseau:', error);
+            // Afficher un message d'erreur
+            // ...
+        })
+        .finally(() => {
+            // Masquer l'indicateur de chargement
+            // ...
+        });
+}
+
+// Fonction pour obtenir une couleur en fonction du score de sentiment
+function getColorForSentiment(score) {
+    if (score >= 0.05) return '#10b981';  // Positif
+    if (score <= -0.05) return '#ef4444'; // Négatif
+    return '#f59e0b';                     // Neutre
+}
+
+// Fonction pour mettre à jour la liste des avis récents
+function updateRecentReviews(reviews) {
+    const reviewsContainer = document.getElementById('recentReviews');
+    
+    // Vider le conteneur
+    reviewsContainer.innerHTML = '';
+    
+    // Ajouter les nouveaux avis
+    reviews.forEach(review => {
+        // Déterminer le sentiment
+        const sentimentClass = review.sentiment_score >= 0.05 ? 'positive' : 
+                              (review.sentiment_score <= -0.05 ? 'negative' : 'neutral');
+        
+        // Créer l'élément d'avis
+        const reviewElement = document.createElement('div');
+        reviewElement.className = `card review-card ${sentimentClass} mb-3`;
+        
+        // Créer le contenu de l'avis
+        reviewElement.innerHTML = `
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h6 class="card-title mb-0">${review.product_name}</h6>
+                    <span class="sentiment-badge ${sentimentClass}">
+                        ${sentimentClass === 'positive' ? 
+                          '<i class="bi bi-emoji-smile me-1"></i> Positif' : 
+                          (sentimentClass === 'neutral' ? 
+                           '<i class="bi bi-emoji-neutral me-1"></i> Neutre' : 
+                           '<i class="bi bi-emoji-frown me-1"></i> Négatif')}
+                    </span>
+                </div>
+                <p class="card-text">${review.review_text}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                        Par <span class="fw-bold">${review.reviewer_name}</span>
+                        <span class="segment-tag ${review.segment}">${review.segment}</span>
+                    </small>
+                    <small class="text-muted">${review.review_date}</small>
+                </div>
+            </div>
+        `;
+        
+        // Ajouter l'élément au conteneur
+        reviewsContainer.appendChild(reviewElement);
+    });
+}
+
+// Fonction pour charger plus d'avis
+function loadMoreReviews() {
+    // Implémentation du chargement de plus d'avis
+    const reviewsContainer = document.getElementById('recentReviews');
+    const currentCount = reviewsContainer.children.length;
+    
+    // Appeler l'API pour récupérer plus d'avis
+    fetch(`/api/reviews?offset=${currentCount}&limit=5`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Ajouter les nouveaux avis
+                updateRecentReviews(data.reviews || []);
+                
+                // Masquer le bouton si plus d'avis disponibles
+                if (data.reviews.length < 5) {
+                    document.getElementById('loadMoreReviewsBtn').style.display = 'none';
+                }
+            } else {
+                console.error('Erreur lors du chargement des avis:', data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur réseau:', error);
+        });
+}
+
+// Fonction pour afficher tous les avis
+function showAllReviews() {
+    // Rediriger vers une page dédiée affichant tous les avis
+    const filters = {
+        category: document.getElementById('categoryFilter').value,
+        segment: document.getElementById('segmentFilter').value,
+        time_period: document.getElementById('timeFilter').value,
+        sentiment: document.getElementById('sentimentFilter').value
+    };
+    
+    // Construire l'URL avec les filtres
+    let url = '/all_reviews?';
+    for (const [key, value] of Object.entries(filters)) {
+        if (value && value !== 'all') {
+            url += `${key}=${encodeURIComponent(value)}&`;
+        }
+    }
+    
+    window.location.href = url;
+}
+</script>
+{% endblock %}

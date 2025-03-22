@@ -1,0 +1,317 @@
+{% extends "base.html" %}
+
+{% block title %}Détails de la Transaction #{{ transaction.id }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .transaction-header {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .transaction-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .transaction-id {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #0d6efd;
+    }
+    .transaction-date {
+        font-size: 1.1rem;
+        color: #6c757d;
+    }
+    .transaction-amount {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #198754;
+    }
+    .transaction-badge {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+        border-radius: 20px;
+        margin-right: 5px;
+    }
+    .info-section {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    .info-title {
+        font-weight: 600;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 10px;
+    }
+    .info-row {
+        display: flex;
+        margin-bottom: 10px;
+    }
+    .info-label {
+        width: 40%;
+        font-weight: 500;
+        color: #6c757d;
+    }
+    .info-value {
+        width: 60%;
+    }
+    .article-card {
+        border-left: 3px solid #0d6efd;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+    }
+    .article-card:hover {
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-3px);
+    }
+    .discount-badge {
+        background-color: #dc3545;
+        color: white;
+        font-size: 0.75rem;
+        padding: 3px 8px;
+        border-radius: 12px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Accueil</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Tableau de Bord</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Transaction #{{ transaction.id }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- En-tête de la transaction -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="transaction-header">
+                <div class="transaction-summary">
+                    <div>
+                        <div class="transaction-id">Transaction #{{ transaction.id }}</div>
+                        <div class="transaction-date">
+                            {{ transaction.date_transaction }}
+                            <span class="badge bg-secondary transaction-badge">{{ transaction.canal_vente }}</span>
+                            {% if transaction.points_gagnes > 0 %}
+                            <span class="badge bg-warning text-dark transaction-badge">
+                                <i class="bi bi-star-fill"></i> {{ transaction.points_gagnes }} points
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="transaction-amount">{{ transaction.montant_total|round(2) }} €</div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Détails du paiement</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="info-row">
+                                    <div class="info-label">N° Facture</div>
+                                    <div class="info-value">{{ transaction.numero_facture }}</div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-label">Montant TTC</div>
+                                    <div class="info-value">{{ transaction.montant_total|round(2) }} €</div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-label">Montant HT</div>
+                                    <div class="info-value">{{ transaction.montant_ht|round(2) }} €</div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-label">TVA</div>
+                                    <div class="info-value">{{ transaction.tva_montant|round(2) }} €</div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-label">Moyen de paiement</div>
+                                    <div class="info-value">{{ transaction.moyen_paiement }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Point de vente</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="info-row">
+                                    <div class="info-label">Magasin</div>
+                                    <div class="info-value">{{ transaction.magasin }}</div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-label">Adresse</div>
+                                    <div class="info-value">
+                                        {{ transaction.adresse_magasin }}<br>
+                                        {{ transaction.code_postal_magasin }} {{ transaction.ville_magasin }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Informations client -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="info-section">
+                <h4 class="info-title">Client</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="info-row">
+                            <div class="info-label">Nom</div>
+                            <div class="info-value">{{ transaction.client_prenom }} {{ transaction.client_nom }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-row">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">{{ transaction.client_email }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-row">
+                            <div class="info-label">Niveau de fidélité</div>
+                            <div class="info-value">
+                                {% if transaction.niveau_fidelite == 'bronze' %}
+                                <span class="badge bg-secondary">Bronze</span>
+                                {% elif transaction.niveau_fidelite == 'argent' %}
+                                <span class="badge bg-secondary">Argent</span>
+                                {% elif transaction.niveau_fidelite == 'or' %}
+                                <span class="badge bg-warning text-dark">Or</span>
+                                {% elif transaction.niveau_fidelite == 'platine' %}
+                                <span class="badge bg-info text-dark">Platine</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Standard</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="info-row">
+                            <div class="info-label">Points gagnés</div>
+                            <div class="info-value">{{ transaction.points_gagnes }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-row">
+                            <div class="info-label">Points utilisés</div>
+                            <div class="info-value">{{ transaction.points_utilises }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Articles -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Détails des articles</h4>
+                    <span class="badge bg-primary">{{ articles|length }} article(s)</span>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Référence</th>
+                                    <th>Catégorie</th>
+                                    <th>Prix unitaire</th>
+                                    <th>Quantité</th>
+                                    <th>Remise</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for article in articles %}
+                                <tr>
+                                    <td>{{ article.produit_nom }}</td>
+                                    <td>{{ article.produit_reference }}</td>
+                                    <td>
+                                        {% if article.categorie %}
+                                        <span class="badge bg-info text-dark">{{ article.categorie }}</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Non catégorisé</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ article.prix_unitaire|round(2) }} €</td>
+                                    <td>{{ article.quantite }}</td>
+                                    <td>
+                                        {% if article.remise_pourcentage > 0 %}
+                                        <span class="discount-badge">-{{ article.remise_pourcentage }}%</span>
+                                        <small>({{ article.remise_montant|round(2) }} €)</small>
+                                        {% else %}
+                                        -
+                                        {% endif %}
+                                    </td>
+                                    <td><strong>{{ article.montant_ligne|round(2) }} €</strong></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr class="table-active">
+                                    <td colspan="5"></td>
+                                    <td><strong>Total TTC</strong></td>
+                                    <td><strong>{{ transaction.montant_total|round(2) }} €</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="row mb-4">
+        <div class="col-md-12 d-flex justify-content-between">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Retour au tableau de bord
+            </a>
+            <div>
+                <button class="btn btn-outline-primary me-2" onclick="window.print()">
+                    <i class="bi bi-printer"></i> Imprimer
+                </button>
+                <a href="{{ url_for('api_export_dashboard') }}?format=excel&data_type=transaction&transaction_id={{ transaction.id }}" class="btn btn-outline-success">
+                    <i class="bi bi-download"></i> Exporter
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Code JavaScript spécifique à la page de détails de transaction
+        // Par exemple, vous pourriez ajouter une visualisation ou des fonctionnalités interactives ici
+    });
+</script>
+{% endblock %}

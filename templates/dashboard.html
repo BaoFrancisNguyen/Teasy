@@ -1,0 +1,1039 @@
+{% extends "base.html" %}
+
+{% block title %}Tableau de Bord{% endblock %}
+
+{% block extra_css %}
+<style>
+    .kpi-card {
+        text-align: center;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .kpi-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+    .kpi-value {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+    .kpi-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    .kpi-description {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    .bg-primary-light {
+        background-color: #e3f2fd;
+        color: #0d6efd;
+    }
+    .bg-success-light {
+        background-color: #e8f5e9;
+        color: #198754;
+    }
+    .bg-info-light {
+        background-color: #e0f7fa;
+        color: #0dcaf0;
+    }
+    .bg-warning-light {
+        background-color: #fff8e1;
+        color: #ffc107;
+    }
+    .chart-container {
+        height: 400px;
+        margin-bottom: 30px;
+    }
+    .filter-section {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .category-badge {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+        margin-right: 5px;
+        border-radius: 20px;
+    }
+    .dashboard-card {
+        height: 100%;
+        transition: all 0.3s ease;
+    }
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+    .card-header-tabs {
+        margin-right: -0.5rem;
+        margin-bottom: -0.5rem;
+        margin-left: -0.5rem;
+        border-bottom: 0;
+    }
+    .nav-tabs .nav-link.active {
+        background-color: #fff;
+        border-bottom-color: #fff;
+    }
+    .tab-content {
+        padding: 20px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="mb-0"><i class="bi bi-bar-chart-fill"></i> Tableau de Bord</h1>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-primary" id="refreshData">
+                        <i class="bi bi-arrow-clockwise"></i> Actualiser
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exportModal">
+                        <i class="bi bi-download"></i> Exporter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section des filtres -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card filter-section">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="dateRangeFilter" class="form-label">Période</label>
+                            <select class="form-select" id="dateRangeFilter">
+                                <option value="7">7 derniers jours</option>
+                                <option value="30" selected>30 derniers jours</option>
+                                <option value="90">3 derniers mois</option>
+                                <option value="365">12 derniers mois</option>
+                                <option value="custom">Période personnalisée</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="storeFilter" class="form-label">Magasin</label>
+                            <select class="form-select" id="storeFilter">
+                                <option value="all" selected>Tous les magasins</option>
+                                {% for magasin in magasins %}
+                                <option value="{{ magasin.magasin_id }}">{{ magasin.nom }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="paymentFilter" class="form-label">Moyen de paiement</label>
+                            <select class="form-select" id="paymentFilter">
+                                <option value="all" selected>Tous les moyens</option>
+                                {% for method in payment_methods %}
+                                <option value="{{ method }}">{{ method|title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="clientSegmentFilter" class="form-label">Segment client</label>
+                            <select class="form-select" id="clientSegmentFilter">
+                                <option value="all" selected>Tous les segments</option>
+                                <option value="standard">Standard</option>
+                                <option value="premium">Premium</option>
+                                <option value="vip">VIP</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="customDateRange" class="row mt-3" style="display: none;">
+                        <div class="col-md-3">
+                            <label for="startDate" class="form-label">Date de début</label>
+                            <input type="date" class="form-control" id="startDate">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="endDate" class="form-label">Date de fin</label>
+                            <input type="date" class="form-control" id="endDate">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button class="btn btn-primary w-100" id="applyDateRange">Appliquer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section des KPIs -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="kpi-card bg-primary-light" id="kpi-ca">
+                <i class="bi bi-cash-coin fs-1"></i>
+                <div class="kpi-title">Chiffre d'affaires</div>
+                <div class="kpi-value">{{ kpi_ca|default('0') }} €</div>
+                <div class="kpi-description">
+                    <span id="kpi-ca-trend">
+                        {% if kpi_ca_trend > 0 %}
+                        <i class="bi bi-arrow-up-right text-success"></i> +{{ kpi_ca_trend }}%
+                        {% elif kpi_ca_trend < 0 %}
+                        <i class="bi bi-arrow-down-right text-danger"></i> {{ kpi_ca_trend }}%
+                        {% else %}
+                        <i class="bi bi-dash"></i> 0%
+                        {% endif %}
+                    </span>
+                    vs période précédente
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="kpi-card bg-success-light" id="kpi-transactions">
+                <i class="bi bi-receipt fs-1"></i>
+                <div class="kpi-title">Nombre de transactions</div>
+                <div class="kpi-value">{{ kpi_transactions|default('0') }}</div>
+                <div class="kpi-description">
+                    <span id="kpi-transactions-trend">
+                        {% if kpi_transactions_trend > 0 %}
+                        <i class="bi bi-arrow-up-right text-success"></i> +{{ kpi_transactions_trend }}%
+                        {% elif kpi_transactions_trend < 0 %}
+                        <i class="bi bi-arrow-down-right text-danger"></i> {{ kpi_transactions_trend }}%
+                        {% else %}
+                        <i class="bi bi-dash"></i> 0%
+                        {% endif %}
+                    </span>
+                    vs période précédente
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="kpi-card bg-info-light" id="kpi-panier-moyen">
+                <i class="bi bi-cart-check fs-1"></i>
+                <div class="kpi-title">Panier moyen</div>
+                <div class="kpi-value">{{ kpi_panier_moyen|default('0') }} €</div>
+                <div class="kpi-description">
+                    <span id="kpi-panier-moyen-trend">
+                        {% if kpi_panier_moyen_trend > 0 %}
+                        <i class="bi bi-arrow-up-right text-success"></i> +{{ kpi_panier_moyen_trend }}%
+                        {% elif kpi_panier_moyen_trend < 0 %}
+                        <i class="bi bi-arrow-down-right text-danger"></i> {{ kpi_panier_moyen_trend }}%
+                        {% else %}
+                        <i class="bi bi-dash"></i> 0%
+                        {% endif %}
+                    </span>
+                    vs période précédente
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="kpi-card bg-warning-light" id="kpi-points">
+                <i class="bi bi-star fs-1"></i>
+                <div class="kpi-title">Points de fidélité accordés</div>
+                <div class="kpi-value">{{ kpi_points|default('0') }}</div>
+                <div class="kpi-description">
+                    <span id="kpi-points-trend">
+                        {% if kpi_points_trend > 0 %}
+                        <i class="bi bi-arrow-up-right text-success"></i> +{{ kpi_points_trend }}%
+                        {% elif kpi_points_trend < 0 %}
+                        <i class="bi bi-arrow-down-right text-danger"></i> {{ kpi_points_trend }}%
+                        {% else %}
+                        <i class="bi bi-dash"></i> 0%
+                        {% endif %}
+                    </span>
+                    vs période précédente
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section principale avec graphiques -->
+    <div class="row mb-4">
+        <!-- Évolution des ventes -->
+        <div class="col-md-8">
+            <div class="card dashboard-card h-100">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" id="salesChartTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="daily-tab" data-bs-toggle="tab" data-bs-target="#daily-tab-pane" type="button" role="tab" aria-controls="daily-tab-pane" aria-selected="true">Jour</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="weekly-tab" data-bs-toggle="tab" data-bs-target="#weekly-tab-pane" type="button" role="tab" aria-controls="weekly-tab-pane" aria-selected="false">Semaine</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="monthly-tab" data-bs-toggle="tab" data-bs-target="#monthly-tab-pane" type="button" role="tab" aria-controls="monthly-tab-pane" aria-selected="false">Mois</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="salesChartTabsContent">
+                        <div class="tab-pane fade show active" id="daily-tab-pane" role="tabpanel" aria-labelledby="daily-tab" tabindex="0">
+                            <div id="dailySalesChart" class="chart-container"></div>
+                        </div>
+                        <div class="tab-pane fade" id="weekly-tab-pane" role="tabpanel" aria-labelledby="weekly-tab" tabindex="0">
+                            <div id="weeklySalesChart" class="chart-container"></div>
+                        </div>
+                        <div class="tab-pane fade" id="monthly-tab-pane" role="tabpanel" aria-labelledby="monthly-tab" tabindex="0">
+                            <div id="monthlySalesChart" class="chart-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Répartition par catégorie -->
+        <div class="col-md-4">
+            <div class="card dashboard-card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Répartition des ventes</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-pills mb-3" id="distributionTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="by-store-tab" data-bs-toggle="pill" data-bs-target="#by-store-content" type="button" role="tab" aria-controls="by-store-content" aria-selected="true">Par magasin</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="by-payment-tab" data-bs-toggle="pill" data-bs-target="#by-payment-content" type="button" role="tab" aria-controls="by-payment-content" aria-selected="false">Par paiement</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="distributionTabsContent">
+                        <div class="tab-pane fade show active" id="by-store-content" role="tabpanel" aria-labelledby="by-store-tab" tabindex="0">
+                            <div id="storeDistributionChart" class="chart-container"></div>
+                        </div>
+                        <div class="tab-pane fade" id="by-payment-content" role="tabpanel" aria-labelledby="by-payment-tab" tabindex="0">
+                            <div id="paymentDistributionChart" class="chart-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ligne de graphiques secondaires -->
+    <div class="row mb-4">
+        <!-- Répartition par heure -->
+        <div class="col-md-4">
+            <div class="card dashboard-card">
+                <div class="card-header">
+                    <h5 class="mb-0">Transactions par heure</h5>
+                </div>
+                <div class="card-body">
+                    <div id="hourlyDistributionChart" class="chart-container"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top produits -->
+        <div class="col-md-4">
+            <div class="card dashboard-card">
+                <div class="card-header">
+                    <h5 class="mb-0">Top 5 des produits</h5>
+                </div>
+                <div class="card-body">
+                    <div id="topProductsChart" class="chart-container"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Satisfaction client -->
+        <div class="col-md-4">
+            <div class="card dashboard-card">
+                <div class="card-header">
+                    <h5 class="mb-0">Satisfaction client</h5>
+                </div>
+                <div class="card-body">
+                    <div id="customerSatisfactionChart" class="chart-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section des données récentes -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card dashboard-card">
+                <div class="card-header">
+                    <h5 class="mb-0">Transactions récentes</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Magasin</th>
+                                    <th>Montant</th>
+                                    <th>Moyen de paiement</th>
+                                    <th>Points</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentTransactionsTable">
+                                {% for t in recent_transactions %}
+                                <tr>
+                                    <td>{{ t.id }}</td>
+                                    <td>{{ t.date_transaction }}</td>
+                                    <td>{{ t.magasin }}</td>
+                                    <td>{{ t.montant_total }} €</td>
+                                    <td>{{ t.moyen_paiement }}</td>
+                                    <td>{{ t.points_gagnes }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-info" data-transaction-id="{{ t.id }}">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour l'exportation des données -->
+<!-- Modal pour l'exportation -->
+<div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportModalLabel">Exporter les données</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="exportForm">
+                    <div class="mb-3">
+                        <label for="exportFormat" class="form-label">Format d'export</label>
+                        <select class="form-select" id="exportFormat" name="format">
+                            <option value="csv">CSV</option>
+                            <option value="excel">Excel</option>
+                            <option value="pdf">PDF</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="dataType" class="form-label">Type de données</label>
+                        <select class="form-select" id="dataType" name="data_type">
+                            <option value="dashboard">Tableau de bord (résumé)</option>
+                            <option value="transactions">Transactions complètes</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Nouvelle option pour inclure les données démographiques -->
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="includeDemographics" name="include_demographics" value="true">
+                        <label class="form-check-label" for="includeDemographics">
+                            Inclure les données démographiques des clients
+                        </label>
+                        <div class="form-text">
+                            Ajoute des informations sur la distribution par genre, âge et segment client
+                        </div>
+                    </div>
+                    
+                    <p class="text-muted mt-3">
+                        <small>Note: Les filtres actuels du tableau de bord seront appliqués à l'export.</small>
+                    </p>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" id="exportButton">Exporter</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gestionnaire pour le filtre de période
+        document.getElementById('dateRangeFilter').addEventListener('change', function() {
+            if (this.value === 'custom') {
+                document.getElementById('customDateRange').style.display = 'flex';
+            } else {
+                document.getElementById('customDateRange').style.display = 'none';
+                fetchAndUpdateDashboard();
+            }
+        });
+
+        // Gestionnaire pour les autres filtres
+        document.getElementById('storeFilter').addEventListener('change', fetchAndUpdateDashboard);
+        document.getElementById('paymentFilter').addEventListener('change', fetchAndUpdateDashboard);
+        document.getElementById('clientSegmentFilter').addEventListener('change', fetchAndUpdateDashboard);
+        document.getElementById('applyDateRange').addEventListener('click', fetchAndUpdateDashboard);
+        document.getElementById('refreshData').addEventListener('click', fetchAndUpdateDashboard);
+
+        // Gestionnaire pour l'exportation
+
+        document.getElementById('exportButton').addEventListener('click', function() {
+            const format = document.getElementById('exportFormat').value;
+            const dataType = document.getElementById('exportData').value;
+            
+            // Construction de l'URL d'exportation avec les filtres actifs
+            const dateRange = document.getElementById('dateRangeFilter').value;
+            const store = document.getElementById('storeFilter').value;
+            const payment = document.getElementById('paymentFilter').value;
+            const segment = document.getElementById('clientSegmentFilter').value;
+            
+            const params = new URLSearchParams();
+            params.append('format', format);
+            params.append('data_type', dataType);
+            params.append('date_range', dateRange);
+            params.append('store', store);
+            params.append('payment', payment);
+            params.append('segment', segment);
+            
+            if (dateRange === 'custom') {
+                params.append('start_date', document.getElementById('startDate').value);
+                params.append('end_date', document.getElementById('endDate').value);
+            }
+            
+            // Déterminer l'URL en fonction du format
+            let exportUrl = '/api/export_dashboard';
+            
+            // Si c'est un PDF, utiliser la nouvelle API
+            if (format === 'pdf') {
+                exportUrl = '/api/export_dashboard_pdf';
+            }
+            
+            // Redirection vers l'endpoint d'exportation
+            window.location.href = `${exportUrl}?${params.toString()}`;
+            
+            // Fermer le modal
+            const exportModal = bootstrap.Modal.getInstance(document.getElementById('exportModal'));
+            exportModal.hide();
+        });
+
+        // Initialisation des graphiques
+        initializeCharts();
+        
+        // Chargement initial des données
+        fetchAndUpdateDashboard();
+    });
+
+    function fetchAndUpdateDashboard() {
+        // Récupération des valeurs des filtres
+        const dateRange = document.getElementById('dateRangeFilter').value;
+        const store = document.getElementById('storeFilter').value;
+        const payment = document.getElementById('paymentFilter').value;
+        const segment = document.getElementById('clientSegmentFilter').value;
+        
+        const params = new URLSearchParams();
+        params.append('date_range', dateRange);
+        params.append('store', store);
+        params.append('payment', payment);
+        params.append('segment', segment);
+        
+        if (dateRange === 'custom') {
+            params.append('start_date', document.getElementById('startDate').value);
+            params.append('end_date', document.getElementById('endDate').value);
+        }
+        
+        // Récupérer les données du dashboard
+        fetch(`/api/dashboard_data?${params.toString()}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateKPIs(data.kpis);
+                    updateCharts(data.charts_data);
+                    updateRecentTransactions(data.recent_transactions);
+                } else {
+                    console.error('Erreur lors de la récupération des données:', data.error);
+                    // Afficher un message d'erreur
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de la requête API:', error);
+                // Afficher un message d'erreur
+            });
+    }
+
+    function updateKPIs(kpis) {
+        // Mettre à jour les valeurs des KPIs
+        document.querySelector('#kpi-ca .kpi-value').textContent = `${kpis.ca.toLocaleString('fr-FR')} €`;
+        document.querySelector('#kpi-transactions .kpi-value').textContent = kpis.transactions.toLocaleString('fr-FR');
+        document.querySelector('#kpi-panier-moyen .kpi-value').textContent = `${kpis.panier_moyen.toLocaleString('fr-FR')} €`;
+        document.querySelector('#kpi-points .kpi-value').textContent = kpis.points.toLocaleString('fr-FR');
+        
+        // Mettre à jour les tendances
+        updateTrendIndicator('#kpi-ca-trend', kpis.ca_trend);
+        updateTrendIndicator('#kpi-transactions-trend', kpis.transactions_trend);
+        updateTrendIndicator('#kpi-panier-moyen-trend', kpis.panier_moyen_trend);
+        updateTrendIndicator('#kpi-points-trend', kpis.points_trend);
+    }
+    
+    function updateTrendIndicator(selector, value) {
+        const element = document.querySelector(selector);
+        if (value > 0) {
+            element.innerHTML = `<i class="bi bi-arrow-up-right text-success"></i> +${value.toFixed(1)}%`;
+        } else if (value < 0) {
+            element.innerHTML = `<i class="bi bi-arrow-down-right text-danger"></i> ${value.toFixed(1)}%`;
+        } else {
+            element.innerHTML = `<i class="bi bi-dash"></i> 0%`;
+        }
+    }
+
+    function updateCharts(chartsData) {
+        try {
+            // Vérifier que chartsData existe
+            if (!chartsData) {
+                console.error("Données des graphiques manquantes");
+                return;
+            }
+            
+            // Mise à jour de chaque type de graphique avec gestion des erreurs
+            if (chartsData.sales) {
+                try {
+                    updateSalesCharts(chartsData.sales);
+                } catch (error) {
+                    console.error("Erreur lors de la mise à jour des graphiques de ventes:", error);
+                }
+            }
+            
+            if (chartsData.distribution) {
+                try {
+                    updateDistributionCharts(chartsData.distribution);
+                } catch (error) {
+                    console.error("Erreur lors de la mise à jour des graphiques de distribution:", error);
+                }
+            }
+            
+            if (chartsData.hourly) {
+                try {
+                    updateHourlyChart(chartsData.hourly);
+                } catch (error) {
+                    console.error("Erreur lors de la mise à jour du graphique horaire:", error);
+                }
+            }
+            
+            if (chartsData.top_products) {
+                try {
+                    updateTopProductsChart(chartsData.top_products);
+                } catch (error) {
+                    console.error("Erreur lors de la mise à jour du graphique des top produits:", error);
+                }
+            }
+            
+            if (chartsData.satisfaction) {
+                try {
+                    updateSatisfactionChart(chartsData.satisfaction);
+                } catch (error) {
+                    console.error("Erreur lors de la mise à jour du graphique de satisfaction:", error);
+                }
+            }
+        } catch (error) {
+            console.error("Erreur globale lors de la mise à jour des graphiques:", error);
+        }
+    }
+    
+    function updateRecentTransactions(transactions) {
+        const tbody = document.getElementById('recentTransactionsTable');
+        tbody.innerHTML = '';
+        
+        transactions.forEach(t => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${t.id}</td>
+                <td>${new Date(t.date_transaction).toLocaleString('fr-FR')}</td>
+                <td>${t.magasin}</td>
+                <td>${t.montant_total.toLocaleString('fr-FR')} €</td>
+                <td>${t.moyen_paiement}</td>
+                <td>${t.points_gagnes}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-info" data-transaction-id="${t.id}">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+        // Ajouter des gestionnaires d'événements pour les boutons de détails
+        document.querySelectorAll('[data-transaction-id]').forEach(button => {
+            button.addEventListener('click', function() {
+                const transactionId = this.getAttribute('data-transaction-id');
+                // Rediriger vers la page de détails ou ouvrir un modal
+                window.location.href = `/transaction/${transactionId}`;
+            });
+        });
+    }
+
+    function initializeCharts() {
+        // Initialiser tous les graphiques vides
+        initSalesCharts();
+        initDistributionCharts();
+        initHourlyChart();
+        initTopProductsChart();
+        initSatisfactionChart();
+    }
+    
+    function initSalesCharts() {
+        // Graphique journalier
+        Plotly.newPlot('dailySalesChart', [{
+            x: [],
+            y: [],
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: {
+                color: 'rgb(75, 192, 192)',
+                width: 2
+            },
+            marker: {
+                color: 'rgb(75, 192, 192)',
+                size: 6
+            }
+        }], {
+            title: 'Évolution des ventes (Jour)',
+            xaxis: {
+                title: 'Date'
+            },
+            yaxis: {
+                title: 'Montant (€)'
+            },
+            margin: { t: 50, r: 20, l: 60, b: 60 }
+        }, {responsive: true});
+        
+        // Graphique hebdomadaire
+        Plotly.newPlot('weeklySalesChart', [{
+            x: [],
+            y: [],
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: {
+                color: 'rgb(54, 162, 235)',
+                width: 2
+            },
+            marker: {
+                color: 'rgb(54, 162, 235)',
+                size: 6
+            }
+        }], {
+            title: 'Évolution des ventes (Semaine)',
+            xaxis: {
+                title: 'Semaine'
+            },
+            yaxis: {
+                title: 'Montant (€)'
+            },
+            margin: { t: 50, r: 20, l: 60, b: 60 }
+        }, {responsive: true});
+        
+        // Graphique mensuel
+        Plotly.newPlot('monthlySalesChart', [{
+            x: [],
+            y: [],
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: {
+                color: 'rgb(255, 99, 132)',
+                width: 2
+            },
+            marker: {
+                color: 'rgb(255, 99, 132)',
+                size: 6
+            }
+        }], {
+            title: 'Évolution des ventes (Mois)',
+            xaxis: {
+                title: 'Mois'
+            },
+            yaxis: {
+                title: 'Montant (€)'
+            },
+            margin: { t: 50, r: 20, l: 60, b: 60 }
+        }, {responsive: true});
+    }
+    
+    function initDistributionCharts() {
+        try {
+            // Graphique distribution par magasin
+            Plotly.newPlot('storeDistributionChart', [{
+                labels: ["Aucune donnée"],
+                values: [100],
+                type: 'pie',
+                textinfo: 'percent',
+                hoverinfo: 'label+percent+value',
+                marker: {
+                    colors: [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 206, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(153, 102, 255)',
+                        'rgb(255, 159, 64)'
+                    ]
+                }
+            }], {
+                title: 'Répartition des ventes par magasin',
+                margin: { t: 50, r: 20, l: 20, b: 20 }
+            }, {responsive: true});
+            
+            // Graphique distribution par moyen de paiement
+            Plotly.newPlot('paymentDistributionChart', [{
+                labels: ["Aucune donnée"],
+                values: [100],
+                type: 'pie',
+                textinfo: 'percent',
+                hoverinfo: 'label+percent+value',
+                marker: {
+                    colors: [
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 206, 86)',
+                        'rgb(75, 192, 192)'
+                    ]
+                }
+            }], {
+                title: 'Répartition des ventes par moyen de paiement',
+                margin: { t: 50, r: 20, l: 20, b: 20 }
+            }, {responsive: true});
+        } catch (error) {
+            console.error("Erreur lors de l'initialisation des graphiques de distribution:", error);
+            
+            // Ajouter des messages d'erreur visibles
+            document.getElementById('storeDistributionChart').innerHTML = 
+                '<div class="alert alert-danger">Erreur lors du chargement du graphique</div>';
+            document.getElementById('paymentDistributionChart').innerHTML = 
+                '<div class="alert alert-danger">Erreur lors du chargement du graphique</div>';
+        }
+    }
+    
+    function initHourlyChart() {
+        try {
+            Plotly.newPlot('hourlyDistributionChart', [{
+                x: Array.from({length: 24}, (_, i) => i),
+                y: Array(24).fill(0),
+                type: 'bar',
+                marker: {
+                    color: 'rgb(75, 192, 192)'
+                }
+            }], {
+                title: 'Nombre de transactions par heure',
+                xaxis: {
+                    title: 'Heure',
+                    tickvals: Array.from({length: 24}, (_, i) => i),
+                    ticktext: Array.from({length: 24}, (_, i) => `${i}h`)
+                },
+                yaxis: {
+                    title: 'Nombre de transactions'
+                },
+                margin: { t: 50, r: 20, l: 60, b: 60 }
+            }, {responsive: true});
+        } catch (error) {
+            console.error("Erreur lors de l'initialisation du graphique horaire:", error);
+            // Ajouter un message d'erreur visible dans le DOM
+            document.getElementById('hourlyDistributionChart').innerHTML = 
+                '<div class="alert alert-danger">Erreur lors du chargement du graphique</div>';
+        }
+    }
+    
+    function initTopProductsChart() {
+        try {
+            Plotly.newPlot('topProductsChart', [{
+                y: ["Aucun produit"],
+                x: [0],
+                type: 'bar',
+                orientation: 'h',
+                marker: {
+                    color: 'rgb(54, 162, 235)'
+                }
+            }], {
+                title: 'Top 5 des produits vendus',
+                xaxis: {
+                    title: 'Quantité vendue'
+                },
+                margin: { t: 50, r: 20, l: 150, b: 60 }
+            }, {responsive: true});
+        } catch (error) {
+            console.error("Erreur lors de l'initialisation du graphique des top produits:", error);
+            document.getElementById('topProductsChart').innerHTML = 
+                '<div class="alert alert-danger">Erreur lors du chargement du graphique</div>';
+        }
+    }
+    
+    function initSatisfactionChart() {
+        try {
+            Plotly.newPlot('customerSatisfactionChart', [{
+                values: [20, 20, 20, 20, 20],
+                labels: ['Très satisfait', 'Satisfait', 'Neutre', 'Insatisfait', 'Très insatisfait'],
+                type: 'pie',
+                textinfo: 'percent',
+                hoverinfo: 'label+percent+value',
+                marker: {
+                    colors: [
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 206, 86)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 99, 132)'
+                    ]
+                }
+            }], {
+                title: 'Niveau de satisfaction client',
+                margin: { t: 50, r: 20, l: 20, b: 20 }
+            }, {responsive: true});
+        } catch (error) {
+            console.error("Erreur lors de l'initialisation du graphique de satisfaction:", error);
+            document.getElementById('customerSatisfactionChart').innerHTML = 
+                '<div class="alert alert-danger">Erreur lors du chargement du graphique</div>';
+        }
+    }
+    
+    function updateSalesCharts(salesData) {
+        // Mise à jour du graphique journalier
+        Plotly.update('dailySalesChart', {
+            x: [salesData.daily.dates],
+            y: [salesData.daily.values]
+        });
+        
+        // Mise à jour du graphique hebdomadaire
+        Plotly.update('weeklySalesChart', {
+            x: [salesData.weekly.dates],
+            y: [salesData.weekly.values]
+        });
+        
+        // Mise à jour du graphique mensuel
+        Plotly.update('monthlySalesChart', {
+            x: [salesData.monthly.dates],
+            y: [salesData.monthly.values]
+        });
+    }
+    
+    function updateDistributionCharts(distributionData) {
+        try {
+            // Vérifier que distributionData existe
+            if (!distributionData) {
+                console.error("Données de distribution manquantes");
+                return;
+            }
+            
+            // Mise à jour de la répartition par magasin
+            if (distributionData.stores) {
+                try {
+                    // Vérifier que les données existent et sont valides
+                    if (!distributionData.stores.labels || !distributionData.stores.values) {
+                        console.warn("Données de répartition par magasin incomplètes", distributionData.stores);
+                        distributionData.stores = {
+                            labels: ["Aucun magasin"],
+                            values: [0]
+                        };
+                    }
+                    
+                    // Mise à jour du graphique avec les bonnes données
+                    Plotly.restyle('storeDistributionChart', {
+                        labels: [distributionData.stores.labels],
+                        values: [distributionData.stores.values]
+                    });
+                } catch (error) {
+                    console.error("Erreur lors de la mise à jour du graphique de répartition par magasin:", error);
+                }
+            }
+            
+            // Mise à jour de la répartition par moyen de paiement
+            if (distributionData.payments) {
+                try {
+                    // Vérifier que les données existent et sont valides
+                    if (!distributionData.payments.labels || !distributionData.payments.values) {
+                        console.warn("Données de répartition par moyen de paiement incomplètes", distributionData.payments);
+                        distributionData.payments = {
+                            labels: ["Aucun paiement"],
+                            values: [0]
+                        };
+                    }
+                    
+                    // Mise à jour du graphique avec les bonnes données
+                    Plotly.restyle('paymentDistributionChart', {
+                        labels: [distributionData.payments.labels],
+                        values: [distributionData.payments.values]
+                    });
+                } catch (error) {
+                    console.error("Erreur lors de la mise à jour du graphique de répartition par moyen de paiement:", error);
+                }
+            }
+        } catch (error) {
+            console.error("Erreur globale lors de la mise à jour des graphiques de distribution:", error);
+        }
+    }
+    
+    function updateHourlyChart(hourlyData) {
+        // Vérification que hourlyData et hourlyData.values existent
+        if (!hourlyData || !hourlyData.values) {
+            console.error("Données horaires manquantes", hourlyData);
+            // Utiliser des données vides
+            hourlyData = { values: Array(24).fill(0) };
+        }
+        
+        // S'assurer que nous avons bien 24 valeurs (une pour chaque heure)
+        const values = hourlyData.values;
+        if (values.length !== 24) {
+            console.warn(`Nombre incorrect de valeurs horaires: ${values.length}, ajustement à 24`);
+            // Ajuster les valeurs pour avoir exactement 24 heures
+            while (values.length < 24) values.push(0);
+            // Si plus de 24, tronquer
+            while (values.length > 24) values.pop();
+        }
+        
+        // Mettre à jour le graphique avec les données ajustées
+        Plotly.update('hourlyDistributionChart', {
+            y: [values]
+        });
+    }
+    
+    function updateTopProductsChart(topProductsData) {
+    // Vérification que topProductsData et ses propriétés existent
+        if (!topProductsData || !topProductsData.names || !topProductsData.quantities) {
+            console.error("Données des top produits manquantes", topProductsData);
+            // Utiliser des données vides
+            topProductsData = { 
+                names: ["Aucun produit"], 
+                quantities: [0] 
+            };
+        }
+        
+        // S'assurer que les tableaux ont la même longueur
+        if (topProductsData.names.length !== topProductsData.quantities.length) {
+            console.warn("Incohérence entre les noms et les quantités des produits");
+            // Utiliser le tableau le plus court pour éviter les erreurs
+            const minLength = Math.min(topProductsData.names.length, topProductsData.quantities.length);
+            topProductsData.names = topProductsData.names.slice(0, minLength);
+            topProductsData.quantities = topProductsData.quantities.slice(0, minLength);
+        }
+        
+        // Mettre à jour le graphique avec les données ajustées
+        Plotly.update('topProductsChart', {
+            y: [topProductsData.names],
+            x: [topProductsData.quantities]
+        });
+    }
+    
+    function updateSatisfactionChart(satisfactionData) {
+    // Vérification que satisfactionData et satisfactionData.values existent
+        if (!satisfactionData || !satisfactionData.values || !satisfactionData.categories) {
+            console.error("Données de satisfaction manquantes", satisfactionData);
+            // Utiliser des données par défaut
+            satisfactionData = {
+                categories: ["Produit", "Prix", "Service", "Livraison", "Application"],
+                values: [3.0, 3.0, 3.0, 3.0, 3.0]
+            };
+        }
+        
+        // S'assurer que les tableaux ont la même longueur
+        if (satisfactionData.categories.length !== satisfactionData.values.length) {
+            console.warn("Incohérence entre les catégories et les valeurs de satisfaction");
+            // Utiliser le tableau le plus court pour éviter les erreurs
+            const minLength = Math.min(satisfactionData.categories.length, satisfactionData.values.length);
+            satisfactionData.categories = satisfactionData.categories.slice(0, minLength);
+            satisfactionData.values = satisfactionData.values.slice(0, minLength);
+        }
+        
+        // Mettre à jour le graphique avec les données ajustées
+        Plotly.update('customerSatisfactionChart', {
+            labels: [satisfactionData.categories],
+            values: [satisfactionData.values]
+        });
+    }
+</script>
+{% endblock %}

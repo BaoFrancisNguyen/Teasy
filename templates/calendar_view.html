@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Calendrier des Achats{% endblock %}
+
+{% block extra_css %}
+<style>
+    .visualization-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    
+    .calendar-controls {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .heatmap-container {
+        min-height: 400px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Accueil</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('data_processing') }}">Données CSV</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Calendrier des Achats</li>
+                </ol>
+            </nav>
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>
+                    <i class="bi bi-calendar-week"></i> Calendrier des Achats
+                </h1>
+                {% if filename %}
+                <h5 class="text-muted">{{ filename }}</h5>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if not has_data %}
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Attention:</strong> Aucun fichier de données n'est chargé. Veuillez d'abord charger un fichier CSV.
+            <div class="mt-3">
+                <a href="{{ url_for('data_processing') }}" class="btn btn-primary">
+                    <i class="bi bi-upload"></i> Charger un fichier CSV
+                </a>
+            </div>
+        </div>
+        {% else %}
+        
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Card de visualisation du calendrier -->
+                {% include 'day-plot-calendar.html' %}
+                
+                <!-- Carte d'explication -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header card-header-primary">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-info-circle"></i> À propos de cette visualisation
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <h5>Calendrier des Achats</h5>
+                        <p>Cette visualisation représente le nombre d'achats par jour sous forme de calendrier thermique. Chaque cellule représente un jour, et l'intensité de couleur indique le nombre d'achats effectués ce jour-là.</p>
+                        
+                        <h6>Comment l'utiliser :</h6>
+                        <ul>
+                            <li>Utilisez le sélecteur de magasin pour filtrer par enseigne</li>
+                            <li>Passez la souris sur une cellule pour voir le nombre exact d'achats</li>
+                            <li>Observez les tendances hebdomadaires et les pics d'activité</li>
+                        </ul>
+                        
+                        <h6>Interprétation :</h6>
+                        <ul>
+                            <li>Les couleurs plus foncées indiquent un plus grand nombre d'achats</li>
+                            <li>Les variations entre les jours de la semaine peuvent révéler des habitudes d'achat</li>
+                            <li>Comparez les différents magasins pour découvrir vos préférences</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Assurez-vous que Plotly.js est bien chargé -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<!-- Inclure le script du calendrier -->
+<script src="{{ url_for('static', filename='js/day-plot-calendar.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,654 @@
+{% extends "base.html" %}
+
+{% block title %}MILAN - Traitement de données{% endblock %}
+
+{% block extra_css %}
+<style>
+    .feature-icon {
+        font-size: 2.5rem;
+        color: #3498db;
+        margin-bottom: 15px;
+    }
+    .drag-drop-zone {
+        border: 2px dashed #cccccc;
+        border-radius: 10px;
+        padding: 40px 20px;
+        text-align: center;
+        background-color: #f8f9fa;
+        transition: all 0.3s;
+        margin-bottom: 20px;
+    }
+    .drag-drop-zone.active {
+        border-color: #3498db;
+        background-color: rgba(52, 152, 219, 0.1);
+    }
+    .drag-drop-zone .upload-icon {
+        font-size: 4rem;
+        color: #95a5a6;
+        margin-bottom: 15px;
+        transition: all 0.3s;
+    }
+    .drag-drop-zone:hover .upload-icon {
+        color: #3498db;
+    }
+    .file-upload-input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+    .database-filters {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-left: 4px solid #3498db;
+    }
+    .database-info {
+        padding: 10px 15px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+    }
+    .database-info i {
+        margin-right: 8px;
+    }
+    .recent-analysis-item {
+        transition: all 0.3s ease;
+    }
+    .recent-analysis-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .filter-help-text {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+    .filter-section {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+    .filter-section:last-child {
+        border-bottom: none;
+    }
+    .filter-section-title {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+    .advanced-filters-toggle {
+        cursor: pointer;
+        color: #3498db;
+        user-select: none;
+    }
+    .advanced-filters {
+        display: none;
+    }
+    .advanced-filters.show {
+        display: block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h1 class="mb-4">
+                <i class="bi bi-table"></i> Traitement des données
+            </h1>
+            
+            <ul class="nav nav-tabs mb-4" id="dataTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="database-tab" data-bs-toggle="tab" data-bs-target="#database-tab-pane" type="button" role="tab" aria-controls="database-tab-pane" aria-selected="true">
+                        <i class="bi bi-database"></i> Base de données
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-tab-pane" type="button" role="tab" aria-controls="upload-tab-pane" aria-selected="false">
+                        <i class="bi bi-upload"></i> Import CSV
+                    </button>
+                </li>
+            </ul>
+            
+            <div class="tab-content" id="dataTabsContent">
+                <!-- Onglet Base de données -->
+                <div class="tab-pane fade show active" id="database-tab-pane" role="tabpanel" aria-labelledby="database-tab" tabindex="0">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            <h5 class="mb-0">Charger les données depuis SQLite</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Information sur l'état de la base de données -->
+                            {% if db_connected %}
+                                <div class="database-info alert alert-success">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    {{ db_info }}
+                                </div>
+                            {% else %}
+                                <div class="database-info alert alert-warning">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                    {{ db_error }}
+                                </div>
+                            {% endif %}
+                        
+                            <div class="text-center mb-4">
+                                <div class="feature-icon">
+                                    <i class="bi bi-receipt"></i>
+                                </div>
+                                <h4>Transactions</h4>
+                                <p class="text-muted">Explorez et analysez vos données de transactions</p>
+                            </div>
+                            
+                            <!-- Formulaire pour les filtres SQLite -->
+                            <form action="{{ url_for('data_processing') }}" method="post" id="sqlite-data-form">
+                                <input type="hidden" name="data_source" value="sqlite">
+                                
+                                <div class="database-filters">
+                                    <div class="filter-section">
+                                        <div class="filter-section-title">
+                                            <i class="bi bi-calendar-range"></i> Période d'analyse
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="date_debut" class="form-label">Date de début</label>
+                                                    <input type="date" class="form-control" id="date_debut" name="date_debut" 
+                                                           value="{{ default_date_debut }}" required>
+                                                    <div class="filter-help-text">Date au format YYYY-MM-DD</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="date_fin" class="form-label">Date de fin</label>
+                                                    <input type="date" class="form-control" id="date_fin" name="date_fin" 
+                                                           value="{{ default_date_fin }}" required>
+                                                    <div class="filter-help-text">Date au format YYYY-MM-DD</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="filter-section">
+                                        <div class="filter-section-title">
+                                            <i class="bi bi-shop"></i> Point de vente
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="magasin_id" class="form-label">Magasin</label>
+                                                    <select class="form-select" id="magasin_id" name="magasin_id">
+                                                        <option value="">Tous les magasins</option>
+                                                        {% for magasin in magasins %}
+                                                            <option value="{{ magasin.magasin_id }}">{{ magasin.nom }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <div class="filter-help-text">Filtrer par magasin spécifique</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="enseigne" class="form-label">Enseigne</label>
+                                                    <select class="form-select" id="enseigne" name="enseigne">
+                                                        <option value="">Toutes les enseignes</option>
+                                                        {% for enseigne in enseignes %}
+                                                            <option value="{{ enseigne }}">{{ enseigne }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <div class="filter-help-text">Filtrer par marque</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="ville" class="form-label">Ville</label>
+                                                    <select class="form-select" id="ville" name="ville">
+                                                        <option value="">Toutes les villes</option>
+                                                        {% for ville in villes %}
+                                                            <option value="{{ ville }}">{{ ville }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <div class="filter-help-text">Filtrer par localisation</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="advanced-filters-toggle mb-3" id="advanced-filters-toggle">
+                                        <i class="bi bi-plus-circle"></i> Afficher les filtres avancés
+                                    </div>
+                                    
+                                    <div class="advanced-filters" id="advanced-filters">
+                                        <div class="filter-section">
+                                            <div class="filter-section-title">
+                                                <i class="bi bi-tag"></i> Produits
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="categorie_id" class="form-label">Catégorie</label>
+                                                        <select class="form-select" id="categorie_id" name="categorie_id">
+                                                            <option value="">Toutes les catégories</option>
+                                                            {% for categorie in categories_produits %}
+                                                                <option value="{{ categorie.categorie_id }}">{{ categorie.nom }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <div class="filter-help-text">Filtrer par catégorie de produit</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="produit_id" class="form-label">Produit</label>
+                                                        <select class="form-select" id="produit_id" name="produit_id">
+                                                            <option value="">Tous les produits</option>
+                                                            {% for produit in produits %}
+                                                                <option value="{{ produit.produit_id }}">{{ produit.nom }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <div class="filter-help-text">Filtrer par produit spécifique</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="filter-section">
+                                            <div class="filter-section-title">
+                                                <i class="bi bi-cash-coin"></i> Paiement et Montant
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="moyen_paiement" class="form-label">Moyen de paiement</label>
+                                                        <select class="form-select" id="moyen_paiement" name="moyen_paiement">
+                                                            <option value="">Tous les moyens de paiement</option>
+                                                            {% for moyen in moyens_paiement %}
+                                                                <option value="{{ moyen }}">{{ moyen|title }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <div class="filter-help-text">Filtrer par méthode de paiement</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="montant_min" class="form-label">Montant minimum</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text">€</span>
+                                                            <input type="number" class="form-control" id="montant_min" name="montant_min" min="0" step="0.01" placeholder="0.00">
+                                                        </div>
+                                                        <div class="filter-help-text">Montant minimum de transaction</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label for="montant_max" class="form-label">Montant maximum</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text">€</span>
+                                                            <input type="number" class="form-control" id="montant_max" name="montant_max" min="0" step="0.01" placeholder="1000.00">
+                                                        </div>
+                                                        <div class="filter-help-text">Montant maximum de transaction</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="filter-section">
+                                            <div class="filter-section-title">
+                                                <i class="bi bi-gear"></i> Options additionnelles
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="checkbox" id="include_items" name="include_items" value="true" checked>
+                                                <label class="form-check-label" for="include_items">
+                                                    Inclure les détails des articles pour chaque transaction
+                                                </label>
+                                                <div class="filter-help-text">Cette option peut ralentir le chargement pour les grands volumes de données</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="filter-section">
+                                    <div class="filter-section-title">
+                                        <i class="bi bi-people"></i> Données démographiques
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="include_demographics" name="include_demographics" value="true">
+                                        <label class="form-check-label" for="include_demographics">
+                                            Inclure les données démographiques des clients
+                                        </label>
+                                        <div class="filter-help-text">
+                                            Ajoute les informations de genre, âge, segment client et niveau de fidélité aux transactions
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-database-fill-up"></i> Charger les données
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" id="reset-filters-btn">
+                                        <i class="bi bi-arrow-counterclockwise"></i> Réinitialiser les filtres
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <div class="mt-4">
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle-fill me-2"></i>
+                                    {% if not db_connected %}
+                                        Pour utiliser cette fonctionnalité, exécutez d'abord le script <code>data_initialization.py</code> pour créer et remplir la base de données avec des exemples.
+                                    {% else %}
+                                        Vous pouvez filtrer les transactions par période, magasin ou d'autres critères. Laissez les options vides pour récupérer toutes les données disponibles.
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Onglet Import CSV -->
+                <div class="tab-pane fade" id="upload-tab-pane" role="tabpanel" aria-labelledby="upload-tab" tabindex="0">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            <h5 class="mb-0">Importer un fichier CSV</h5>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ url_for('data_processing') }}" method="post" enctype="multipart/form-data" id="uploadForm">
+                                <div class="position-relative drag-drop-zone" id="dragDropZone">
+                                    <div class="upload-icon">
+                                        <i class="bi bi-file-earmark-arrow-up"></i>
+                                    </div>
+                                    <h4>Glissez-déposez votre fichier CSV ici</h4>
+                                    <p class="text-muted">ou cliquez pour sélectionner un fichier</p>
+                                    <input type="file" name="file" class="file-upload-input" id="fileUpload" accept=".csv">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="delimiter" class="form-label">Délimiteur</label>
+                                    <select class="form-control" id="delimiter" name="delimiter">
+                                        <option value="auto">Auto-détection</option>
+                                        <option value=",">Virgule (,)</option>
+                                        <option value=";" selected>Point-virgule (;)</option>
+                                        <option value="\t">Tabulation</option>
+                                        <option value="|">Pipe (|)</option>
+                                    </select>
+                                    <div class="filter-help-text">
+                                        Sélectionnez le caractère qui sépare les colonnes dans votre fichier CSV.
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between">
+                                    <span id="selectedFileName" class="text-muted"></span>
+                                    <button type="submit" class="btn btn-primary" id="uploadButton" disabled>
+                                        <i class="bi bi-upload"></i> Charger le fichier
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Historique récent -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Historique récent</h5>
+                </div>
+                <div class="card-body">
+                    <p>Accédez rapidement à vos analyses récentes :</p>
+                    <div class="list-group">
+                        <!-- Si des analyses récentes existent, les afficher ici -->
+                        {% if recent_analyses %}
+                            {% for analysis in recent_analyses[:5] %}
+                                <a href="{{ url_for('history') }}#{{ analysis.id }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center recent-analysis-item">
+                                    <div>
+                                        <h6 class="mb-1">{{ analysis.dataset_name }}</h6>
+                                        <small class="text-muted">{{ analysis.timestamp[:16].replace('T', ' ') }}</small>
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">
+                                        <i class="bi bi-eye"></i>
+                                    </span>
+                                </a>
+                            {% endfor %}
+                        {% else %}
+                            <div class="list-group-item text-center text-muted">
+                                <p>Aucune analyse récente trouvée</p>
+                                <small>Chargez des données pour commencer</small>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section Fonctionnalités disponibles -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header">
+                            <h5 class="mb-0">Fonctionnalités disponibles</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <div>
+                                        <strong>Traitement des transactions</strong>
+                                        <div class="small text-muted">Analyse complète des achats et habitudes</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <div>
+                                        <strong>Détection des tendances</strong>
+                                        <div class="small text-muted">Identifiez les tendances d'achat et les préférences</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <div>
+                                        <strong>Statistiques avancées</strong>
+                                        <div class="small text-muted">Graphiques et insights sur vos dépenses</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <div>
+                                        <strong>Clustering et segmentation</strong>
+                                        <div class="small text-muted">Regroupez vos tickets par habitudes d'achat</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <div>
+                                        <strong>Transformation de données</strong>
+                                        <div class="small text-muted">Nettoyage et préparation des données</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header">
+                            <h5 class="mb-0">Analyse de transactions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="bi bi-receipt-cutoff fs-1 text-primary me-3"></i>
+                                <div>
+                                    <h5 class="mb-1">Comprendre vos habitudes d'achats</h5>
+                                    <p class="mb-0 text-muted">Analysez vos dépenses et optimisez votre budget</p>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                <strong>Bénéfices clés :</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Suivi précis de vos dépenses par catégorie</li>
+                                    <li>Identification des économies potentielles</li>
+                                    <li>Détection des magasins les plus avantageux</li>
+                                    <li>Analyse des tendances de consommation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gestion du glisser-déposer de fichiers
+        const dragDropZone = document.getElementById('dragDropZone');
+        const fileUpload = document.getElementById('fileUpload');
+        const selectedFileName = document.getElementById('selectedFileName');
+        const uploadButton = document.getElementById('uploadButton');
+        
+        // Gestionnaire pour le changement de fichier
+        if (fileUpload) {
+            fileUpload.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    selectedFileName.textContent = 'Fichier sélectionné : ' + this.files[0].name;
+                    uploadButton.disabled = false;
+                } else {
+                    selectedFileName.textContent = '';
+                    uploadButton.disabled = true;
+                }
+            });
+        }
+        
+        // Gestionnaires pour le drag & drop
+        if (dragDropZone) {
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dragDropZone.addEventListener(eventName, function(e) {
+                    e.preventDefault();
+                    dragDropZone.classList.add('active');
+                });
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dragDropZone.addEventListener(eventName, function(e) {
+                    e.preventDefault();
+                    dragDropZone.classList.remove('active');
+                    
+                    if (eventName === 'drop') {
+                        fileUpload.files = e.dataTransfer.files;
+                        fileUpload.dispatchEvent(new Event('change'));
+                    }
+                });
+            });
+        }
+        
+        // Gestion des filtres avancés
+        const advancedFiltersToggle = document.getElementById('advanced-filters-toggle');
+        const advancedFilters = document.getElementById('advanced-filters');
+        
+        if (advancedFiltersToggle && advancedFilters) {
+            advancedFiltersToggle.addEventListener('click', function() {
+                advancedFilters.classList.toggle('show');
+                if (advancedFilters.classList.contains('show')) {
+                    advancedFiltersToggle.innerHTML = '<i class="bi bi-dash-circle"></i> Masquer les filtres avancés';
+                } else {
+                    advancedFiltersToggle.innerHTML = '<i class="bi bi-plus-circle"></i> Afficher les filtres avancés';
+                }
+            });
+        }
+        
+        // Initialisation des dates par défaut
+        const dateFin = document.getElementById('date_fin');
+        if (dateFin && !dateFin.value) {
+            const today = new Date();
+            dateFin.value = today.toISOString().split('T')[0];
+        }
+        
+        const dateDebut = document.getElementById('date_debut');
+        if (dateDebut && !dateDebut.value) {
+            const threeMonthsAgo = new Date();
+            threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+            dateDebut.value = threeMonthsAgo.toISOString().split('T')[0];
+        }
+        
+        // Synchronisation entre les filtres magasin et enseigne
+        const magasinSelect = document.getElementById('magasin_id');
+        const enseigneSelect = document.getElementById('enseigne');
+        const villeSelect = document.getElementById('ville');
+        
+        if (magasinSelect && enseigneSelect) {
+            magasinSelect.addEventListener('change', function() {
+                // Si on sélectionne un magasin spécifique, désactiver la sélection d'enseigne et ville
+                if (this.value) {
+                    enseigneSelect.value = '';
+                    enseigneSelect.disabled = true;
+                    if (villeSelect) {
+                        villeSelect.value = '';
+                        villeSelect.disabled = true;
+                    }
+                } else {
+                    enseigneSelect.disabled = false;
+                    if (villeSelect) {
+                        villeSelect.disabled = false;
+                    }
+                }
+            });
+            
+            enseigneSelect.addEventListener('change', function() {
+                // Si on sélectionne une enseigne spécifique, désactiver la sélection de magasin
+                if (this.value) {
+                    magasinSelect.value = '';
+                    magasinSelect.disabled = true;
+                } else {
+                    magasinSelect.disabled = false;
+                }
+            });
+        }
+        
+        // Gestionnaire pour le bouton de réinitialisation des filtres
+        const resetBtn = document.getElementById('reset-filters-btn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', function() {
+                // Réinitialiser le formulaire
+                document.getElementById('sqlite-data-form').reset();
+                
+                // Réinitialiser les dates
+                const today = new Date();
+                if (dateFin) {
+                    dateFin.value = today.toISOString().split('T')[0];
+                }
+                
+                const threeMonthsAgo = new Date();
+                threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+                if (dateDebut) {
+                    dateDebut.value = threeMonthsAgo.toISOString().split('T')[0];
+                }
+                
+                // Réactiver les sélecteurs
+                if (magasinSelect) {
+                    magasinSelect.disabled = false;
+                }
+                if (enseigneSelect) {
+                    enseigneSelect.disabled = false;
+                }
+                if (villeSelect) {
+                    villeSelect.disabled = false;
+                }
+                
+                // Masquer les filtres avancés
+                if (advancedFilters && advancedFilters.classList.contains('show')) {
+                    advancedFilters.classList.remove('show');
+                    if (advancedFiltersToggle) {
+                        advancedFiltersToggle.innerHTML = '<i class="bi bi-plus-circle"></i> Afficher les filtres avancés';
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

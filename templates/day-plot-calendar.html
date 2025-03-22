@@ -1,0 +1,765 @@
+<!-- day-plot-calendar.html -->
+<!-- Template complet pour le calendrier des achats avec filtres avancés -->
+
+<div class="card shadow-sm mb-4 visualization-container">
+  <div class="card-header card-header-primary">
+    <h5 class="card-title mb-0 visualization-title">
+      <i class="bi bi-calendar-week"></i> Calendrier des Achats
+    </h5>
+  </div>
+  <div class="card-body">
+    <!-- Filtres avancés -->
+    <div class="row mb-3 calendar-controls">
+      <div class="col-md-3 mb-3">
+        <div class="form-group">
+          <label for="brand-select" class="form-label fw-bold">Magasin :</label>
+          <select id="brand-select" class="form-select">
+            <option value="all">Tous les magasins</option>
+            <!-- Les options seront ajoutées par JavaScript -->
+          </select>
+        </div>
+      </div>
+      
+      <div class="col-md-3 mb-3">
+        <div class="form-group">
+          <label for="payment-method-select" class="form-label fw-bold">Moyen de paiement :</label>
+          <select id="payment-method-select" class="form-select">
+            <option value="all">Tous les moyens</option>
+            <!-- Les options seront ajoutées par JavaScript -->
+          </select>
+        </div>
+      </div>
+      
+      <div class="col-md-3 mb-3">
+        <div class="form-group">
+          <label for="gender-select" class="form-label fw-bold">Genre :</label>
+          <select id="gender-select" class="form-select">
+            <option value="all">Tous</option>
+            <option value="homme">Homme</option>
+            <option value="femme">Femme</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="col-md-3 mb-3">
+        <div class="form-group">
+          <label for="age-range-select" class="form-label fw-bold">Tranche d'âge :</label>
+          <select id="age-range-select" class="form-select">
+            <option value="all">Toutes</option>
+            <option value="0-18">0-18 ans</option>
+            <option value="19-25">19-25 ans</option>
+            <option value="26-35">26-35 ans</option>
+            <option value="36-50">36-50 ans</option>
+            <option value="51+">51+ ans</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="col-md-3 mb-3">
+        <div class="form-group">
+          <label for="article-select" class="form-label fw-bold">Article :</label>
+          <select id="article-select" class="form-select">
+            <option value="all">Tous les articles</option>
+            <!-- Les options seront ajoutées par JavaScript -->
+          </select>
+        </div>
+      </div>
+      
+      <div class="col-md-9 mb-3">
+        <div class="row">
+          <div class="col-md-5">
+            <div class="form-group">
+              <label for="date-start" class="form-label fw-bold">Période du :</label>
+              <input type="date" id="date-start" class="form-control">
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="form-group">
+              <label for="date-end" class="form-label fw-bold">au :</label>
+              <input type="date" id="date-end" class="form-control">
+            </div>
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button id="apply-filters" class="btn btn-primary w-100">
+              <i class="bi bi-filter"></i> Filtrer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Indicateur de chargement -->
+    <div id="loading-indicator" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+      <p class="mt-2">Chargement des données...</p>
+    </div>
+    
+    <!-- Message d'erreur -->
+    <div id="error-message" class="alert alert-danger" style="display: none;">
+      Une erreur s'est produite lors du chargement des données.
+    </div>
+    
+    <!-- Conteneur pour le graphique -->
+    <div id="day-plot-calendar" style="height: 600px; display: none;"></div>
+    
+    <!-- Informations sur les filtres appliqués -->
+    <div id="filter-info" class="alert alert-info mt-3" style="display: none;">
+      <h6 class="mb-2">Filtres appliqués :</h6>
+      <ul id="active-filters" class="mb-0"></ul>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-6">
+        <div class="form-group mb-2">
+          <label for="gender-select" class="form-label">Genre du client :</label>
+          <select id="gender-select" class="form-select form-select-sm">
+            <option value="all">Tous les genres</option>
+            <!-- Les options seront chargées dynamiquement -->
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group mb-2">
+          <label for="age-range-select" class="form-label">Tranche d'âge :</label>
+          <select id="age-range-select" class="form-select form-select-sm">
+            <option value="all">Toutes les tranches d'âge</option>
+            <option value="0-18">Moins de 19 ans</option>
+            <option value="19-25">19 à 25 ans</option>
+            <option value="26-35">26 à 35 ans</option>
+            <option value="36-50">36 à 50 ans</option>
+            <option value="51+">51 ans et plus</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CSS pour le calendrier -->
+<style>
+/* Styles de base */
+.calendar-controls {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+#day-plot-calendar {
+    height: 600px !important;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.plotly-tooltip {
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+}
+
+.form-select, .form-control {
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid #dee2e6;
+    width: 100%;
+    background-color: #fff;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.visualization-container {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.visualization-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+}
+
+#loading-indicator .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+#error-message {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f8d7da;
+    color: #721c24;
+    margin: 20px 0;
+}
+
+#active-filters li {
+    margin-bottom: 5px;
+}
+
+.card-header-primary {
+    background-color: #f0f8ff;
+    border-bottom: 2px solid #0d6efd;
+}
+
+/* Animation de pulsation pour le bouton */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(13, 110, 253, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(13, 110, 253, 0);
+    }
+}
+
+.btn-pulse {
+    animation: pulse 1s;
+    position: relative;
+}
+
+/* Style pour le bouton d'application des filtres */
+#apply-filters {
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+#apply-filters:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+    transform: translateY(-2px);
+}
+
+#apply-filters:active {
+    transform: translateY(0);
+}
+
+/* Style pour la zone d'information des filtres */
+#filter-info {
+    background-color: #e9f5ff;
+    border-left: 4px solid #0d6efd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+#filter-info h6 {
+    color: #0d6efd;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+#active-filters {
+    padding-left: 20px;
+    margin: 0;
+}
+
+/* Ajustements pour les écrans plus petits */
+@media (max-width: 768px) {
+    .calendar-controls {
+        padding: 15px;
+    }
+    
+    #apply-filters {
+        margin-top: 10px;
+        width: 100%;
+    }
+}
+</style>
+
+<!-- JavaScript pour le calendrier -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Sélecteurs des éléments du DOM
+    const dayPlotCalendar = document.getElementById('day-plot-calendar');
+    const brandSelect = document.getElementById('brand-select');
+    const paymentMethodSelect = document.getElementById('payment-method-select');
+    const genderSelect = document.getElementById('gender-select');
+    const ageRangeSelect = document.getElementById('age-range-select');
+    const articleSelect = document.getElementById('article-select');
+    const dateStart = document.getElementById('date-start');
+    const dateEnd = document.getElementById('date-end');
+    const applyFiltersBtn = document.getElementById('apply-filters');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const errorMessage = document.getElementById('error-message');
+    const filterInfo = document.getElementById('filter-info');
+    const activeFilters = document.getElementById('active-filters');
+
+    // Initialiser les dates par défaut (3 derniers mois)
+    const today = new Date();
+    dateEnd.valueAsDate = today;
+    
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(today.getMonth() - 3);
+    dateStart.valueAsDate = threeMonthsAgo;
+
+    // Fonction pour charger les données du calendrier
+    async function loadCalendarData() {
+        try {
+            // Afficher l'indicateur de chargement
+            loadingIndicator.style.display = 'block';
+            dayPlotCalendar.style.display = 'none';
+            errorMessage.style.display = 'none';
+            filterInfo.style.display = 'none';
+
+            // Préparer les filtres
+            const filters = {
+                brand: brandSelect.value || 'all',
+                payment_method: paymentMethodSelect.value || 'all',
+                gender: genderSelect.value || 'all',
+                age_range: ageRangeSelect.value || 'all',
+                article: articleSelect.value || 'all',
+                date_start: dateStart.value || null,
+                date_end: dateEnd.value || null
+            };
+
+            // Requête AJAX pour obtenir les données
+            const response = await fetch('/api/calendar_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(filters)
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error || 'Erreur lors du chargement des données');
+            }
+
+            // Mettre à jour les listes de sélection si des données sont disponibles
+            if (data.payment_methods && data.payment_methods.length > 0) {
+                updateSelectOptions(paymentMethodSelect, data.payment_methods, 'all', 'Tous les moyens');
+            }
+            
+            if (data.articles && data.articles.length > 0) {
+                updateSelectOptions(articleSelect, data.articles, 'all', 'Tous les articles');
+            }
+            
+            if (data.brands && data.brands.length > 0) {
+                updateSelectOptions(brandSelect, data.brands, 'all', 'Tous les magasins');
+            }
+
+            // Afficher les filtres actifs
+            displayActiveFilters(filters);
+
+            // Si aucune donnée n'est disponible
+            if (!data.dates || data.dates.length === 0) {
+                errorMessage.textContent = 'Aucune donnée disponible pour cette sélection';
+                errorMessage.style.display = 'block';
+                loadingIndicator.style.display = 'none';
+                return;
+            }
+
+            // Préparer les données pour le calendrier
+            const calendarData = data.dates.map((date, index) => ({
+                date: date,
+                value: data.values[index] || 0,
+                paymentInfo: data.paymentInfo ? data.paymentInfo[index] : null,
+                magasin: data.magasins ? data.magasins[index] : null,
+                gender: data.genders ? data.genders[index] : null,
+                age: data.ages ? data.ages[index] : null
+            }));
+
+            // Créer une structure de données de type calendrier (regroupement par semaine/jour)
+            const weeks = {};
+            const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+            
+            // Agréger les données par date
+            const dateMap = {};
+            calendarData.forEach(item => {
+                if (!dateMap[item.date]) {
+                    dateMap[item.date] = {
+                        date: item.date,
+                        value: item.value,
+                        details: []
+                    };
+                } else {
+                    dateMap[item.date].value += item.value;
+                }
+                
+                // Ajouter les informations détaillées
+                dateMap[item.date].details.push({
+                    paymentInfo: item.paymentInfo,
+                    magasin: item.magasin,
+                    gender: item.gender,
+                    age: item.age,
+                    value: item.value
+                });
+            });
+            
+            // Structurer les données par semaine pour l'affichage du calendrier
+            Object.values(dateMap).forEach(item => {
+                const date = new Date(item.date);
+                const dayOfWeek = date.getDay(); // 0 = Dimanche, 6 = Samedi
+                
+                // Trouver le lundi de la semaine
+                const mondayDate = new Date(date);
+                mondayDate.setDate(date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1)); // Si dimanche, reculer d'une semaine
+                
+                const weekKey = mondayDate.toISOString().split('T')[0];
+                
+                if (!weeks[weekKey]) {
+                    weeks[weekKey] = Array(7).fill(null).map(() => ({ value: 0, details: [], date: null }));
+                }
+                
+                // Mettre à jour la valeur pour ce jour de la semaine
+                const dayIndex = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+                weeks[weekKey][dayIndex].value = item.value;
+                weeks[weekKey][dayIndex].details = item.details;
+                weeks[weekKey][dayIndex].date = item.date;
+            });
+
+            // Trier les semaines par ordre chronologique
+            const weekKeys = Object.keys(weeks).sort();
+            const sortedWeeks = weekKeys.map(key => weeks[key]);
+            
+            // Convertir en format adapté pour Plotly
+            const z = sortedWeeks.map(week => week.map(day => day.value || 0));
+            const text = sortedWeeks.map(week => 
+                week.map(day => {
+                    if (!day.date) return "Pas de données";
+                    if (!day.details || day.details.length === 0) return `Date: ${day.date}<br>Pas d'achats`;
+                    
+                    // Regrouper par différents critères
+                    const paymentSummary = {};
+                    const storeSummary = {};
+                    const genderSummary = {};
+                    const ageSummary = {};
+                    
+                    day.details.forEach(detail => {
+                        if (detail.paymentInfo) {
+                            paymentSummary[detail.paymentInfo] = (paymentSummary[detail.paymentInfo] || 0) + detail.value;
+                        }
+                        if (detail.magasin) {
+                            storeSummary[detail.magasin] = (storeSummary[detail.magasin] || 0) + detail.value;
+                        }
+                        if (detail.gender) {
+                            genderSummary[detail.gender] = (genderSummary[detail.gender] || 0) + detail.value;
+                        }
+                        if (detail.age) {
+                            let ageGroup = '';
+                            const age = Number(detail.age);
+                            if (age < 19) ageGroup = '0-18 ans';
+                            else if (age <= 25) ageGroup = '19-25 ans';
+                            else if (age <= 35) ageGroup = '26-35 ans';
+                            else if (age <= 50) ageGroup = '36-50 ans';
+                            else ageGroup = '51+ ans';
+                            
+                            ageSummary[ageGroup] = (ageSummary[ageGroup] || 0) + detail.value;
+                        }
+                    });
+                    
+                    // Construire le texte d'info-bulle
+                    let tooltip = `<b>Date</b>: ${day.date}<br><b>Total</b>: ${day.value} achat(s)<br>`;
+                    
+                    if (Object.keys(paymentSummary).length > 0) {
+                        tooltip += "<br><b>Moyens de paiement</b>:<br>";
+                        Object.entries(paymentSummary).forEach(([method, count]) => {
+                            tooltip += `- ${method}: ${count} achat(s)<br>`;
+                        });
+                    }
+                    
+                    if (Object.keys(storeSummary).length > 0 && filters.brand === 'all') {
+                        tooltip += "<br><b>Magasins</b>:<br>";
+                        Object.entries(storeSummary).forEach(([store, count]) => {
+                            tooltip += `- ${store}: ${count} achat(s)<br>`;
+                        });
+                    }
+                    
+                    if (Object.keys(genderSummary).length > 0 && filters.gender === 'all') {
+                        tooltip += "<br><b>Répartition par genre</b>:<br>";
+                        Object.entries(genderSummary).forEach(([gender, count]) => {
+                            tooltip += `- ${gender}: ${count} achat(s)<br>`;
+                        });
+                    }
+                    
+                    if (Object.keys(ageSummary).length > 0 && filters.age_range === 'all') {
+                        tooltip += "<br><b>Répartition par âge</b>:<br>";
+                        Object.entries(ageSummary).forEach(([ageGroup, count]) => {
+                            tooltip += `- ${ageGroup}: ${count} achat(s)<br>`;
+                        });
+                    }
+                    
+                    return tooltip;
+                })
+            );
+            
+            const x = days;
+            const y = weekKeys.map(week => {
+                const date = new Date(week);
+                return `Semaine du ${date.getDate()}/${date.getMonth() + 1}`;
+            });
+
+            // Créer le tracé de calendrier
+            const plotData = [{
+                z: z,
+                x: x,
+                y: y,
+                type: 'heatmap',
+                // Couleurs inversées de bleu clair à bleu foncé
+                colorscale: [
+                    [0, 'rgb(247, 251, 255)'],   // Très clair (valeurs faibles)
+                    [0.2, 'rgb(198, 219, 239)'], 
+                    [0.4, 'rgb(158, 202, 225)'],
+                    [0.6, 'rgb(107, 174, 214)'],
+                    [0.8, 'rgb(49, 130, 189)'],
+                    [1, 'rgb(8, 48, 107)']       // Très foncé (valeurs élevées)
+                ],
+                showscale: true,
+                hoverongaps: false,
+                text: text,
+                hoverinfo: 'text',
+                colorbar: {
+                    title: 'Nombre d\'achats',
+                    titlefont: {
+                        size: 14
+                    }
+                }
+            }];
+
+            const config = {
+                responsive: true,
+                displayModeBar: true,
+                modeBarButtonsToRemove: [
+                    'lasso2d', 'select2d', 'toggleSpikelines'
+                ],
+                displaylogo: false,
+                toImageButtonOptions: {
+                    format: 'png',
+                    filename: 'calendrier_achats',
+                    height: 600,
+                    width: 1200,
+                    scale: 2
+                }
+            };
+            
+            // Calculer le titre en fonction des filtres
+            let titleText = 'Calendrier des Achats';
+            const filterTexts = [];
+            
+            if (filters.brand !== 'all') {
+                filterTexts.push(`Magasin: ${brandSelect.options[brandSelect.selectedIndex].text}`);
+            }
+            
+            if (filters.payment_method !== 'all') {
+                filterTexts.push(`Paiement: ${paymentMethodSelect.options[paymentMethodSelect.selectedIndex].text}`);
+            }
+            
+            if (filters.gender !== 'all') {
+                filterTexts.push(`Genre: ${genderSelect.options[genderSelect.selectedIndex].text}`);
+            }
+            
+            if (filters.age_range !== 'all') {
+                filterTexts.push(`Âge: ${ageRangeSelect.options[ageRangeSelect.selectedIndex].text}`);
+            }
+            
+            if (filters.article !== 'all') {
+                filterTexts.push(`Article: ${articleSelect.options[articleSelect.selectedIndex].text}`);
+            }
+            
+            if (filterTexts.length > 0) {
+                titleText += ` (${filterTexts.join(', ')})`;
+            }
+
+            const layout = {
+                title: {
+                    text: titleText,
+                    font: {
+                        size: 18
+                    }
+                },
+                // Hauteur augmentée à 600px
+                height: 600,
+                margin: {
+                    l: 150, // Plus de marge à gauche pour les labels de semaine
+                    r: 50,
+                    t: 70,  // Plus de marge en haut pour le titre
+                    b: 50
+                },
+                // Personnalisation des axes
+                xaxis: {
+                    title: 'Jour de la semaine',
+                    titlefont: {
+                        size: 14
+                    }
+                },
+                yaxis: {
+                    title: 'Semaine',
+                    titlefont: {
+                        size: 14
+                    }
+                }
+            };
+
+            // Créer le graphique
+            Plotly.newPlot('day-plot-calendar', plotData, layout, config);
+
+            // Cacher le spinner de chargement
+            loadingIndicator.style.display = 'none';
+            dayPlotCalendar.style.display = 'block';
+
+        } catch (error) {
+            console.error('Erreur lors du chargement des données:', error);
+            loadingIndicator.style.display = 'none';
+            errorMessage.textContent = error.message || 'Une erreur s\'est produite lors du chargement des données.';
+            errorMessage.style.display = 'block';
+        }
+    }
+
+    // Fonction pour mettre à jour les options d'un select
+    function updateSelectOptions(selectElement, options, defaultValue, defaultText) {
+        // Conserver l'option par défaut
+        const defaultOption = selectElement.querySelector(`option[value="${defaultValue}"]`);
+        const currentValue = selectElement.value;
+        
+        // Vider la liste
+        selectElement.innerHTML = '';
+        
+        // Ajouter l'option par défaut
+        if (defaultOption) {
+            selectElement.appendChild(defaultOption);
+        } else {
+            const newDefaultOption = document.createElement('option');
+            newDefaultOption.value = defaultValue;
+            newDefaultOption.textContent = defaultText;
+            selectElement.appendChild(newDefaultOption);
+        }
+        
+        // Ajouter les nouvelles options
+        options.forEach(option => {
+            const optionElement = document.createElement('option');
+            optionElement.value = option;
+            optionElement.textContent = option;
+            selectElement.appendChild(optionElement);
+        });
+        
+        // Restaurer la valeur précédente si possible
+        if (currentValue !== defaultValue) {
+            const exists = Array.from(selectElement.options).some(option => option.value === currentValue);
+            if (exists) {
+                selectElement.value = currentValue;
+            } else {
+                selectElement.value = defaultValue;
+            }
+        }
+    }
+    
+    // Fonction pour afficher les filtres actifs
+    function displayActiveFilters(filters) {
+        // Vérifier si au moins un filtre est actif
+        const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
+            if (key === 'date_start' || key === 'date_end') {
+                return value !== null;
+            }
+            return value !== 'all';
+        });
+        
+        if (!hasActiveFilters) {
+            filterInfo.style.display = 'none';
+            return;
+        }
+        
+        // Préparer la liste des filtres actifs
+        activeFilters.innerHTML = '';
+        
+        if (filters.brand !== 'all') {
+            const li = document.createElement('li');
+            li.textContent = `Magasin : ${brandSelect.options[brandSelect.selectedIndex].text}`;
+            activeFilters.appendChild(li);
+        }
+        
+        if (filters.payment_method !== 'all') {
+            const li = document.createElement('li');
+            li.textContent = `Moyen de paiement : ${paymentMethodSelect.options[paymentMethodSelect.selectedIndex].text}`;
+            activeFilters.appendChild(li);
+        }
+        
+        if (filters.gender !== 'all') {
+            const li = document.createElement('li');
+            li.textContent = `Genre : ${genderSelect.options[genderSelect.selectedIndex].text}`;
+            activeFilters.appendChild(li);
+        }
+        
+        if (filters.age_range !== 'all') {
+            const li = document.createElement('li');
+            li.textContent = `Tranche d'âge : ${ageRangeSelect.options[ageRangeSelect.selectedIndex].text}`;
+            activeFilters.appendChild(li);
+        }
+        
+        if (filters.article !== 'all') {
+            const li = document.createElement('li');
+            li.textContent = `Article : ${articleSelect.options[articleSelect.selectedIndex].text}`;
+            activeFilters.appendChild(li);
+        }
+        
+        if (filters.date_start) {
+            const li = document.createElement('li');
+            li.textContent = `Date de début : ${new Date(filters.date_start).toLocaleDateString()}`;
+            activeFilters.appendChild(li);
+        }
+        
+        if (filters.date_end) {
+            const li = document.createElement('li');
+            li.textContent = `Date de fin : ${new Date(filters.date_end).toLocaleDateString()}`;
+            activeFilters.appendChild(li);
+        }
+        
+        filterInfo.style.display = 'block';
+    }
+    
+    // Charger les données initiales
+    loadCalendarData();
+
+    // Gestionnaire d'événements pour le bouton d'application des filtres
+    if (applyFiltersBtn) {
+        applyFiltersBtn.addEventListener('click', loadCalendarData);
+    }
+
+    // Ajouter un gestionnaire pour le redimensionnement
+    window.addEventListener('resize', function() {
+        if (dayPlotCalendar.style.display !== 'none') {
+            Plotly.relayout('day-plot-calendar', {
+                width: dayPlotCalendar.offsetWidth
+            });
+        }
+    });
+    
+    // Ajouter des gestionnaires pour les sélecteurs (pour l'UI uniquement, le chargement se fait avec le bouton)
+    const selectors = [brandSelect, paymentMethodSelect, genderSelect, ageRangeSelect, articleSelect];
+    selectors.forEach(selector => {
+        if (selector) {
+            selector.addEventListener('change', function() {
+                // Mettre à jour visuellement que le bouton doit être cliqué
+                applyFiltersBtn.classList.add('btn-pulse');
+                setTimeout(() => {
+                    applyFiltersBtn.classList.remove('btn-pulse');
+                }, 1000);
+            });
+        }
+    });
+});
+</script>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .header h1 {
+            color: #0d6efd;
+            margin-bottom: 5px;
+        }
+        .header p {
+            color: #6c757d;
+            font-size: 14px;
+            margin-top: 0;
+        }
+        .kpi-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .kpi-card {
+            width: 22%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .kpi-title {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .kpi-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0d6efd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        .section-title {
+            color: #0d6efd;
+            font-size: 18px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .filter-info {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .filter-title {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 10px;
+            color: #6c757d;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ title }}</h1>
+        <p>Rapport généré le {{ date_generation }}</p>
+        <p>Période : {{ period }}</p>
+    </div>
+    
+    <div class="filter-info">
+        <span class="filter-title">Filtres appliqués :</span>
+        Magasin: {{ filter_info.store }}, Moyen de paiement: {{ filter_info.payment }}, Segment: {{ filter_info.segment }}
+    </div>
+    
+    <h2 class="section-title">Indicateurs clés de performance (KPI)</h2>
+    
+    <div class="kpi-section">
+        <div class="kpi-card">
+            <div class="kpi-title">Chiffre d'affaires</div>
+            <div class="kpi-value">{{ kpis.ca_total|float|round(2) }} €</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Transactions</div>
+            <div class="kpi-value">{{ kpis.transactions_count }}</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Panier moyen</div>
+            <div class="kpi-value">{{ kpis.panier_moyen|float|round(2) }} €</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Points de fidélité</div>
+            <div class="kpi-value">{{ kpis.points_total }}</div>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Répartition des ventes par magasin</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Magasin</th>
+                <th>Montant</th>
+                <th>% du total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if charts_data and charts_data.distribution and charts_data.distribution.stores 
+               and charts_data.distribution.stores.labels and charts_data.distribution.stores.values 
+               and not charts_data.distribution.stores.values is callable %}
+                {% for i in range(charts_data.distribution.stores.labels|length) %}
+                    {% if i < charts_data.distribution.stores.values|length %}
+                    <tr>
+                        <td>{{ charts_data.distribution.stores.labels[i] }}</td>
+                        <td>{{ charts_data.distribution.stores.values[i]|float|round(2) }} €</td>
+                        <td>{{ (charts_data.distribution.stores.values[i]|float / (charts_data.sales.daily.total|float or 1) * 100)|round(1) }}%</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3" class="text-center">Aucune donnée disponible</td>
+                </tr>
+            {% endif %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Total</th>
+                <th>{{ charts_data.sales.daily.total|default(0)|float|round(2) }} €</th>
+                <th>100%</th>
+            </tr>
+        </tfoot>
+    </table>
+    
+    <h2 class="section-title">Répartition des ventes par moyen de paiement</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Moyen de paiement</th>
+                <th>Montant</th>
+                <th>% du total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if charts_data and charts_data.distribution and charts_data.distribution.payments 
+               and charts_data.distribution.payments.labels and charts_data.distribution.payments.values 
+               and not charts_data.distribution.payments.values is callable %}
+                {% for i in range(charts_data.distribution.payments.labels|length) %}
+                    {% if i < charts_data.distribution.payments.values|length %}
+                    <tr>
+                        <td>{{ charts_data.distribution.payments.labels[i] }}</td>
+                        <td>{{ charts_data.distribution.payments.values[i]|float|round(2) }} €</td>
+                        <td>{{ (charts_data.distribution.payments.values[i]|float / (charts_data.sales.daily.total|float or 1) * 100)|round(1) }}%</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3" class="text-center">Aucune donnée disponible</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    
+    <h2 class="section-title">Transactions récentes</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Magasin</th>
+                <th>Montant</th>
+                <th>Moyen de paiement</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in recent_transactions %}
+            <tr>
+                <td>{{ t.id }}</td>
+                <td>{{ t.date_transaction }}</td>
+                <td>{{ t.magasin }}</td>
+                <td>{{ t.montant_total|float|round(2) }} €</td>
+                <td>{{ t.moyen_paiement }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <footer>
+        <p>© 2025 HETIC x DÉKUPLE - Rapport généré le {{ date_generation }}</p>
+    </footer>
+</body>
+</html>
+
+<!-- Section à ajouter dans le template pdf_report.html -->
+
+{% if include_demographics and demographics_data %}
+<div class="page-break"></div>
+<div class="section demographics-section">
+    <h2>Données Démographiques</h2>
+    
+    <div class="row">
+        <!-- Distribution par genre -->
+        {% if demographics_data.gender_distribution %}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Distribution par Genre</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Genre</th>
+                                <th>Nombre</th>
+                                <th>Pourcentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set total = demographics_data.gender_distribution.values()|sum %}
+                            {% for genre, count in demographics_data.gender_distribution.items() %}
+                            <tr>
+                                <td>{{ genre|capitalize }}</td>
+                                <td>{{ count }}</td>
+                                <td>{{ (count / total * 100)|round(1) }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Distribution par âge -->
+        {% if demographics_data.age_distribution %}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Distribution par Âge</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Tranche d'âge</th>
+                                <th>Nombre</th>
+                                <th>Pourcentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set total = demographics_data.age_distribution.values()|sum %}
+                            {% for age_group, count in demographics_data.age_distribution.items() %}
+                            <tr>
+                                <td>{{ age_group }}</td>
+                                <td>{{ count }}</td>
+                                <td>{{ (count / total * 100)|round(1) }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="row mt-4">
+        <!-- Distribution par segment client -->
+        {% if demographics_data.segment_distribution %}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Distribution par Segment</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Segment</th>
+                                <th>Nombre</th>
+                                <th>Pourcentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set total = demographics_data.segment_distribution.values()|sum %}
+                            {% for segment, count in demographics_data.segment_distribution.items() %}
+                            <tr>
+                                <td>{{ segment|capitalize }}</td>
+                                <td>{{ count }}</td>
+                                <td>{{ (count / total * 100)|round(1) }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Panier moyen par segment -->
+        {% if demographics_data.avg_basket_by_segment %}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Panier Moyen par Segment</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Segment</th>
+                                <th>Panier Moyen (€)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for segment, avg_basket in demographics_data.avg_basket_by_segment.items() %}
+                            <tr>
+                                <td>{{ segment|capitalize }}</td>
+                                <td>{{ avg_basket|round(2) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}

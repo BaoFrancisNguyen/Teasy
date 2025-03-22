@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}TEASY{% endblock %}
+
+{% block extra_css %}
+<style>
+    .feature-icon {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .card:hover {
+        transform: translateY(-8px);
+        transition: transform 0.5s ease;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        border-left: 5px solid var(--emerald-500);
+    }
+    .card {
+        background-color: #e4f5f8;  
+        border-left: 5px solid transparent;
+        border: 3px solid #64b9b5; /* Bordure légère grise */
+        border-radius: 8px;  
+        transition: all 0.3s ease;
+    }
+    .btn-outline-primary {
+        border-color: var(--emerald-600);
+        color: var(--emerald-600);
+    }
+    .btn-outline-primary:hover {
+        background-color: var(--emerald-600);
+        color: white;
+    }
+    .btn-outline-danger {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+    .btn-outline-teal {
+        border-color: var(--emerald-700);
+        color: var(--emerald-700);
+    }
+    .btn-outline-warning {
+        border-color: #ffc107;
+        color: #ffc107;
+    }
+    .btn-outline-secondary {
+        border-color: #6c757d;
+        color: #6c757d;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <img class="d-block mx-auto mb-4" src="{{ url_for('static', filename='img/teasy.png') }}" alt="TEASY" width="500"> <!-- Augmenté à 500px -->
+    </div>
+</div>
+
+    <div class="row g-4">
+        <!-- Traitement CSV -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-table text-primary fs-2"></i>
+                    </div>
+                    <h5 class="card-title">Analyse Exploratoire</h5>
+                    <p class="card-text">
+                        Prétraitement, nettoyage et insights automatiques.
+                    </p>
+                    <a href="{{ url_for('data_processing') }}" class="btn btn-outline-primary">
+                        <i class="bi bi-table me-2"></i>Commencer
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Visualisations -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-graph-up text-primary fs-2"></i>
+                    </div>
+                    <h5 class="card-title">Visualisations</h5>
+                    <p class="card-text">
+                        Créez des graphiques interactifs et explorez 
+                        vos données visuellement.
+                    </p>
+                    <a href="{{ url_for('visualizations') }}" class="btn btn-outline-primary">
+                        <i class="bi bi-bar-chart me-2"></i>Visualiser
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Clustering -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-diagram-3 text-teal fs-2"></i>
+                    </div>
+                    <h5 class="card-title">Clustering</h5>
+                    <p class="card-text">
+                        Découvrez des groupes naturels dans vos données.
+                        K-Means, DBSCAN et clustering hiérarchique.
+                    </p>
+                    <a href="{{ url_for('clustering') }}" class="btn btn-outline-teal">
+                        <i class="bi bi-grid-3x3 me-2"></i>Regrouper
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendrier -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-clock-history text-warning fs-2"></i>
+                    </div>
+                    <h5 class="card-title">Daymap</h5>
+                    <p class="card-text">
+                        Consultez les ventes 
+                        par produit dans un intervalle de temps.
+                    </p>
+                    <a href="{{ url_for('calendar_view') }}" class="btn btn-outline-warning">
+                        <i class="bi bi-list me-2"></i>Consulter
+                    </a>
+                </div>
+            </div>
+        </div>
+<!-- DASHBOARD -->
+<div class="col-md-4">
+    <div class="card h-100 shadow-sm">
+        <div class="card-body">
+            <div class="feature-icon mb-3">
+                <i class="bi bi-graph-up text-primary fs-2"></i>
+            </div>
+            <h5 class="card-title">Tableau de Bord</h5>
+            <p class="card-text">
+                Visualisez vos données de manière interactive et découvrez des insights.
+            </p>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">
+                <i class="bi bi-pie-chart-fill me-2"></i>Accéder au Tableau de Bord
+            </a>
+        </div>
+    </div>
+</div>
+        <!-- Cartographie -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-geo-alt text-info fs-2"></i>
+                    </div>
+                    <h5 class="card-title">Cartographie</h5>
+                    <p class="card-text">
+                        Visualisez et analysez des données géographiques. 
+                    </p>
+                    <a href="{{ url_for('maps_view') }}" class="btn btn-outline-info">
+                        <i class="bi bi-map me-2"></i>Explorer
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Historique -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-clock-history text-warning fs-2"></i>
+                    </div>
+                    <h5 class="card-title">Historique</h5>
+                    <p class="card-text">
+                        Consultez vos analyses précédentes. 
+                        Retrouvez facilement vos projets.
+                    </p>
+                    <a href="{{ url_for('history') }}" class="btn btn-outline-warning">
+                        <i class="bi bi-list me-2"></i>Consulter
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paramètres -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-gear text-secondary fs-2"></i>
+                    </div>
+                    <h5 class="card-title">Paramètres</h5>
+                    <p class="card-text">
+                        Personnalisez votre expérience. 
+                        Configurez les modèles et préférences.
+                    </p>
+                    <a href="{{ url_for('settings') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-sliders me-2"></i>Configurer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Informations -->
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <div class="alert alert-light" role="alert">
+                <h4 class="alert-heading">Votre Assistant d'Analyse de Données</h4>
+                <p>
+                    Transformez vos données brutes en insights puissants. 
+                    Analyse locale, traitement intelligent et visualisation interactive.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Ajouter React et Recharts -->
+<script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
+
+<!-- Charger le tableau de bord React -->
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

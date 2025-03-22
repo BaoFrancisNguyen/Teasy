@@ -1,0 +1,1076 @@
+{% extends "base.html" %}
+
+{% block title %}Clustering{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card-header-primary {
+        background-color: #4e73df;
+        color: white;
+    }
+    
+    .cluster-card {
+        transition: transform 0.3s ease;
+        margin-bottom: 1rem;
+    }
+    
+    .cluster-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .stat-badge {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 30px;
+        display: inline-block;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .cluster-viz-container {
+        height: 400px;
+        position: relative;
+    }
+    
+    .analysis-container {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        border-left: 4px solid #4e73df;
+        margin-bottom: 15px;
+        white-space: pre-wrap;
+    }
+    
+    .score-display {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    
+    .algorithm-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .algorithm-card:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .algorithm-card.selected {
+        border-color: #4e73df;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .spinner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    
+    .parameter-row {
+        margin-bottom: 1rem;
+    }
+    
+    .summary-text {
+        white-space: pre-line;
+        line-height: 1.6;
+    }
+    
+    .cluster-stat-item {
+        margin-bottom: 0.75rem;
+    }
+    
+    .markdown-content h1, 
+    .markdown-content h2, 
+    .markdown-content h3, 
+    .markdown-content h4 {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .markdown-content ul, 
+    .markdown-content ol {
+        padding-left: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .markdown-content code {
+        background-color: #f8f9fa;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Accueil</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('data_processing') }}">Données CSV</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Clustering</li>
+                </ol>
+            </nav>
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>
+                    <i class="bi bi-diagram-3"></i> Clustering des données
+                </h1>
+                {% if filename %}
+                <h5 class="text-muted">{{ filename }}</h5>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if not df_info %}
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Attention:</strong> Aucun fichier de données n'est chargé. Veuillez d'abord charger un fichier CSV.
+            <div class="mt-3">
+                <a href="{{ url_for('data_processing') }}" class="btn btn-primary">
+                    <i class="bi bi-upload"></i> Charger un fichier CSV
+                </a>
+            </div>
+        </div>
+        {% else %}
+        
+        <div class="row mb-4">
+            <!-- Statistiques du dataset -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header card-header-primary">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-bar-chart-line"></i> Statistiques du jeu de données
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <h6>Lignes</h6>
+                                    <div class="h3">{{ df_info.shape[0] }}</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <h6>Colonnes</h6>
+                                    <div class="h3">{{ df_info.shape[1] }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h6>Colonnes numériques disponibles</h6>
+                            <div class="d-flex flex-wrap">
+                                {% for col in numeric_columns %}
+                                <span class="badge bg-primary me-1 mb-1">{{ col }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            Le clustering nécessite des données numériques. Seules les colonnes numériques seront utilisées.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Algorithmes de clustering -->
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header card-header-primary">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-gear"></i> Algorithmes de clustering
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="clustering-form" method="post" action="{{ url_for('run_clustering') }}">
+                            <!-- Sélecteur d'algorithme -->
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <div class="card algorithm-card" data-algorithm="kmeans">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">K-Means</h5>
+                                            <p class="card-text small">Regroupement par centroïdes</p>
+                                            <div class="form-check">
+                                                <input class="form-check-input algorithm-radio" type="radio" name="algorithm" id="algorithm-kmeans" value="kmeans" checked>
+                                                <label class="form-check-label" for="algorithm-kmeans">Sélectionner</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card algorithm-card" data-algorithm="dbscan">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">DBSCAN</h5>
+                                            <p class="card-text small">Clustering basé sur la densité</p>
+                                            <div class="form-check">
+                                                <input class="form-check-input algorithm-radio" type="radio" name="algorithm" id="algorithm-dbscan" value="dbscan">
+                                                <label class="form-check-label" for="algorithm-dbscan">Sélectionner</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card algorithm-card" data-algorithm="hierarchical">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Hiérarchique</h5>
+                                            <p class="card-text small">Regroupement par fusion progressive</p>
+                                            <div class="form-check">
+                                                <input class="form-check-input algorithm-radio" type="radio" name="algorithm" id="algorithm-hierarchical" value="hierarchical">
+                                                <label class="form-check-label" for="algorithm-hierarchical">Sélectionner</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Sélection des colonnes -->
+                            <div class="form-group mb-4">
+                                <label for="columns-select">Sélectionner les colonnes à utiliser :</label>
+                                <select multiple class="form-select" id="columns-select" name="columns[]" size="5">
+                                    {% for column in numeric_columns %}
+                                    <option value="{{ column }}" selected>{{ column }}</option>
+                                    {% endfor %}
+                                </select>
+                                <small class="form-text text-muted">
+                                    Maintenez Ctrl (ou Cmd) pour sélectionner plusieurs colonnes. 
+                                    Par défaut, toutes les colonnes numériques sont sélectionnées.
+                                </small>
+                            </div>
+                            
+                            <!-- Paramètres spécifiques aux algorithmes -->
+                            <div id="kmeans-params" class="algorithm-params">
+                                <h6>Paramètres K-Means</h6>
+                                <div class="row parameter-row">
+                                    <div class="col-md-6">
+                                        <label for="kmeans-n-clusters">Nombre de clusters (k) :</label>
+                                        <input type="number" class="form-control" id="kmeans-n-clusters" name="kmeans-n-clusters" value="3" min="2" max="20">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="kmeans-max-iter">Nombre max d'itérations :</label>
+                                        <input type="number" class="form-control" id="kmeans-max-iter" name="kmeans-max-iter" value="300" min="100" max="1000">
+                                    </div>
+                                </div>
+                                <div class="row parameter-row">
+                                    <div class="col-md-6">
+                                        <label for="kmeans-n-init">Nombre d'initialisations :</label>
+                                        <input type="number" class="form-control" id="kmeans-n-init" name="kmeans-n-init" value="10" min="1" max="50">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="button" id="elbow-method-btn" class="btn btn-outline-primary mt-4">
+                                            <i class="bi bi-graph-up"></i> Méthode du coude
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="dbscan-params" class="algorithm-params" style="display: none;">
+                                <h6>Paramètres DBSCAN</h6>
+                                <div class="row parameter-row">
+                                    <div class="col-md-6">
+                                        <label for="dbscan-eps">Epsilon (rayon du voisinage) :</label>
+                                        <input type="number" class="form-control" id="dbscan-eps" name="dbscan-eps" value="0.5" min="0.1" max="10" step="0.1">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="dbscan-min-samples">Nombre min. de points :</label>
+                                        <input type="number" class="form-control" id="dbscan-min-samples" name="dbscan-min-samples" value="5" min="2" max="100">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="hierarchical-params" class="algorithm-params" style="display: none;">
+                                <h6>Paramètres Clustering Hiérarchique</h6>
+                                <div class="row parameter-row">
+                                    <div class="col-md-4">
+                                        <label for="hierarchical-n-clusters">Nombre de clusters :</label>
+                                        <input type="number" class="form-control" id="hierarchical-n-clusters" name="hierarchical-n-clusters" value="3" min="2" max="20">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="hierarchical-affinity">Métrique de distance :</label>
+                                        <select class="form-select" id="hierarchical-affinity" name="hierarchical-affinity">
+                                            <option value="euclidean" selected>Euclidienne</option>
+                                            <option value="manhattan">Manhattan</option>
+                                            <option value="cosine">Cosinus</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="hierarchical-linkage">Critère de liaison :</label>
+                                        <select class="form-select" id="hierarchical-linkage" name="hierarchical-linkage">
+                                            <option value="ward" selected>Ward</option>
+                                            <option value="complete">Complete</option>
+                                            <option value="average">Average</option>
+                                            <option value="single">Single</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-play-fill"></i> Exécuter le clustering
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Résultats du clustering (affiché uniquement s'il y a des résultats) -->
+        {% if clustering_result and clustering_result.success %}
+        <div class="row mt-4" id="results-section">
+            <div class="col-12">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header card-header-primary">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-pie-chart"></i> Résultats du clustering
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Visualisation du clustering -->
+                            <div class="col-md-8">
+                                <div class="cluster-viz-container" id="cluster-viz"></div>
+                            </div>
+                            
+                            <!-- Statistiques du clustering -->
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-bar-chart-line"></i> Évaluation du clustering
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-6 text-center mb-3">
+                                                <p class="mb-1">Nombre de clusters</p>
+                                                <div class="score-display">{{ clustering_result.n_clusters }}</div>
+                                            </div>
+                                            {% if clustering_result.algorithm == 'dbscan' %}
+                                            <div class="col-6 text-center mb-3">
+                                                <p class="mb-1">Points de bruit</p>
+                                                <div class="score-display">{{ clustering_result.noise_points }}</div>
+                                            </div>
+                                            {% elif clustering_result.algorithm == 'kmeans' %}
+                                            <div class="col-6 text-center mb-3">
+                                                <p class="mb-1">Inertie</p>
+                                                <div class="score-display">{{ "%.1f"|format(clustering_result.inertia) }}</div>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <hr>
+                                        
+                                        <div class="row">
+                                            <div class="col-6 text-center mb-3">
+                                                <p class="mb-1">Score silhouette</p>
+                                                <div class="score-display">
+                                                    {% if clustering_result.silhouette_score %}
+                                                    {{ "%.3f"|format(clustering_result.silhouette_score) }}
+                                                    {% else %}
+                                                    N/A
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-6 text-center mb-3">
+                                                <p class="mb-1">Score Calinski-Harabasz</p>
+                                                <div class="score-display">
+                                                    {% if clustering_result.calinski_harabasz_score %}
+                                                    {{ "%.1f"|format(clustering_result.calinski_harabasz_score) }}
+                                                    {% else %}
+                                                    N/A
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mt-3">
+                                            <h6>Taille des clusters</h6>
+                                            {% for cluster_id, size in clustering_result.cluster_sizes.items() %}
+                                            <div class="mb-2">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span>
+                                                        {% if cluster_id == -1 %}
+                                                        Bruit (Cluster -1)
+                                                        {% else %}
+                                                        Cluster {{ cluster_id }}
+                                                        {% endif %}
+                                                    </span>
+                                                    <span class="badge bg-primary">{{ size }} points</span>
+                                                </div>
+                                                <div class="progress mt-1" style="height: 5px;">
+                                                    <div class="progress-bar" style="width: {{ (size / df_info.shape[0] * 100)|round }}%"></div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Analyse des clusters -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header card-header-primary">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-file-text"></i> Analyse des clusters
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Résumé textuel -->
+                            <div class="col-md-6">
+                                <div class="analysis-container">
+                                    <div class="summary-text">{{ cluster_summary|safe }}</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Statistiques par cluster -->
+                            <div class="col-md-6">
+                                <ul class="nav nav-tabs" id="cluster-tabs" role="tablist">
+                                    {% if clustering_result.algorithm == 'dbscan' %}
+                                        {% for cluster_id in clustering_result.cluster_stats %}
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link {% if loop.first %}active{% endif %}" 
+                                                    id="cluster-tab-{{ cluster_id }}" 
+                                                    data-bs-toggle="tab" 
+                                                    data-bs-target="#cluster-content-{{ cluster_id }}" 
+                                                    type="button" 
+                                                    role="tab">
+                                                Cluster {{ cluster_id }}
+                                            </button>
+                                        </li>
+                                        {% endfor %}
+                                    {% else %}
+                                        {% for cluster_idx in range(clustering_result.n_clusters) %}
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link {% if loop.first %}active{% endif %}" 
+                                                    id="cluster-tab-{{ cluster_idx }}" 
+                                                    data-bs-toggle="tab" 
+                                                    data-bs-target="#cluster-content-{{ cluster_idx }}" 
+                                                    type="button" 
+                                                    role="tab">
+                                                Cluster {{ cluster_idx }}
+                                            </button>
+                                        </li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                                
+                                <div class="tab-content mt-3" id="cluster-tab-content">
+                                    {% if clustering_result.algorithm == 'dbscan' %}
+                                        {% for cluster_id, stats in clustering_result.cluster_stats.items() %}
+                                        <div class="tab-pane fade {% if loop.first %}show active{% endif %}" 
+                                             id="cluster-content-{{ cluster_id }}" 
+                                             role="tabpanel">
+                                            <h6>Statistiques du Cluster {{ cluster_id }}</h6>
+                                            <div class="cluster-stats">
+                                                {% for col, values in stats.items() %}
+                                                <div class="cluster-stat-item">
+                                                    <strong>{{ col }}:</strong>
+                                                    <div class="small">
+                                                        <span class="stat-badge bg-light">Moyenne: {{ "%.2f"|format(values.mean) }}</span>
+                                                        <span class="stat-badge bg-light">Médiane: {{ "%.2f"|format(values.median) }}</span>
+                                                        <span class="stat-badge bg-light">Écart-type: {{ "%.2f"|format(values.std) }}</span>
+                                                        <span class="stat-badge bg-light">Min: {{ "%.2f"|format(values.min) }}</span>
+                                                        <span class="stat-badge bg-light">Max: {{ "%.2f"|format(values.max) }}</span>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        {% for cluster_idx in range(clustering_result.n_clusters) %}
+                                        <div class="tab-pane fade {% if loop.first %}show active{% endif %}" 
+                                             id="cluster-content-{{ cluster_idx }}" 
+                                             role="tabpanel">
+                                            <h6>Statistiques du Cluster {{ cluster_idx }}</h6>
+                                            <div class="cluster-stats">
+                                                {% for col, values in clustering_result.cluster_stats[cluster_idx].items() %}
+                                                <div class="cluster-stat-item">
+                                                    <strong>{{ col }}:</strong>
+                                                    <div class="small">
+                                                        <span class="stat-badge bg-light">Moyenne: {{ "%.2f"|format(values.mean) }}</span>
+                                                        <span class="stat-badge bg-light">Médiane: {{ "%.2f"|format(values.median) }}</span>
+                                                        <span class="stat-badge bg-light">Écart-type: {{ "%.2f"|format(values.std) }}</span>
+                                                        <span class="stat-badge bg-light">Min: {{ "%.2f"|format(values.min) }}</span>
+                                                        <span class="stat-badge bg-light">Max: {{ "%.2f"|format(values.max) }}</span>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Analyse IA des clusters -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header card-header-primary">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-robot"></i> Analyse IA des clusters
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="ai-analysis-container">
+                            <!-- Section d'entrée pour l'analyse IA -->
+                            <div id="ai-analysis-input" class="mb-3">
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle-fill me-2"></i>
+                                    Utilisez l'intelligence artificielle pour obtenir une interprétation approfondie des clusters identifiés.
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="ai-context-input">Contexte ou questions spécifiques (facultatif):</label>
+                                    <textarea id="ai-context-input" class="form-control" rows="3" 
+                                              placeholder="Ex: Expliquer les principales différences entre les clusters, identifier des segments de clientèle, etc."></textarea>
+                                </div>
+                                <button id="run-ai-analysis-btn" class="btn btn-primary">
+                                    <i class="bi bi-lightbulb"></i> Analyser avec l'IA
+                                </button>
+                            </div>
+                            
+                            <!-- Indicateur de chargement (masqué par défaut) -->
+                            <div id="ai-analysis-loading" style="display: none;">
+                                <div class="d-flex justify-content-center my-4">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Analyse en cours...</span>
+                                    </div>
+                                </div>
+                                <p class="text-center">L'IA analyse vos clusters, cela peut prendre quelques instants...</p>
+                            </div>
+                            
+                            <!-- Résultats de l'analyse (masqués par défaut) -->
+                            <div id="ai-analysis-results" style="display: none;">
+                                <div class="alert alert-success">
+                                    <i class="bi bi-check-circle-fill me-2"></i>
+                                    Analyse complétée avec succès!
+                                </div>
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h6 class="mb-0">Interprétation des clusters</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="ai-analysis-content" class="markdown-content"></div>
+                                    </div>
+                                </div>
+                                <div class="text-end mt-3">
+                                    <button id="ai-analysis-new-btn" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-arrow-clockwise"></i> Nouvelle analyse
+                                    </button>
+                                    <button id="ai-analysis-copy-btn" class="btn btn-outline-secondary btn-sm">
+                                        <i class="bi bi-clipboard"></i> Copier l'analyse
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Message d'erreur (masqué par défaut) -->
+                            <div id="ai-analysis-error" class="alert alert-danger" style="display: none;">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <span id="ai-analysis-error-message">Une erreur s'est produite.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Actions sur les résultats -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header card-header-primary">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-tools"></i> Actions
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <form action="{{ url_for('save_clustering') }}" method="post">
+                                    <div class="mb-3">
+                                        <label for="cluster-column-name" class="form-label">Nom de la colonne de clusters:</label>
+                                        <input type="text" class="form-control" id="cluster-column-name" name="cluster_column_name" 
+                                               value="cluster_{{ clustering_result.algorithm }}">
+                                    </div>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-save"></i> Enregistrer les clusters dans les données
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-primary" id="btn-export-clusters">
+                                        <i class="bi bi-download"></i> Exporter les résultats (CSV)
+                                    </button>
+                                    <button class="btn btn-outline-primary" id="btn-visualize-3d">
+                                        <i class="bi bi-graph-up"></i> Visualisation 3D
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Modale pour la méthode du coude -->
+        <div class="modal fade" id="elbow-method-modal" tabindex="-1" aria-labelledby="elbow-method-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="elbow-method-modal-label">Méthode du coude (K-Means)</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="elbow-method-loading" class="text-center p-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Chargement...</span>
+                            </div>
+                            <p class="mt-2">Calcul en cours...</p>
+                        </div>
+                        <div id="elbow-method-content" style="display: none;">
+                            <div id="elbow-method-plot" style="height: 400px;"></div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div id="silhouette-plot" style="height: 300px;"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="calinski-plot" style="height: 300px;"></div>
+                                </div>
+                            </div>
+                            <div class="alert alert-info mt-3">
+                                <strong>Comment interpréter :</strong>
+                                <ul class="mb-0">
+                                    <li>Inertie : Cherchez le "coude" dans la courbe où l'inertie commence à diminuer plus lentement.</li>
+                                    <li>Score silhouette : Valeur plus élevée = meilleure séparation des clusters. Cherchez le maximum.</li>
+                                    <li>Score Calinski-Harabasz : Valeur plus élevée = meilleure séparation des clusters. Cherchez le maximum.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="elbow-method-error" class="alert alert-danger" style="display: none;">
+                            Une erreur s'est produite lors du calcul.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-primary" id="apply-optimal-k">Appliquer le K optimal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gestion des cartes d'algorithmes
+        const algorithmCards = document.querySelectorAll('.algorithm-card');
+        const algorithmRadios = document.querySelectorAll('.algorithm-radio');
+        const algorithmParams = document.querySelectorAll('.algorithm-params');
+        
+        // Sélectionner la première carte par défaut
+        if (algorithmCards.length > 0) {
+            algorithmCards[0].classList.add('selected');
+        }
+        
+        // Ajouter les écouteurs d'événements pour chaque carte
+        algorithmCards.forEach(card => {
+            card.addEventListener('click', function() {
+                // Désélectionner toutes les cartes
+                algorithmCards.forEach(c => c.classList.remove('selected'));
+                
+                // Sélectionner cette carte
+                this.classList.add('selected');
+                
+                // Cocher le radio button correspondant
+                const algorithm = this.dataset.algorithm;
+                document.getElementById(`algorithm-${algorithm}`).checked = true;
+                
+                // Afficher les paramètres correspondants
+                algorithmParams.forEach(param => {
+                    param.style.display = 'none';
+                });
+                document.getElementById(`${algorithm}-params`).style.display = 'block';
+            });
+        });
+        
+        // Écouteur pour les boutons radio
+        algorithmRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Mettre à jour la carte sélectionnée
+                algorithmCards.forEach(card => {
+                    card.classList.remove('selected');
+                    if (card.dataset.algorithm === this.value) {
+                        card.classList.add('selected');
+                    }
+                });
+                
+                // Afficher les paramètres correspondants
+                algorithmParams.forEach(param => {
+                    param.style.display = 'none';
+                });
+                document.getElementById(`${this.value}-params`).style.display = 'block';
+            });
+        });
+        
+        // Gestion du bouton pour la méthode du coude
+        const elbowButton = document.getElementById('elbow-method-btn');
+        if (elbowButton) {
+            elbowButton.addEventListener('click', function() {
+                // Afficher la modale
+                const modal = new bootstrap.Modal(document.getElementById('elbow-method-modal'));
+                modal.show();
+                
+                // Afficher le spinner de chargement
+                document.getElementById('elbow-method-loading').style.display = 'block';
+                document.getElementById('elbow-method-content').style.display = 'none';
+                document.getElementById('elbow-method-error').style.display = 'none';
+                
+                // Récupérer les colonnes sélectionnées
+                const columnsSelect = document.getElementById('columns-select');
+                const selectedColumns = Array.from(columnsSelect.selectedOptions).map(option => option.value);
+                
+                // Faire la requête AJAX pour calculer les données du coude
+                fetch('/api/elbow_method', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        columns: selectedColumns
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Cacher le spinner
+                    document.getElementById('elbow-method-loading').style.display = 'none';
+                    
+                    if (data.success) {
+                        // Afficher le contenu
+                        document.getElementById('elbow-method-content').style.display = 'block';
+                        
+                        // Créer le graphique de la méthode du coude
+                        Plotly.newPlot('elbow-method-plot', [{
+                            x: data.n_clusters_range,
+                            y: data.inertias,
+                            type: 'scatter',
+                            mode: 'lines+markers',
+                            marker: {
+                                color: 'rgb(65, 105, 225)',
+                                size: 10
+                            },
+                            line: {
+                                color: 'rgb(65, 105, 225)',
+                                width: 3
+                            }
+                        }], {
+                            title: 'Méthode du coude - K-Means',
+                            xaxis: {
+                                title: 'Nombre de clusters (k)',
+                                tickmode: 'linear',
+                                tick0: 2,
+                                dtick: 1
+                            },
+                            yaxis: {
+                                title: 'Inertie'
+                            }
+                        });
+                        
+                        // Créer le graphique du score silhouette
+                        Plotly.newPlot('silhouette-plot', [{
+                            x: data.n_clusters_range,
+                            y: data.silhouette_scores,
+                            type: 'scatter',
+                            mode: 'lines+markers',
+                            marker: {
+                                color: 'rgb(50, 205, 50)',
+                                size: 10
+                            },
+                            line: {
+                                color: 'rgb(50, 205, 50)',
+                                width: 3
+                            }
+                        }], {
+                            title: 'Score silhouette',
+                            xaxis: {
+                                title: 'Nombre de clusters (k)',
+                                tickmode: 'linear',
+                                tick0: 2,
+                                dtick: 1
+                            },
+                            yaxis: {
+                                title: 'Score silhouette'
+                            }
+                        });
+                        
+                        // Créer le graphique du score Calinski-Harabasz
+                        Plotly.newPlot('calinski-plot', [{
+                            x: data.n_clusters_range,
+                            y: data.calinski_scores,
+                            type: 'scatter',
+                            mode: 'lines+markers',
+                            marker: {
+                                color: 'rgb(255, 165, 0)',
+                                size: 10
+                            },
+                            line: {
+                                color: 'rgb(255, 165, 0)',
+                                width: 3
+                            }
+                        }], {
+                            title: 'Score Calinski-Harabasz',
+                            xaxis: {
+                                title: 'Nombre de clusters (k)',
+                                tickmode: 'linear',
+                                tick0: 2,
+                                dtick: 1
+                            },
+                            yaxis: {
+                                title: 'Score Calinski-Harabasz'
+                            }
+                        });
+                        
+                        // Déterminer le nombre optimal de clusters
+                        let optimalK = 3; // Valeur par défaut
+                        
+                        // Trouver le k avec le meilleur score silhouette
+                        if (data.silhouette_scores.length > 0) {
+                            let maxSilhouette = Math.max(...data.silhouette_scores.filter(x => x !== null));
+                            let silhouetteIndex = data.silhouette_scores.indexOf(maxSilhouette);
+                            if (silhouetteIndex !== -1) {
+                                optimalK = data.n_clusters_range[silhouetteIndex];
+                            }
+                        }
+                        
+                        // Configurer le bouton pour appliquer le K optimal
+                        const applyButton = document.getElementById('apply-optimal-k');
+                        applyButton.textContent = `Appliquer k = ${optimalK}`;
+                        applyButton.dataset.k = optimalK;
+                        
+                        // Écouteur pour le bouton d'application du K optimal
+                        applyButton.addEventListener('click', function() {
+                            // Mettre à jour le champ du nombre de clusters
+                            document.getElementById('kmeans-n-clusters').value = this.dataset.k;
+                            
+                            // Fermer la modale
+                            bootstrap.Modal.getInstance(document.getElementById('elbow-method-modal')).hide();
+                        });
+                    } else {
+                        // Afficher le message d'erreur
+                        document.getElementById('elbow-method-error').style.display = 'block';
+                        document.getElementById('elbow-method-error').textContent = data.error || 'Une erreur s\'est produite lors du calcul.';
+                    }
+                })
+                .catch(error => {
+                    // Cacher le spinner
+                    document.getElementById('elbow-method-loading').style.display = 'none';
+                    
+                    // Afficher le message d'erreur
+                    document.getElementById('elbow-method-error').style.display = 'block';
+                    document.getElementById('elbow-method-error').textContent = 'Erreur de connexion au serveur: ' + error;
+                });
+            });
+        }
+        
+        // Visualisation du clustering (s'il y a des résultats)
+        {% if clustering_result and clustering_result.success %}
+        // Créer le graphique de visualisation des clusters
+        const plotData = [];
+        
+        // Extraire les données PCA
+        const pcaData = {{ clustering_result.pca_result|tojson }};
+        const labels = {{ clustering_result.labels|tojson }};
+        
+        // Générer des couleurs uniques pour chaque cluster
+        const uniqueLabels = [...new Set(labels)];
+        const colors = [
+            '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+            '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
+            '#aec7e8', '#ffbb78', '#98df8a', '#ff9896', '#c5b0d5',
+            '#c49c94', '#f7b6d2', '#c7c7c7', '#dbdb8d', '#9edae5'
+        ];
+        
+        // Regrouper les points par cluster
+        uniqueLabels.forEach((label, index) => {
+            const labelPoints = pcaData.filter((_, i) => labels[i] === label);
+            const xValues = labelPoints.map(point => point[0]);
+            const yValues = labelPoints.map(point => point[1]);
+            
+            const clusterName = label === -1 ? 'Bruit (Cluster -1)' : `Cluster ${label}`;
+            const color = label === -1 ? 'rgb(169, 169, 169)' : colors[index % colors.length];
+            
+            plotData.push({
+                x: xValues,
+                y: yValues,
+                mode: 'markers',
+                type: 'scatter',
+                name: clusterName,
+                marker: {
+                    color: color,
+                    size: 8,
+                    opacity: 0.7
+                }
+            });
+        });
+        
+        // Créer le graphique
+        Plotly.newPlot('cluster-viz', plotData, {
+            title: '{{ clustering_result.algorithm|capitalize }} Clustering - PCA 2D',
+            xaxis: {
+                title: 'Composante principale 1'
+            },
+            yaxis: {
+                title: 'Composante principale 2'
+            },
+            hovermode: 'closest',
+            legend: {
+                orientation: 'h',
+                y: -0.2
+            }
+        });
+        {% endif %}
+        
+        // Bouton pour exporter les clusters au format CSV
+        const exportBtn = document.getElementById('btn-export-clusters');
+        if (exportBtn) {
+            exportBtn.addEventListener('click', function() {
+                window.location.href = '{{ url_for("export_clusters", format="csv") }}';
+            });
+        }
+        
+        // Bouton pour visualiser en 3D
+        const visualize3DBtn = document.getElementById('btn-visualize-3d');
+        if (visualize3DBtn) {
+            visualize3DBtn.addEventListener('click', function() {
+                // Rediriger vers la page de visualisation 3D ou ouvrir une modale
+                alert('Fonctionnalité de visualisation 3D à implémenter');
+            });
+        }
+        
+        // Fonctionnalité d'analyse IA des clusters
+        const runAnalysisBtn = document.getElementById('run-ai-analysis-btn');
+        const newAnalysisBtn = document.getElementById('ai-analysis-new-btn');
+        const copyAnalysisBtn = document.getElementById('ai-analysis-copy-btn');
+        const contextInput = document.getElementById('ai-context-input');
+        const inputSection = document.getElementById('ai-analysis-input');
+        const loadingSection = document.getElementById('ai-analysis-loading');
+        const resultsSection = document.getElementById('ai-analysis-results');
+        const errorSection = document.getElementById('ai-analysis-error');
+        const errorMessage = document.getElementById('ai-analysis-error-message');
+        const analysisContent = document.getElementById('ai-analysis-content');
+        
+        // Fonction pour convertir le markdown en HTML
+        function markdownToHtml(markdown) {
+            // Implémentation simplifiée - dans un environnement réel, utilisez une bibliothèque comme marked.js
+            return markdown
+                .replace(/#{4}(.*?)\n/g, '<h4>$1</h4>') // h4
+                .replace(/#{3}(.*?)\n/g, '<h3>$1</h3>') // h3
+                .replace(/#{2}(.*?)\n/g, '<h2>$1</h2>') // h2
+                .replace(/#{1}(.*?)\n/g, '<h1>$1</h1>') // h1
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // gras
+                .replace(/\*(.*?)\*/g, '<em>$1</em>') // italique
+                .replace(/`(.*?)`/g, '<code>$1</code>') // code
+                .replace(/\n\n/g, '<br><br>') // double saut de ligne
+                .replace(/\n/g, '<br>'); // saut de ligne
+        }
+        
+        // Événement de clic pour lancer l'analyse
+        if (runAnalysisBtn) {
+            runAnalysisBtn.addEventListener('click', function() {
+                // Masquer les sections précédentes
+                inputSection.style.display = 'none';
+                resultsSection.style.display = 'none';
+                errorSection.style.display = 'none';
+                
+                // Afficher le chargement
+                loadingSection.style.display = 'block';
+                
+                // Récupérer le contexte utilisateur
+                const userContext = contextInput.value.trim();
+                
+                // Faire la requête à l'API
+                fetch('/api/analyze_clusters_with_ai', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_context: userContext
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Masquer le chargement
+                    loadingSection.style.display = 'none';
+                    
+                    if (data.success) {
+                        // Afficher les résultats
+                        analysisContent.innerHTML = markdownToHtml(data.analysis);
+                        resultsSection.style.display = 'block';
+                    } else {
+                        // Afficher l'erreur
+                        errorMessage.textContent = data.error || 'Une erreur s\'est produite lors de l\'analyse.';
+                        errorSection.style.display = 'block';
+                        // Réafficher l'entrée
+                        inputSection.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    // Masquer le chargement et afficher l'erreur
+                    loadingSection.style.display = 'none';
+                    errorMessage.textContent = 'Erreur de communication avec le serveur: ' + error;
+                    errorSection.style.display = 'block';
+                    inputSection.style.display = 'block';
+                });
+            });
+        }
+        
+        // Événement pour relancer une nouvelle analyse
+        if (newAnalysisBtn) {
+            newAnalysisBtn.addEventListener('click', function() {
+                resultsSection.style.display = 'none';
+                inputSection.style.display = 'block';
+            });
+        }
+        
+        // Événement pour copier l'analyse
+        if (copyAnalysisBtn) {
+            copyAnalysisBtn.addEventListener('click', function() {
+                // Récupérer le texte de l'analyse
+                const analysisText = analysisContent.innerText;
+                
+                // Copier dans le presse-papier
+                navigator.clipboard.writeText(analysisText).then(function() {
+                    // Changer temporairement le texte du bouton pour indiquer que c'est copié
+                    const originalText = copyAnalysisBtn.innerHTML;
+                    copyAnalysisBtn.innerHTML = '<i class="bi bi-check"></i> Copié!';
+                    
+                    setTimeout(function() {
+                        copyAnalysisBtn.innerHTML = originalText;
+                    }, 2000);
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}
