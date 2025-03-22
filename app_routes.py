@@ -13,6 +13,12 @@ from functools import wraps
 from weasyprint import HTML, CSS
 from weasyprint.text.fonts import FontConfiguration
 from jinja2 import Environment, FileSystemLoader
+from flask import render_template, request, redirect, url_for, flash, jsonify
+from modules.loyalty_scheduler_controller import (
+    load_config, save_config, update_task_config, start_scheduler, 
+    stop_scheduler, restart_scheduler, run_specific_task, 
+    get_scheduler_logs, get_scheduler_status, is_scheduler_running
+)
 
 # Importer nos modules personnalisés
 from modules.db_connection import DatabaseManager
@@ -23,6 +29,8 @@ from modules.history_manager_module import AnalysisHistory, PDFAnalysisHistory
 from modules.transformations_persistence import TransformationManager
 from modules.maps_module import create_sales_map, analyze_geographical_sales, generate_geographical_insights
 from modules.store_locations import update_store_locations, verify_store_locations
+from modules.loyalty_manager import LoyaltyManager, RewardManager
+
 
 
 import logging
@@ -50,7 +58,7 @@ pdf_history_manager = PDFAnalysisHistory('analysis_history/pdf')
 
 
 # Fonction pour obtenir une connexion à la base de données
-def get_db_connection(db_path='modules/fidelity_db.sqlite'):
+def get_db_connection(db_path='fidelity_db.sqlite'):
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
@@ -3896,6 +3904,824 @@ def all_reviews():
         logger.error(f"Erreur lors de la récupération des avis: {e}")
         return render_template('error.html', message=f"Erreur: {str(e)}")
     
+#----------------------------------------------------PROGRAMME FIDELITE --------------------------------------------------------
+
+"""
+Routes et contrôleurs pour la gestion du programme de fidélité
+"""
+
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, session
+import sqlite3
+import json
+from datetime import datetime, timedelta
+import pandas as pd
+import uuid
+import logging
+
+# Fonction pour obtenir une connexion à la base de données
+def get_db_connection(db_path='C:/Users/baofr/Desktop/Workspace/MILAN_ticket/modules/fidelity_db.sqlite'):
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+# Routes pour le programme de fidélité
+@app.route('/loyalty')
+def loyalty_dashboard():
+    """Page principale du programme de fidélité"""
+    try:
+        conn = get_db_connection()
+        
+        # Récupérer les règles de fidélité actives
+        regles = conn.execute('''
+            SELECT 
+                r.regle_id, r.nom, r.description, r.type_regle, 
+                r.condition_valeur, r.periode_jours, r.action_type, 
+                r.action_valeur, r.est_active,
+                rec.nom as recompense_nom
+            FROM regles_fidelite r
+            LEFT JOIN recompenses rec ON r.recompense_id = rec.recompense_id
+            WHERE r.est_active = 1
+            ORDER BY r.priorite DESC
+        ''').fetchall()
+        
+        # Récupérer les statistiques des offres 
+        stats_offres = conn.execute('''
+            SELECT 
+                COUNT(*) as total_offres,
+                SUM(CASE WHEN statut = 'generee' THEN 1 ELSE 0 END) as offres_generees,
+                SUM(CASE WHEN statut = 'envoyee' THEN 1 ELSE 0 END) as offres_envoyees,
+                SUM(CASE WHEN statut = 'utilisee' THEN 1 ELSE 0 END) as offres_utilisees,
+                SUM(CASE WHEN statut = 'expiree' THEN 1 ELSE 0 END) as offres_expirees
+            FROM offres_client
+            WHERE date_generation >= date('now', '-30 days')
+        ''').fetchone()
+        
+        # Récupérer les offres récentes
+        offres_recentes = conn.execute('''
+            SELECT 
+                oc.offre_id, oc.date_generation, oc.statut,
+                c.prenom || ' ' || c.nom as client_nom,
+                r.nom as regle_nom,
+                rec.nom as recompense_nom
+            FROM offres_client oc
+            JOIN clients c ON oc.client_id = c.client_id
+            JOIN regles_fidelite r ON oc.regle_id = r.regle_id
+            LEFT JOIN recompenses rec ON oc.recompense_id = rec.recompense_id
+            ORDER BY oc.date_generation DESC
+            LIMIT 10
+        ''').fetchall()
+        
+        # Récupérer les historiques d'évaluation récents
+        historiques = conn.execute('''
+            SELECT 
+                h.evaluation_id, h.regle_id, h.date_evaluation,
+                h.nombre_clients_evalues, h.nombre_offres_generees,
+                r.nom as regle_nom
+            FROM historique_evaluations_regles h
+            JOIN regles_fidelite r ON h.regle_id = r.regle_id
+            ORDER BY h.date_evaluation DESC
+            LIMIT 10
+        ''').fetchall()
+        
+        conn.close()
+        
+        return render_template(
+            'loyalty/dashboard.html',
+            regles=regles,
+            stats_offres=stats_offres,
+            offres_recentes=offres_recentes,
+            historiques=historiques
+        )
+    
+    except Exception as e:
+        flash(f'Erreur lors du chargement du tableau de bord de fidélité: {str(e)}', 'danger')
+        return render_template('loyalty/dashboard.html')
+
+@app.route('/loyalty/rules')
+def loyalty_rules():
+    """Liste des règles de fidélité"""
+    try:
+        conn = get_db_connection()
+        
+        # Récupérer toutes les règles
+        regles = conn.execute('''
+            SELECT 
+                r.*, rec.nom as recompense_nom
+            FROM regles_fidelite r
+            LEFT JOIN recompenses rec ON r.recompense_id = rec.recompense_id
+            ORDER BY r.priorite DESC, r.est_active DESC
+        ''').fetchall()
+        
+        # Récupérer les récompenses disponibles pour le formulaire
+        recompenses = conn.execute('''
+            SELECT recompense_id, nom, points_necessaires
+            FROM recompenses
+            WHERE statut = 'active'
+            ORDER BY nom
+        ''').fetchall()
+        
+        conn.close()
+        
+        return render_template(
+            'loyalty/rules.html',
+            regles=regles,
+            recompenses=recompenses
+        )
+    
+    except Exception as e:
+        flash(f'Erreur lors du chargement des règles de fidélité: {str(e)}', 'danger')
+        return render_template('loyalty/rules.html')
+
+@app.route('/loyalty/rules/add', methods=['GET', 'POST'])
+def add_loyalty_rule():
+    """Ajouter une nouvelle règle de fidélité"""
+    if request.method == 'POST':
+        try:
+            # Récupérer les données du formulaire
+            nom = request.form.get('nom')
+            description = request.form.get('description')
+            type_regle = request.form.get('type_regle')
+            condition_valeur = request.form.get('condition_valeur')
+            periode_jours = request.form.get('periode_jours') or None
+            recompense_id = request.form.get('recompense_id') or None
+            action_type = request.form.get('action_type')
+            action_valeur = request.form.get('action_valeur')
+            segments_cibles = request.form.get('segments_cibles') or None
+            priorite = request.form.get('priorite') or 0
+            est_active = 1 if request.form.get('est_active') else 0
+            date_debut = request.form.get('date_debut') or None
+            date_fin = request.form.get('date_fin') or None
+            
+            # Convertir les segments en JSON si nécessaire
+            if segments_cibles and segments_cibles != '[]':
+                segments_list = [s.strip() for s in segments_cibles.split(',')]
+                segments_cibles = json.dumps(segments_list)
+            
+            conn = get_db_connection()
+            
+            # Insérer la nouvelle règle
+            cursor = conn.execute('''
+                INSERT INTO regles_fidelite (
+                    nom, description, type_regle, condition_valeur, 
+                    periode_jours, recompense_id, action_type, action_valeur,
+                    segments_cibles, priorite, est_active, date_debut, date_fin
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                nom, description, type_regle, condition_valeur,
+                periode_jours, recompense_id, action_type, action_valeur,
+                segments_cibles, priorite, est_active, date_debut, date_fin
+            ))
+            
+            conn.commit()
+            conn.close()
+            
+            flash('Règle de fidélité ajoutée avec succès !', 'success')
+            return redirect(url_for('loyalty_rules'))
+            
+        except Exception as e:
+            flash(f'Erreur lors de l\'ajout de la règle: {str(e)}', 'danger')
+            return redirect(url_for('add_loyalty_rule'))
+    
+    # GET: Afficher le formulaire
+    try:
+        conn = get_db_connection()
+        
+        # Récupérer les récompenses disponibles pour le formulaire
+        recompenses = conn.execute('''
+            SELECT recompense_id, nom, points_necessaires, description
+            FROM recompenses
+            WHERE statut = 'active'
+            ORDER BY nom
+        ''').fetchall()
+        
+        conn.close()
+        
+        return render_template(
+            'loyalty/add_rule.html',
+            recompenses=recompenses
+        )
+    
+    except Exception as e:
+        flash(f'Erreur lors du chargement du formulaire: {str(e)}', 'danger')
+        return render_template('loyalty/add_rule.html')
+
+@app.route('/loyalty/rules/edit/<int:regle_id>', methods=['GET', 'POST'])
+def edit_loyalty_rule(regle_id):
+    """Modifier une règle de fidélité existante"""
+    if request.method == 'POST':
+        try:
+            # Récupérer les données du formulaire
+            nom = request.form.get('nom')
+            description = request.form.get('description')
+            type_regle = request.form.get('type_regle')
+            condition_valeur = request.form.get('condition_valeur')
+            periode_jours = request.form.get('periode_jours') or None
+            recompense_id = request.form.get('recompense_id') or None
+            action_type = request.form.get('action_type')
+            action_valeur = request.form.get('action_valeur')
+            segments_cibles = request.form.get('segments_cibles') or None
+            priorite = request.form.get('priorite') or 0
+            est_active = 1 if request.form.get('est_active') else 0
+            date_debut = request.form.get('date_debut') or None
+            date_fin = request.form.get('date_fin') or None
+            
+            # Convertir les segments en JSON si nécessaire
+            if segments_cibles and segments_cibles != '[]':
+                segments_list = [s.strip() for s in segments_cibles.split(',')]
+                segments_cibles = json.dumps(segments_list)
+            
+            conn = get_db_connection()
+            
+            # Mettre à jour la règle
+            conn.execute('''
+                UPDATE regles_fidelite SET
+                    nom = ?, description = ?, type_regle = ?, condition_valeur = ?,
+                    periode_jours = ?, recompense_id = ?, action_type = ?, action_valeur = ?,
+                    segments_cibles = ?, priorite = ?, est_active = ?, date_debut = ?, date_fin = ?,
+                    modification_date = CURRENT_TIMESTAMP
+                WHERE regle_id = ?
+            ''', (
+                nom, description, type_regle, condition_valeur,
+                periode_jours, recompense_id, action_type, action_valeur,
+                segments_cibles, priorite, est_active, date_debut, date_fin,
+                regle_id
+            ))
+            
+            conn.commit()
+            conn.close()
+            
+            flash('Règle de fidélité mise à jour avec succès !', 'success')
+            return redirect(url_for('loyalty_rules'))
+            
+        except Exception as e:
+            flash(f'Erreur lors de la mise à jour de la règle: {str(e)}', 'danger')
+            return redirect(url_for('edit_loyalty_rule', regle_id=regle_id))
+    
+    # GET: Afficher le formulaire avec les données actuelles
+    try:
+        conn = get_db_connection()
+        
+        # Récupérer la règle à modifier
+        regle = conn.execute('''
+            SELECT * FROM regles_fidelite WHERE regle_id = ?
+        ''', (regle_id,)).fetchone()
+        
+        if not regle:
+            flash('Règle de fidélité non trouvée', 'warning')
+            return redirect(url_for('loyalty_rules'))
+        
+        # Récupérer les récompenses disponibles pour le formulaire
+        recompenses = conn.execute('''
+            SELECT recompense_id, nom, points_necessaires, description
+            FROM recompenses
+            WHERE statut = 'active'
+            ORDER BY nom
+        ''').fetchall()
+        
+        conn.close()
+        
+        # Convertir segments_cibles de JSON à liste pour l'affichage
+        segments_cibles = []
+        if regle['segments_cibles']:
+            try:
+                segments_cibles = json.loads(regle['segments_cibles'])
+                segments_cibles = ', '.join(segments_cibles)
+            except:
+                segments_cibles = regle['segments_cibles']
+        
+        return render_template(
+            'loyalty/edit_rule.html',
+            regle=regle,
+            recompenses=recompenses,
+            segments_cibles=segments_cibles
+        )
+    
+    except Exception as e:
+        flash(f'Erreur lors du chargement de la règle: {str(e)}', 'danger')
+        return redirect(url_for('loyalty_rules'))
+
+@app.route('/loyalty/rules/delete/<int:regle_id>', methods=['POST'])
+def delete_loyalty_rule(regle_id):
+    """Supprimer une règle de fidélité"""
+    try:
+        conn = get_db_connection()
+        
+        # Vérifier si la règle existe
+        regle = conn.execute('SELECT regle_id FROM regles_fidelite WHERE regle_id = ?', 
+                           (regle_id,)).fetchone()
+        
+        if not regle:
+            flash('Règle de fidélité non trouvée', 'warning')
+            return redirect(url_for('loyalty_rules'))
+        
+        # Supprimer la règle
+        conn.execute('DELETE FROM regles_fidelite WHERE regle_id = ?', (regle_id,))
+        conn.commit()
+        conn.close()
+        
+        flash('Règle de fidélité supprimée avec succès', 'success')
+        
+    except Exception as e:
+        flash(f'Erreur lors de la suppression de la règle: {str(e)}', 'danger')
+    
+    return redirect(url_for('loyalty_rules'))
+
+@app.route('/loyalty/offers')
+def loyalty_offers():
+    """Liste des offres générées"""
+    try:
+        # Récupérer les paramètres de filtrage
+        status_filter = request.args.get('status', 'all')
+        date_from = request.args.get('date_from', (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d'))
+        date_to = request.args.get('date_to', datetime.now().strftime('%Y-%m-%d'))
+        
+        conn = get_db_connection()
+        
+        # Construire la requête avec les filtres
+        query = '''
+            SELECT 
+                oc.offre_id, oc.date_generation, oc.date_envoi, oc.date_expiration,
+                oc.statut, oc.code_unique,
+                c.client_id, c.prenom || ' ' || c.nom as client_nom,
+                r.regle_id, r.nom as regle_nom,
+                rec.recompense_id, rec.nom as recompense_nom
+            FROM offres_client oc
+            JOIN clients c ON oc.client_id = c.client_id
+            JOIN regles_fidelite r ON oc.regle_id = r.regle_id
+            LEFT JOIN recompenses rec ON oc.recompense_id = rec.recompense_id
+            WHERE oc.date_generation BETWEEN ? AND ?
+        '''
+        
+        params = [date_from, date_to]
+        
+        # Appliquer le filtre de statut
+        if status_filter != 'all':
+            query += ' AND oc.statut = ?'
+            params.append(status_filter)
+        
+        query += ' ORDER BY oc.date_generation DESC'
+        
+        offres = conn.execute(query, params).fetchall()
+        
+        # Récupérer les statistiques par statut
+        stats = conn.execute('''
+            SELECT 
+                statut,
+                COUNT(*) as count
+            FROM offres_client
+            WHERE date_generation BETWEEN ? AND ?
+            GROUP BY statut
+        ''', [date_from, date_to]).fetchall()
+        
+        conn.close()
+        
+        return render_template(
+            'loyalty/offers.html',
+            offres=offres,
+            stats=stats,
+            status_filter=status_filter,
+            date_from=date_from,
+            date_to=date_to
+        )
+    
+    except Exception as e:
+        flash(f'Erreur lors du chargement des offres: {str(e)}', 'danger')
+        return render_template('loyalty/offers.html')
+
+@app.route('/loyalty/offers/send', methods=['POST'])
+def send_loyalty_offers():
+    """Envoyer des offres aux clients (simulé)"""
+    try:
+        offer_ids = request.form.getlist('offer_ids')
+        
+        if not offer_ids:
+            flash('Aucune offre sélectionnée', 'warning')
+            return redirect(url_for('loyalty_offers'))
+        
+        conn = get_db_connection()
+        
+        # Mettre à jour les offres sélectionnées
+        for offer_id in offer_ids:
+            conn.execute('''
+                UPDATE offres_client
+                SET statut = 'envoyee', 
+                    date_envoi = CURRENT_TIMESTAMP,
+                    canal_envoi = 'email'
+                WHERE offre_id = ? AND statut = 'generee'
+            ''', (offer_id,))
+        
+        conn.commit()
+        conn.close()
+        
+        flash(f'{len(offer_ids)} offres ont été envoyées avec succès', 'success')
+        
+    except Exception as e:
+        flash(f'Erreur lors de l\'envoi des offres: {str(e)}', 'danger')
+    
+    return redirect(url_for('loyalty_offers'))
+
+@app.route('/loyalty/run-rules', methods=['POST'])
+def run_loyalty_rules():
+    """Exécuter manuellement l'évaluation des règles de fidélité"""
+    try:
+        conn = get_db_connection()
+        
+        # Récupérer les règles actives
+        rules = conn.execute('''
+            SELECT * FROM regles_fidelite 
+            WHERE est_active = 1
+            AND (date_debut IS NULL OR date_debut <= date('now'))
+            AND (date_fin IS NULL OR date_fin >= date('now'))
+            ORDER BY priorite DESC
+        ''').fetchall()
+        
+        # Vérifier si des règles existent
+        if not rules:
+            flash('Aucune règle active trouvée. Veuillez créer des règles actives.', 'warning')
+            conn.close()
+            return redirect(url_for('loyalty_dashboard'))
+        
+        # Log le nombre de règles trouvées
+        print(f"Nombre de règles actives trouvées: {len(rules)}")
+        
+        total_offers_generated = 0
+        
+        # Pour chaque règle, exécuter la logique appropriée
+        for rule in rules:
+            offers_for_rule = 0
+            print(f"Évaluation de la règle {rule['regle_id']}: {rule['nom']} (type: {rule['type_regle']})")
+            
+            # Exemple simplifié pour le type 'nombre_achats'
+            if rule['type_regle'] == 'nombre_achats':
+                # Vérifier d'abord s'il y a des transactions dans la base de données
+                has_transactions = conn.execute('''
+                    SELECT COUNT(*) as count FROM transactions
+                ''').fetchone()
+                
+                print(f"Nombre total de transactions: {has_transactions['count']}")
+                
+                # Trouver les clients éligibles
+                period_condition = ''
+                if rule['periode_jours']:
+                    period_condition = f"AND date_transaction >= date('now', '-{rule['periode_jours']} days')"
+                
+                # Requête pour compter simplement le nombre d'achats par client
+                check_query = f'''
+                    SELECT 
+                        client_id, 
+                        COUNT(DISTINCT transaction_id) as nb_achats
+                    FROM transactions t
+                    WHERE 1=1 {period_condition}
+                    GROUP BY client_id
+                    HAVING nb_achats >= ?
+                '''
+                
+                potential_clients = conn.execute(check_query, (rule['condition_valeur'],)).fetchall()
+                print(f"Clients potentiellement éligibles: {len(potential_clients)}")
+                
+                # Maintenant exécuter la requête complète
+                eligible_clients = conn.execute(f'''
+                    SELECT 
+                        c.client_id
+                    FROM clients c
+                    JOIN (
+                        SELECT 
+                            client_id, 
+                            COUNT(DISTINCT transaction_id) as nb_achats
+                        FROM transactions t
+                        WHERE 1=1 {period_condition}
+                        GROUP BY client_id
+                        HAVING nb_achats >= ?
+                    ) achats ON c.client_id = achats.client_id
+                    LEFT JOIN offres_client oc ON c.client_id = oc.client_id AND oc.regle_id = ?
+                    WHERE oc.offre_id IS NULL
+                ''', (rule['condition_valeur'], rule['regle_id'])).fetchall()
+                
+                print(f"Clients éligibles après filtrage des offres existantes: {len(eligible_clients)}")
+                
+                # Créer des offres pour chaque client éligible
+                for client in eligible_clients:
+                    conn.execute('''
+                        INSERT INTO offres_client (
+                            client_id, regle_id, recompense_id, date_generation, date_expiration, 
+                            statut, commentaire
+                        ) VALUES (?, ?, ?, CURRENT_TIMESTAMP, date('now', '+30 days'), 'generee', ?)
+                    ''', (
+                        client['client_id'],
+                        rule['regle_id'],
+                        rule['recompense_id'],
+                        f"Offre générée après {rule['condition_valeur']} achats"
+                    ))
+                    offers_for_rule += 1
+            
+            # Autres types de règles seraient implémentés ici
+            
+            # Enregistrer les statistiques d'évaluation
+            conn.execute('''
+                INSERT INTO historique_evaluations_regles (
+                    regle_id, nombre_clients_evalues, nombre_offres_generees, commentaire
+                ) VALUES (?, ?, ?, ?)
+            ''', (
+                rule['regle_id'],
+                len(eligible_clients) if 'eligible_clients' in locals() else 0,
+                offers_for_rule,
+                f"Exécution manuelle le {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            ))
+            
+            total_offers_generated += offers_for_rule
+            print(f"Offres générées pour cette règle: {offers_for_rule}")
+        
+        # Générer des codes uniques pour toutes les nouvelles offres
+        conn.execute('''
+            UPDATE offres_client
+            SET code_unique = 'OF-' || offre_id || '-' || substr(hex(randomblob(4)), 1, 8)
+            WHERE code_unique IS NULL
+        ''')
+        
+        conn.commit()
+        conn.close()
+        
+        flash(f'Évaluation des règles terminée. {total_offers_generated} offres générées.', 'success')
+        
+    except Exception as e:
+        print(f"ERREUR: {str(e)}")
+        flash(f'Erreur lors de l\'exécution des règles: {str(e)}', 'danger')
+    
+    return redirect(url_for('loyalty_dashboard'))
+
+@app.route('/loyalty/client/<int:client_id>')
+def client_loyalty(client_id):
+    """Afficher les informations de fidélité d'un client spécifique"""
+    try:
+        conn = get_db_connection()
+        
+        # Récupérer les informations du client
+        client = conn.execute('''
+            SELECT 
+                c.*,
+                cf.niveau_fidelite,
+                cf.points_actuels,
+                cf.points_en_attente,
+                cf.date_derniere_activite
+            FROM clients c
+            LEFT JOIN cartes_fidelite cf ON c.client_id = cf.client_id
+            WHERE c.client_id = ?
+        ''', (client_id,)).fetchone()
+        
+        if not client:
+            flash('Client non trouvé', 'warning')
+            return redirect(url_for('loyalty_dashboard'))
+        
+        # Récupérer les offres du client
+        offres = conn.execute('''
+            SELECT 
+                oc.*,
+                r.nom as regle_nom,
+                rec.nom as recompense_nom
+            FROM offres_client oc
+            JOIN regles_fidelite r ON oc.regle_id = r.regle_id
+            LEFT JOIN recompenses rec ON oc.recompense_id = rec.recompense_id
+            WHERE oc.client_id = ?
+            ORDER BY oc.date_generation DESC
+        ''', (client_id,)).fetchall()
+        
+        # Récupérer l'historique des points
+        historique_points = conn.execute('''
+            SELECT 
+                hp.*,
+                t.date_transaction,
+                t.montant_total
+            FROM historique_points hp
+            LEFT JOIN transactions t ON hp.transaction_id = t.transaction_id
+            WHERE hp.client_id = ?
+            ORDER BY hp.date_operation DESC
+            LIMIT 20
+        ''', (client_id,)).fetchall()
+        
+        conn.close()
+        
+        return render_template(
+            'loyalty/client_loyalty.html',
+            client=client,
+            offres=offres,
+            historique_points=historique_points
+        )
+    
+    except Exception as e:
+        flash(f'Erreur lors du chargement des données de fidélité: {str(e)}', 'danger')
+        return redirect(url_for('loyalty_dashboard'))
+
+@app.route('/api/loyalty/stats')
+def api_loyalty_stats():
+    """API pour récupérer les statistiques du programme de fidélité"""
+    try:
+        conn = get_db_connection()
+        
+        # Statistiques générales
+        stats = conn.execute('''
+            SELECT 
+                COUNT(DISTINCT c.client_id) as total_clients,
+                COUNT(DISTINCT oc.offre_id) as total_offres,
+                SUM(CASE WHEN oc.statut = 'utilisee' THEN 1 ELSE 0 END) as offres_utilisees,
+                AVG(CASE WHEN oc.statut = 'utilisee' THEN 1.0 ELSE 0.0 END) as taux_utilisation
+            FROM clients c
+            LEFT JOIN offres_client oc ON c.client_id = oc.client_id
+            WHERE c.statut = 'actif'
+        ''').fetchone()
+        
+        # Statistiques par niveau de fidélité
+        stats_niveaux = conn.execute('''
+            SELECT 
+                cf.niveau_fidelite,
+                COUNT(cf.client_id) as nb_clients,
+                AVG(cf.points_actuels) as points_moyens
+            FROM cartes_fidelite cf
+            JOIN clients c ON cf.client_id = c.client_id
+            WHERE c.statut = 'actif'
+            GROUP BY cf.niveau_fidelite
+        ''').fetchall()
+        
+        # Statistiques par type de règle
+        stats_regles = conn.execute('''
+            SELECT 
+                r.type_regle,
+                COUNT(DISTINCT oc.offre_id) as nb_offres,
+                SUM(CASE WHEN oc.statut = 'utilisee' THEN 1 ELSE 0 END) as offres_utilisees
+            FROM offres_client oc
+            JOIN regles_fidelite r ON oc.regle_id = r.regle_id
+            GROUP BY r.type_regle
+        ''').fetchall()
+        
+        # Nombre d'offres par mois (dernière année)
+        offres_par_mois = conn.execute('''
+            SELECT 
+                strftime('%Y-%m', date_generation) as mois,
+                COUNT(*) as nb_offres
+            FROM offres_client
+            WHERE date_generation >= date('now', '-1 year')
+            GROUP BY mois
+            ORDER BY mois
+        ''').fetchall()
+        
+        conn.close()
+        
+        return jsonify({
+            'success': True,
+            'stats': dict(stats),
+            'stats_niveaux': [dict(x) for x in stats_niveaux],
+            'stats_regles': [dict(x) for x in stats_regles],
+            'offres_par_mois': [dict(x) for x in offres_par_mois]
+        })
+    
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
+
+# ---------------------------------------------------SCHEDULER --------------------------------------------------
+
+@app.route('/loyalty/scheduler')
+def loyalty_scheduler_config():
+    """Page de configuration du planificateur de fidélité"""
+    try:
+        # Charger la configuration
+        config = load_config()
+        
+        # Vérifier l'état actuel du planificateur
+        is_running = is_scheduler_running()
+        
+        # Mettre à jour le statut si nécessaire
+        if is_running != config['status']['is_running']:
+            config['status']['is_running'] = is_running
+            if not is_running:
+                config['status']['pid'] = None
+            save_config(config)
+        
+        # Récupérer les logs récents
+        scheduler_logs = get_scheduler_logs(10)
+        
+        return render_template(
+            'scheduler_config.html',
+            scheduler_tasks=config['tasks'],
+            scheduler_status=config['status'],
+            scheduler_logs=scheduler_logs
+        )
+    
+    except Exception as e:
+        flash(f'Erreur lors du chargement de la configuration du planificateur: {str(e)}', 'danger')
+        return redirect(url_for('loyalty_dashboard'))
+
+# Sauvegarder la configuration du planificateur
+@app.route('/loyalty/scheduler/save', methods=['POST'])
+def loyalty_scheduler_config_save():
+    """Sauvegarde les modifications de la configuration du planificateur"""
+    try:
+        # Mettre à jour la configuration avec les données du formulaire
+        update_task_config(request.form)
+        
+        flash('Configuration du planificateur sauvegardée avec succès', 'success')
+        
+        # Si le planificateur est en cours d'exécution, proposer de le redémarrer
+        if is_scheduler_running():
+            flash('Le planificateur est en cours d\'exécution. Les modifications prendront effet après un redémarrage.', 'warning')
+    
+    except Exception as e:
+        flash(f'Erreur lors de la sauvegarde de la configuration: {str(e)}', 'danger')
+    
+    return redirect(url_for('loyalty_scheduler_config'))
+
+# Contrôle du planificateur (démarrage, arrêt, redémarrage)
+@app.route('/loyalty/scheduler/control/<action>', methods=['POST'])
+def loyalty_scheduler_control(action):
+    """Contrôle l'état du planificateur (démarrage, arrêt, redémarrage)"""
+    try:
+        result = {'success': False, 'message': 'Action non reconnue'}
+        
+        if action == 'start':
+            result = start_scheduler()
+            if result['success']:
+                flash('Planificateur démarré avec succès', 'success')
+            else:
+                flash(f'Échec du démarrage du planificateur: {result["message"]}', 'danger')
+                
+        elif action == 'stop':
+            result = stop_scheduler()
+            if result['success']:
+                flash('Planificateur arrêté avec succès', 'success')
+            else:
+                flash(f'Échec de l\'arrêt du planificateur: {result["message"]}', 'danger')
+                
+        elif action == 'restart':
+            result = restart_scheduler()
+            if result['success']:
+                flash('Planificateur redémarré avec succès', 'success')
+            else:
+                flash(f'Échec du redémarrage du planificateur: {result["message"]}', 'danger')
+        
+        else:
+            flash(f'Action non reconnue: {action}', 'warning')
+    
+    except Exception as e:
+        flash(f'Erreur lors de l\'exécution de l\'action: {str(e)}', 'danger')
+    
+    return redirect(url_for('loyalty_scheduler_config'))
+
+# Exécution manuelle d'une tâche
+@app.route('/loyalty/scheduler/run-task/<task_id>', methods=['POST'])
+def loyalty_scheduler_run_task(task_id):
+    """Exécute manuellement une tâche spécifique"""
+    try:
+        result = run_specific_task(task_id)
+        
+        if result['success']:
+            flash(f'Tâche exécutée avec succès: {result["message"]}', 'success')
+        else:
+            flash(f'Échec de l\'exécution de la tâche: {result["message"]}', 'danger')
+    
+    except Exception as e:
+        flash(f'Erreur lors de l\'exécution de la tâche: {str(e)}', 'danger')
+    
+    return redirect(url_for('loyalty_scheduler_config'))
+
+# Page des logs complets
+@app.route('/loyalty/scheduler/logs')
+def loyalty_scheduler_logs():
+    """Affiche les logs complets du planificateur"""
+    try:
+        # Récupérer tous les logs disponibles (limités à 200 lignes pour des raisons de performance)
+        scheduler_logs = get_scheduler_logs(200)
+        
+        return render_template(
+            'scheduler_logs.html',
+            scheduler_logs=scheduler_logs
+        )
+    
+    except Exception as e:
+        flash(f'Erreur lors de la récupération des logs: {str(e)}', 'danger')
+        return redirect(url_for('loyalty_scheduler_config'))
+
+# API pour récupérer le statut du planificateur
+@app.route('/api/loyalty/scheduler/status')
+def api_scheduler_status():
+    """API pour récupérer le statut actuel du planificateur"""
+    try:
+        status = get_scheduler_status()
+        return jsonify({
+            'success': True,
+            'is_running': status['is_running'],
+            'active_since': status['active_since'],
+            'last_run': status['last_run'],
+            'pid': status['pid']
+        })
+    
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
+    
+
 if __name__ == '__main__':
     app.run(debug=True)
 
