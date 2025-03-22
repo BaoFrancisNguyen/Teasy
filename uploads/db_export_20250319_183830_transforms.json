@@ -1,0 +1,19 @@
+{
+  "history": [
+    {
+      "type": "merge_columns",
+      "params": {
+        "columns_to_merge": [
+          "magasin",
+          "enseigne"
+        ],
+        "new_column": "fusion",
+        "method": "concat",
+        "separator": ", ",
+        "drop_original": false
+      },
+      "timestamp": "2025-03-19T18:38:47.680914",
+      "applied_successfully": true
+    }
+  ]
+}

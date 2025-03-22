@@ -1,0 +1,423 @@
+{% extends "base.html" %}
+
+{% block title %}Programme de Fidélité - {% if regle %}Modifier{% else %}Ajouter{% endif %} une règle{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+    .form-section {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .form-section h4 {
+        margin-bottom: 20px;
+        color: #10b9ab;
+    }
+    .condition-info, .action-info {
+        display: none;
+        padding: 10px;
+        background-color: #e6f7f5;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+    .help-icon {
+        color: #10b9ab;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('loyalty_dashboard') }}">Programme de Fidélité</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('loyalty_rules') }}">Gestion des Règles</a></li>
+            <li class="breadcrumb-item active">{% if regle %}Modifier{% else %}Ajouter{% endif %} une règle</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="bi bi-{% if regle %}pencil{% else %}plus-circle{% endif %}"></i> 
+            {% if regle %}Modifier{% else %}Ajouter{% endif %} une règle de fidélité
+        </h1>
+    </div>
+
+    <form method="post" action="{% if regle %}{{ url_for('edit_loyalty_rule', regle_id=regle.regle_id) }}{% else %}{{ url_for('add_loyalty_rule') }}{% endif %}">
+        <div class="row">
+            <div class="col-md-8">
+                <!-- Informations générales -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">Informations générales</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="nom" class="form-label">Nom de la règle <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nom" name="nom" required 
+                                   value="{{ regle.nom if regle else '' }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3">{{ regle.description if regle else '' }}</textarea>
+                            <div class="form-text">Description optionnelle pour expliquer l'objectif de cette règle.</div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="type_regle" class="form-label">Type de règle <span class="text-danger">*</span></label>
+                                <select class="form-select" id="type_regle" name="type_regle" required>
+                                    <option value="">-- Sélectionnez un type --</option>
+                                    <option value="nombre_achats" {% if regle and regle.type_regle == 'nombre_achats' %}selected{% endif %}>Nombre d'achats</option>
+                                    <option value="montant_cumule" {% if regle and regle.type_regle == 'montant_cumule' %}selected{% endif %}>Montant cumulé</option>
+                                    <option value="produit_specifique" {% if regle and regle.type_regle == 'produit_specifique' %}selected{% endif %}>Produit spécifique</option>
+                                    <option value="categorie_specifique" {% if regle and regle.type_regle == 'categorie_specifique' %}selected{% endif %}>Catégorie spécifique</option>
+                                    <option value="premiere_visite" {% if regle and regle.type_regle == 'premiere_visite' %}selected{% endif %}>Première visite</option>
+                                    <option value="anniversaire" {% if regle and regle.type_regle == 'anniversaire' %}selected{% endif %}>Anniversaire</option>
+                                    <option value="inactivite" {% if regle and regle.type_regle == 'inactivite' %}selected{% endif %}>Inactivité</option>
+                                </select>
+                                <div class="form-text">Le type détermine la condition d'éligibilité.</div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="priorite" class="form-label">Priorité</label>
+                                <input type="number" class="form-control" id="priorite" name="priorite" min="0" max="100" 
+                                       value="{{ regle.priorite if regle else '0' }}">
+                                <div class="form-text">Plus la valeur est élevée, plus la règle est prioritaire.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="est_active" name="est_active" 
+                                       {% if not regle or regle.est_active %}checked{% endif %}>
+                                <label class="form-check-label" for="est_active">
+                                    Règle active
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Condition -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">Condition</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="condition_valeur" class="form-label">Valeur de la condition <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="condition_valeur" name="condition_valeur" required
+                                           value="{{ regle.condition_valeur if regle else '' }}">
+                                    <span class="input-group-text condition-unit">-</span>
+                                </div>
+                                <div class="form-text condition-help"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3" id="periode_container">
+                            <label for="periode_jours" class="form-label">Période (en jours)</label>
+                            <input type="number" class="form-control" id="periode_jours" name="periode_jours" min="1" max="365"
+                                   value="{{ regle.periode_jours if regle and regle.periode_jours else '' }}">
+                            <div class="form-text">Définir la période durant laquelle la condition doit être remplie. Laissez vide pour aucune limite.</div>
+                        </div>
+                        
+                        <div class="mb-3" id="condition_info">
+                            <div class="alert alert-info" role="alert">
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                <span id="condition_description">Veuillez sélectionner un type de règle.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action et récompense -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">Action et récompense</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="action_type" class="form-label">Type d'action <span class="text-danger">*</span></label>
+                                <select class="form-select" id="action_type" name="action_type" required>
+                                    <option value="">-- Sélectionnez une action --</option>
+                                    <option value="offre_points" {% if regle and regle.action_type == 'offre_points' %}selected{% endif %}>Offrir des points</option>
+                                    <option value="offre_cadeau" {% if regle and regle.action_type == 'offre_cadeau' %}selected{% endif %}>Offrir un cadeau</option>
+                                    <option value="reduction_pourcentage" {% if regle and regle.action_type == 'reduction_pourcentage' %}selected{% endif %}>Réduction en pourcentage</option>
+                                    <option value="reduction_montant" {% if regle and regle.action_type == 'reduction_montant' %}selected{% endif %}>Réduction en montant</option>
+                                    <option value="notification" {% if regle and regle.action_type == 'notification' %}selected{% endif %}>Notification simple</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6" id="action_valeur_container">
+                                <label for="action_valeur" class="form-label">Valeur de l'action</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="action_valeur" name="action_valeur"
+                                           value="{{ regle.action_valeur if regle else '' }}">
+                                    <span class="input-group-text action-unit">-</span>
+                                </div>
+                                <div class="form-text action-help"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3" id="recompense_container" style="display: none;">
+                            <label for="recompense_id" class="form-label">Récompense associée</label>
+                            <select class="form-select" id="recompense_id" name="recompense_id">
+                                <option value="">-- Aucune récompense spécifique --</option>
+                                {% for recompense in recompenses %}
+                                    <option value="{{ recompense.recompense_id }}" 
+                                            {% if regle and regle.recompense_id == recompense.recompense_id %}selected{% endif %}>
+                                        {{ recompense.nom }} ({{ recompense.points_necessaires }} points)
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">Sélectionnez une récompense spécifique à offrir au client.</div>
+                        </div>
+                        
+                        <div class="mb-3" id="action_info">
+                            <div class="alert alert-info" role="alert">
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                <span id="action_description">Veuillez sélectionner un type d'action.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <!-- Paramètres avancés -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">Paramètres avancés</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="segments_cibles" class="form-label">Segments client ciblés</label>
+                            <input type="text" class="form-control" id="segments_cibles" name="segments_cibles"
+                                   value="{{ segments_cibles if segments_cibles else '' }}" placeholder="standard, premium, vip">
+                            <div class="form-text">Segments séparés par des virgules. Laissez vide pour cibler tous les clients.</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Période de validité</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="date_debut" class="form-label small">Date de début</label>
+                                    <input type="date" class="form-control" id="date_debut" name="date_debut"
+                                           value="{{ regle.date_debut if regle and regle.date_debut else '' }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="date_fin" class="form-label small">Date de fin</label>
+                                    <input type="date" class="form-control" id="date_fin" name="date_fin"
+                                           value="{{ regle.date_fin if regle and regle.date_fin else '' }}">
+                                </div>
+                            </div>
+                            <div class="form-text">Définissez une période de validité pour la règle, ou laissez vide pour une validité permanente.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Informations et aide -->
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">Aide</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>Types de règles</h5>
+                        <ul class="small">
+                            <li><strong>Nombre d'achats</strong>: Se déclenche lorsqu'un client effectue un nombre défini d'achats.</li>
+                            <li><strong>Montant cumulé</strong>: Se déclenche lorsqu'un client atteint un montant cumulé d'achats.</li>
+                            <li><strong>Produit spécifique</strong>: Se déclenche lors de l'achat d'un produit spécifique.</li>
+                            <li><strong>Catégorie spécifique</strong>: Se déclenche lors d'un achat dans une catégorie spécifique.</li>
+                            <li><strong>Première visite</strong>: Se déclenche pour les nouveaux clients.</li>
+                            <li><strong>Anniversaire</strong>: Se déclenche avant l'anniversaire du client.</li>
+                            <li><strong>Inactivité</strong>: Se déclenche après une période d'inactivité du client.</li>
+                        </ul>
+                        
+                        <h5 class="mt-3">Conseils</h5>
+                        <ul class="small">
+                            <li>Utilisez la priorité pour définir l'ordre d'application des règles.</li>
+                            <li>Définissez une période pour limiter l'application dans le temps.</li>
+                            <li>Ciblez des segments spécifiques pour personnaliser votre stratégie.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{{ url_for('loyalty_rules') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Retour
+            </a>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> {% if regle %}Mettre à jour{% else %}Enregistrer{% endif %}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const typeRegle = document.getElementById('type_regle');
+        const conditionValeur = document.getElementById('condition_valeur');
+        const conditionUnit = document.querySelector('.condition-unit');
+        const conditionHelp = document.querySelector('.condition-help');
+        const conditionDescription = document.getElementById('condition_description');
+        const periodeContainer = document.getElementById('periode_container');
+        
+        const actionType = document.getElementById('action_type');
+        const actionValeur = document.getElementById('action_valeur');
+        const actionUnit = document.querySelector('.action-unit');
+        const actionHelp = document.querySelector('.action-help');
+        const actionDescription = document.getElementById('action_description');
+        const recompenseContainer = document.getElementById('recompense_container');
+        
+        // Mettre à jour l'affichage de la condition en fonction du type de règle
+        typeRegle.addEventListener('change', function() {
+            updateConditionDisplay();
+        });
+        
+        // Mettre à jour l'affichage de l'action en fonction du type d'action
+        actionType.addEventListener('change', function() {
+            updateActionDisplay();
+        });
+        
+        // Initialiser l'affichage au chargement
+        updateConditionDisplay();
+        updateActionDisplay();
+        
+        function updateConditionDisplay() {
+            const selectedType = typeRegle.value;
+            
+            // Réinitialiser
+            conditionUnit.textContent = '-';
+            conditionHelp.textContent = '';
+            periodeContainer.style.display = 'block';
+            
+            switch(selectedType) {
+                case 'nombre_achats':
+                    conditionUnit.textContent = 'achats';
+                    conditionHelp.textContent = 'Nombre d\'achats requis pour déclencher la règle';
+                    conditionDescription.textContent = 'Cette règle se déclenche lorsqu\'un client atteint le nombre d\'achats spécifié dans la période définie.';
+                    break;
+                    
+                case 'montant_cumule':
+                    conditionUnit.textContent = '€';
+                    conditionHelp.textContent = 'Montant cumulé d\'achats requis pour déclencher la règle';
+                    conditionDescription.textContent = 'Cette règle se déclenche lorsqu\'un client atteint le montant cumulé d\'achats spécifié dans la période définie.';
+                    break;
+                    
+                case 'produit_specifique':
+                    conditionUnit.textContent = 'ID produit';
+                    conditionHelp.textContent = 'Identifiant du produit dont l\'achat déclenchera la règle';
+                    conditionDescription.textContent = 'Cette règle se déclenche lorsqu\'un client achète le produit spécifié.';
+                    break;
+                    
+                case 'categorie_specifique':
+                    conditionUnit.textContent = 'ID catégorie';
+                    conditionHelp.textContent = 'Identifiant de la catégorie dont l\'achat déclenchera la règle';
+                    conditionDescription.textContent = 'Cette règle se déclenche lorsqu\'un client achète un produit de la catégorie spécifiée.';
+                    break;
+                    
+                case 'premiere_visite':
+                    conditionUnit.textContent = 'jours';
+                    conditionHelp.textContent = 'Période (en jours) après la première visite qui déclenchera la règle';
+                    conditionDescription.textContent = 'Cette règle se déclenche pour les nouveaux clients pendant la période spécifiée après leur première visite.';
+                    periodeContainer.style.display = 'none';
+                    break;
+                    
+                case 'anniversaire':
+                    conditionUnit.textContent = 'jours avant';
+                    conditionHelp.textContent = 'Nombre de jours avant l\'anniversaire pour déclencher la règle';
+                    conditionDescription.textContent = 'Cette règle se déclenche lorsque la date d\'anniversaire d\'un client approche (dans le nombre de jours spécifié).';
+                    periodeContainer.style.display = 'none';
+                    break;
+                    
+                case 'inactivite':
+                    conditionUnit.textContent = 'jours';
+                    conditionHelp.textContent = 'Nombre de jours d\'inactivité pour déclencher la règle';
+                    conditionDescription.textContent = 'Cette règle se déclenche lorsqu\'un client n\'a pas effectué d\'achat pendant le nombre de jours spécifié.';
+                    periodeContainer.style.display = 'none';
+                    break;
+                    
+                default:
+                    conditionUnit.textContent = '-';
+                    conditionHelp.textContent = '';
+                    conditionDescription.textContent = 'Veuillez sélectionner un type de règle.';
+            }
+        }
+        
+        function updateActionDisplay() {
+            const selectedAction = actionType.value;
+            
+            // Réinitialiser
+            actionUnit.textContent = '-';
+            actionHelp.textContent = '';
+            actionValeur.required = false;
+            recompenseContainer.style.display = 'none';
+            
+            switch(selectedAction) {
+                case 'offre_points':
+                    actionUnit.textContent = 'points';
+                    actionHelp.textContent = 'Nombre de points à offrir au client';
+                    actionDescription.textContent = 'Cette action ajoutera le nombre de points spécifié au compte du client.';
+                    actionValeur.required = true;
+                    break;
+                    
+                case 'offre_cadeau':
+                    actionUnit.textContent = '-';
+                    actionHelp.textContent = 'Laissez vide et sélectionnez une récompense ci-dessous';
+                    actionDescription.textContent = 'Cette action offrira un cadeau au client. Sélectionnez une récompense spécifique.';
+                    recompenseContainer.style.display = 'block';
+                    break;
+                    
+                case 'reduction_pourcentage':
+                    actionUnit.textContent = '%';
+                    actionHelp.textContent = 'Pourcentage de réduction à offrir';
+                    actionDescription.textContent = 'Cette action offrira une réduction en pourcentage sur un prochain achat.';
+                    actionValeur.required = true;
+                    break;
+                    
+                case 'reduction_montant':
+                    actionUnit.textContent = '€';
+                    actionHelp.textContent = 'Montant de la réduction à offrir';
+                    actionDescription.textContent = 'Cette action offrira une réduction fixe en euros sur un prochain achat.';
+                    actionValeur.required = true;
+                    break;
+                    
+                case 'notification':
+                    actionUnit.textContent = 'message';
+                    actionHelp.textContent = 'Message à envoyer (optionnel)';
+                    actionDescription.textContent = 'Cette action enverra une notification au client sans offre particulière.';
+                    break;
+                    
+                default:
+                    actionUnit.textContent = '-';
+                    actionHelp.textContent = '';
+                    actionDescription.textContent = 'Veuillez sélectionner un type d\'action.';
+            }
+        }
+        
+        // Initialiser les sélecteurs de date
+        flatpickr('#date_debut', {
+            dateFormat: "Y-m-d",
+            allowInput: true
+        });
+        
+        flatpickr('#date_fin', {
+            dateFormat: "Y-m-d",
+            allowInput: true
+        });
+    });
+</script>
+{% endblock %}

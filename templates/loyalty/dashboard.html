@@ -1,0 +1,404 @@
+{% extends "base.html" %}
+
+{% block title %}Programme de Fidélité - Tableau de bord{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stats-card {
+        transition: all 0.3s ease;
+    }
+    .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .stats-icon {
+        font-size: 2.5rem;
+        color: #10b9ab;
+    }
+    .rules-table tr {
+        transition: all 0.2s ease;
+    }
+    .rules-table tr:hover {
+        background-color: #e9f7f7;
+    }
+    .status-badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 30px;
+        font-size: 0.75rem;
+    }
+    .status-generated { background-color: #e2f3f5; color: #0c7b93; }
+    .status-sent { background-color: #b5ead7; color: #086972; }
+    .status-used { background-color: #c7ceea; color: #284b63; }
+    .status-expired { background-color: #f6eec7; color: #b68d40; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="bi bi-award"></i> Programme de Fidélité
+        </h1>
+        <div>
+            <form action="{{ url_for('run_loyalty_rules') }}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-play-fill"></i> Exécuter les règles
+                </button>
+            </form>
+            <a href="{{ url_for('loyalty_rules') }}" class="btn btn-outline-primary ms-2">
+                <i class="bi bi-gear"></i> Gérer les règles
+            </a>
+        </div>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card stats-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="h3 mb-0">{{ stats_offres.total_offres if stats_offres else 0 }}</div>
+                            <div class="text-muted">Offres totales</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="bi bi-gift"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stats-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="h3 mb-0">{{ stats_offres.offres_envoyees if stats_offres else 0 }}</div>
+                            <div class="text-muted">Offres envoyées</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stats-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="h3 mb-0">{{ stats_offres.offres_utilisees if stats_offres else 0 }}</div>
+                            <div class="text-muted">Offres utilisées</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stats-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="h3 mb-0">
+                                {% if stats_offres and stats_offres.total_offres > 0 %}
+                                    {{ ((stats_offres.offres_utilisees / stats_offres.total_offres) * 100)|round(1) }}%
+                                {% else %}
+                                    0%
+                                {% endif %}
+                            </div>
+                            <div class="text-muted">Taux conversion</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tableau de règles actives -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Règles de fidélité actives</h5>
+        </div>
+        <div class="card-body">
+            {% if regles %}
+                <div class="table-responsive">
+                    <table class="table table-hover rules-table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Type</th>
+                                <th>Condition</th>
+                                <th>Action</th>
+                                <th>Récompense</th>
+                                <th>Priorité</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for regle in regles %}
+                                <tr>
+                                    <td>{{ regle.nom }}</td>
+                                    <td>
+                                        {% if regle.type_regle == 'nombre_achats' %}
+                                            <span class="badge bg-primary">Nombre d'achats</span>
+                                        {% elif regle.type_regle == 'montant_cumule' %}
+                                            <span class="badge bg-success">Montant cumulé</span>
+                                        {% elif regle.type_regle == 'produit_specifique' %}
+                                            <span class="badge bg-info">Produit spécifique</span>
+                                        {% elif regle.type_regle == 'categorie_specifique' %}
+                                            <span class="badge bg-warning">Catégorie</span>
+                                        {% elif regle.type_regle == 'premiere_visite' %}
+                                            <span class="badge bg-secondary">Première visite</span>
+                                        {% elif regle.type_regle == 'anniversaire' %}
+                                            <span class="badge bg-danger">Anniversaire</span>
+                                        {% elif regle.type_regle == 'inactivite' %}
+                                            <span class="badge bg-dark">Inactivité</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ regle.type_regle }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if regle.type_regle == 'nombre_achats' %}
+                                            {{ regle.condition_valeur }} achats
+                                            {% if regle.periode_jours %}
+                                                en {{ regle.periode_jours }} jours
+                                            {% endif %}
+                                        {% elif regle.type_regle == 'montant_cumule' %}
+                                            {{ regle.condition_valeur }}€
+                                            {% if regle.periode_jours %}
+                                                en {{ regle.periode_jours }} jours
+                                            {% endif %}
+                                        {% elif regle.type_regle == 'produit_specifique' %}
+                                            Achat du produit #{{ regle.condition_valeur }}
+                                        {% elif regle.type_regle == 'categorie_specifique' %}
+                                            Achat dans catégorie #{{ regle.condition_valeur }}
+                                        {% elif regle.type_regle == 'premiere_visite' %}
+                                            Dans les {{ regle.condition_valeur }} jours
+                                        {% elif regle.type_regle == 'anniversaire' %}
+                                            {{ regle.condition_valeur }} jours avant
+                                        {% elif regle.type_regle == 'inactivite' %}
+                                            {{ regle.condition_valeur }} jours d'inactivité
+                                        {% else %}
+                                            {{ regle.condition_valeur }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if regle.action_type == 'offre_points' %}
+                                            <span class="badge bg-success">{{ regle.action_valeur }} points</span>
+                                        {% elif regle.action_type == 'offre_cadeau' %}
+                                            <span class="badge bg-primary">Cadeau</span>
+                                        {% elif regle.action_type == 'reduction_pourcentage' %}
+                                            <span class="badge bg-warning">{{ regle.action_valeur }}% de réduction</span>
+                                        {% elif regle.action_type == 'reduction_montant' %}
+                                            <span class="badge bg-info">{{ regle.action_valeur }}€ de réduction</span>
+                                        {% elif regle.action_type == 'notification' %}
+                                            <span class="badge bg-secondary">Notification</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ regle.action_type }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ regle.recompense_nom if regle.recompense_nom else '-' }}</td>
+                                    <td>{{ regle.priorite }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    Aucune règle de fidélité active. <a href="{{ url_for('add_loyalty_rule') }}">Ajouter une règle</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Offres récentes -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Offres récentes</h5>
+                    <a href="{{ url_for('loyalty_offers') }}" class="btn btn-sm btn-outline-primary">Voir tout</a>
+                </div>
+                <div class="card-body">
+                    {% if offres_recentes %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Client</th>
+                                        <th>Règle</th>
+                                        <th>Statut</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for offre in offres_recentes %}
+                                        <tr>
+                                            <td>{{ offre.offre_id }}</td>
+                                            <td>
+                                                <a href="{{ url_for('client_loyalty', client_id=offre.client_id) }}">
+                                                    {{ offre.client_nom }}
+                                                </a>
+                                            </td>
+                                            <td>{{ offre.regle_nom }}</td>
+                                            <td>
+                                                {% if offre.statut == 'generee' %}
+                                                    <span class="status-badge status-generated">Générée</span>
+                                                {% elif offre.statut == 'envoyee' %}
+                                                    <span class="status-badge status-sent">Envoyée</span>
+                                                {% elif offre.statut == 'utilisee' %}
+                                                    <span class="status-badge status-used">Utilisée</span>
+                                                {% elif offre.statut == 'expiree' %}
+                                                    <span class="status-badge status-expired">Expirée</span>
+                                                {% else %}
+                                                    <span class="status-badge">{{ offre.statut }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ offre.date_generation.split(' ')[0] }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-3">
+                            <i class="bi bi-gift-fill text-muted" style="font-size: 2rem;"></i>
+                            <p class="mt-2 text-muted">Aucune offre récente</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Historique d'évaluations récentes -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Historique des évaluations</h5>
+                </div>
+                <div class="card-body">
+                    {% if historiques %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Règle</th>
+                                        <th>Offres générées</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for historique in historiques %}
+                                        <tr>
+                                            <td>{{ historique.evaluation_id }}</td>
+                                            <td>{{ historique.regle_nom }}</td>
+                                            <td class="text-center">
+                                                {% if historique.nombre_offres_generees > 0 %}
+                                                    <span class="badge bg-success">{{ historique.nombre_offres_generees }}</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">0</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ historique.date_evaluation.split(' ')[0] }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-3">
+                            <i class="bi bi-clock-history text-muted" style="font-size: 2rem;"></i>
+                            <p class="mt-2 text-muted">Aucun historique d'évaluation</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Graphiques et statistiques avancées -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Vue d'ensemble du programme</h5>
+                </div>
+                <div class="card-body">
+                    <div id="loyalty-chart" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Charger les données via l'API
+        fetch('/api/loyalty/stats')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    createOverviewChart(data);
+                }
+            })
+            .catch(error => console.error('Erreur de chargement des statistiques:', error));
+
+        function createOverviewChart(data) {
+            // Extraire les données pour le graphique
+            const months = [];
+            const offerCounts = [];
+
+            if (data.offres_par_mois && data.offres_par_mois.length > 0) {
+                data.offres_par_mois.forEach(item => {
+                    months.push(formatMonth(item.mois));
+                    offerCounts.push(item.nb_offres);
+                });
+            }
+
+            // Créer le graphique
+            const ctx = document.getElementById('loyalty-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Offres générées',
+                        data: offerCounts,
+                        backgroundColor: 'rgba(16, 185, 171, 0.6)',
+                        borderColor: 'rgba(16, 185, 171, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function formatMonth(monthStr) {
+            const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+            const [year, month] = monthStr.split('-');
+            return `${months[parseInt(month) - 1]} ${year}`;
+        }
+    });
+</script>
+{% endblock %}

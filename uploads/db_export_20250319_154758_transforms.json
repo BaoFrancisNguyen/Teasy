@@ -1,0 +1,13 @@
+{
+  "history": [
+    {
+      "type": "missing_values",
+      "params": {
+        "strategy": "auto",
+        "threshold": 50.0,
+        "constant": ""
+      },
+      "timestamp": "2025-03-19T15:48:22.604403"
+    }
+  ]
+}

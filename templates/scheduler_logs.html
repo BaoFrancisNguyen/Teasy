@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}Logs du Planificateur de Fidélité{% endblock %}
+
+{% block extra_css %}
+<style>
+    .log-container {
+        background-color: #1e293b;
+        color: #e2e8f0;
+        border-radius: 8px;
+        padding: 15px;
+        font-family: monospace;
+        height: 75vh;
+        overflow-y: auto;
+    }
+    .log-entry {
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+    .log-entry.info {
+        color: #93c5fd;
+    }
+    .log-entry.error {
+        color: #fca5a5;
+    }
+    .log-entry.warning {
+        color: #fcd34d;
+    }
+    .log-time {
+        color: #64748b;
+        margin-right: 10px;
+    }
+    .log-module {
+        color: #94a3b8;
+        margin-right: 10px;
+    }
+    .log-level-badge {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-right: 10px;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+    }
+    .log-level-info {
+        background-color: #3b82f6;
+        color: white;
+    }
+    .log-level-warning {
+        background-color: #f59e0b;
+        color: white;
+    }
+    .log-level-error {
+        background-color: #ef4444;
+        color: white;
+    }
+    .filter-section {
+        margin-bottom: 15px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('loyalty_dashboard') }}">Programme de Fidélité</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('loyalty_scheduler_config') }}">Configuration du Planificateur</a></li>
+            <li class="breadcrumb-item active">Logs</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="bi bi-file-text"></i> Logs du Planificateur
+        </h1>
+        <div>
+            <a href="{{ url_for('loyalty_scheduler_config') }}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i> Retour à la configuration
+            </a>
+        </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="filter-section">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label for="level-filter" class="form-label">Filtrer par niveau</label>
+                <select class="form-select form-select-sm" id="level-filter">
+                    <option value="all">Tous les niveaux</option>
+                    <option value="info">Information</option>
+                    <option value="warning">Avertissement</option>
+                    <option value="error">Erreur</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="module-filter" class="form-label">Filtrer par module</label>
+                <select class="form-select form-select-sm" id="module-filter">
+                    <option value="all">Tous les modules</option>
+                    <!-- Les options seront ajoutées dynamiquement par JavaScript -->
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="search-logs" class="form-label">Rechercher</label>
+                <input type="text" class="form-control form-control-sm" id="search-logs" placeholder="Texte à rechercher...">
+            </div>
+        </div>
+    </div>
+
+    <!-- Logs -->
+    <div class="log-container" id="logs-container">
+        {% for log in scheduler_logs %}
+            <div class="log-entry {{ log.level }}" data-module="{{ log.module }}">
+                <span class="log-time">{{ log.timestamp }}</span>
+                <span class="log-module">{{ log.module }}</span>
+                <span class="log-level-badge log-level-{{ log.level }}">{{ log.level }}</span>
+                {{ log.message }}
+            </div>
+        {% else %}
+            <div class="text-center text-muted">
+                <i class="bi bi-info-circle"></i> Aucun log disponible
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Variables pour les filtres
+        const levelFilter = document.getElementById('level-filter');
+        const moduleFilter = document.getElementById('module-filter');
+        const searchInput = document.getElementById('search-logs');
+        const logsContainer = document.getElementById('logs-container');
+        const logEntries = document.querySelectorAll('.log-entry');
+        
+        // Collecter les modules uniques pour le filtre
+        const modules = new Set();
+        logEntries.forEach(entry => {
+            const module = entry.getAttribute('data-module');
+            if (module) {
+                modules.add(module);
+            }
+        });
+        
+        // Ajouter les options de module au filtre
+        modules.forEach(module => {
+            const option = document.createElement('option');
+            option.value = module;
+            option.textContent = module;
+            moduleFilter.appendChild(option);
+        });
+        
+        // Fonction pour appliquer les filtres
+        function applyFilters() {
+            const level = levelFilter.value;
+            const module = moduleFilter.value;
+            const search = searchInput.value.toLowerCase();
+            
+            logEntries.forEach(entry => {
+                const entryLevel = entry.classList.contains('info') ? 'info' : 
+                                  entry.classList.contains('warning') ? 'warning' : 
+                                  entry.classList.contains('error') ? 'error' : '';
+                const entryModule = entry.getAttribute('data-module');
+                const entryText = entry.textContent.toLowerCase();
+                
+                const levelMatch = level === 'all' || entryLevel === level;
+                const moduleMatch = module === 'all' || entryModule === module;
+                const searchMatch = search === '' || entryText.includes(search);
+                
+                if (levelMatch && moduleMatch && searchMatch) {
+                    entry.style.display = '';
+                } else {
+                    entry.style.display = 'none';
+                }
+            });
+        }
+        
+        // Écouter les changements des filtres
+        levelFilter.addEventListener('change', applyFilters);
+        moduleFilter.addEventListener('change', applyFilters);
+        searchInput.addEventListener('input', applyFilters);
+        
+        // Faire défiler jusqu'en bas pour voir les logs les plus récents
+        logsContainer.scrollTop = logsContainer.scrollHeight;
+    });
+</script>
+{% endblock %}

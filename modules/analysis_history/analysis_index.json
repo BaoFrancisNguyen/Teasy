@@ -1,0 +1,36 @@
+{
+  "analyses": [
+    {
+      "id": "analysis_1_2025-03-21T18-17-56_807264",
+      "dataset_name": "transactions_20250321",
+      "timestamp": "2025-03-21T18:17:56.807264",
+      "summary": "Analyse impossible"
+    },
+    {
+      "id": "analysis_2_2025-03-21T22-49-30_587980",
+      "dataset_name": "transactions_20250321",
+      "timestamp": "2025-03-21T22:49:30.587980",
+      "summary": "Erreur de l'API IA (500): {\"error\":\"model requires more system memory (20.2 GiB) than is available (..."
+    },
+    {
+      "id": "analysis_3_2025-03-21T22-53-00_227311",
+      "dataset_name": "transactions_20250321",
+      "timestamp": "2025-03-21T22:53:00.227311",
+      "summary": "1. Résumé et insights principaux :\n    - Le jeu de données représente 924 transactions effectuées da..."
+    }
+  ],
+  "datasets": {
+    "transactions_20250321": {
+      "description": "Analyse IA - 2025-03-21 18:17",
+      "first_analysis": "2025-03-21T18:17:56.807264",
+      "last_analysis": "2025-03-21T22:53:00.227311",
+      "analyses_count": 3,
+      "analyses": [
+        "analysis_1_2025-03-21T18-17-56_807264",
+        "analysis_2_2025-03-21T22-49-30_587980",
+        "analysis_3_2025-03-21T22-53-00_227311"
+      ]
+    }
+  },
+  "last_updated": "2025-03-21T22:53:00.229958"
+}

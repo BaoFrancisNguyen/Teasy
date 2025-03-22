@@ -19,7 +19,7 @@
     .card {
         background-color: #e4f5f8;  
         border-left: 5px solid transparent;
-        border: 3px solid #64b9b5; /* Bordure légère grise */
+        border: 3px solid #61d1cb; /* Bordure légère grise */
         border-radius: 8px;  
         transition: all 0.3s ease;
     }
@@ -59,7 +59,7 @@
 </div>
 
     <div class="row g-4">
-        <!-- Traitement CSV -->
+        <!-- Extraction et Traitement Données -->
         <div class="col-md-4">
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
@@ -68,7 +68,7 @@
                     </div>
                     <h5 class="card-title">Analyse Exploratoire</h5>
                     <p class="card-text">
-                        Prétraitement, nettoyage et insights automatiques.
+                        Extraction, prétraitement, nettoyage et insights automatiques.
                     </p>
                     <a href="{{ url_for('data_processing') }}" class="btn btn-outline-primary">
                         <i class="bi bi-table me-2"></i>Commencer
@@ -118,14 +118,13 @@
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <div class="feature-icon mb-3">
-                        <i class="bi bi-clock-history text-warning fs-2"></i>
+                        <i class="bi bi-award text-primary fs-2"></i>
                     </div>
                     <h5 class="card-title">Daymap</h5>
                     <p class="card-text">
-                        Consultez les ventes 
-                        par produit dans un intervalle de temps.
+                        Consultez les ventes quotidiennes.
                     </p>
-                    <a href="{{ url_for('calendar_view') }}" class="btn btn-outline-warning">
+                    <a href="{{ url_for('calendar_view') }}" class="btn btn-outline-primary">
                         <i class="bi bi-list me-2"></i>Consulter
                     </a>
                 </div>
@@ -143,7 +142,7 @@
                 Visualisez vos données de manière interactive et découvrez des insights.
             </p>
             <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">
-                <i class="bi bi-pie-chart-fill me-2"></i>Accéder au Tableau de Bord
+                <i class="bi bi-pie-chart-fill me-2"></i>Exploiter
             </a>
         </div>
     </div>
@@ -153,31 +152,48 @@
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <div class="feature-icon mb-3">
-                        <i class="bi bi-geo-alt text-info fs-2"></i>
+                        <i class="bi bi-award text-primary fs-2"></i>
                     </div>
                     <h5 class="card-title">Cartographie</h5>
                     <p class="card-text">
-                        Visualisez et analysez des données géographiques. 
+                        Visualisez et analysez les ventes sur carte. 
                     </p>
-                    <a href="{{ url_for('maps_view') }}" class="btn btn-outline-info">
+                    <a href="{{ url_for('maps_view') }}" class="btn btn-outline-primary"">
                         <i class="bi bi-map me-2"></i>Explorer
                     </a>
                 </div>
             </div>
         </div>
+            <!-- Nouvelle carte pour le Programme de Fidélité -->
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <div class="feature-icon mb-3">
+                    <i class="bi bi-award text-primary fs-2"></i>
+                </div>
+                <h5 class="card-title">Programme de Fidélité</h5>
+                <p class="card-text">
+                    Gérez les règles de fidélité. Automatisez les offres et récompenses.
+                </p>
+                <a href="{{ url_for('loyalty_dashboard') }}" class="btn btn-outline-primary">
+                    <i class="bi bi-award me-2"></i>Planifier
+                </a>
+            </div>
+        </div>
+    </div>
         <!-- Historique -->
         <div class="col-md-4">
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <div class="feature-icon mb-3">
-                        <i class="bi bi-clock-history text-warning fs-2"></i>
+                        <i class="bi bi-award text-primary fs-2"></i>
                     </div>
                     <h5 class="card-title">Historique</h5>
                     <p class="card-text">
                         Consultez vos analyses précédentes. 
                         Retrouvez facilement vos projets.
                     </p>
-                    <a href="{{ url_for('history') }}" class="btn btn-outline-warning">
+                    <a href="{{ url_for('history') }}" class="btn btn-outline-primary">
                         <i class="bi bi-list me-2"></i>Consulter
                     </a>
                 </div>
@@ -210,8 +226,8 @@
             <div class="alert alert-light" role="alert">
                 <h4 class="alert-heading">Votre Assistant d'Analyse de Données</h4>
                 <p>
-                    Transformez vos données brutes en insights puissants. 
-                    Analyse locale, traitement intelligent et visualisation interactive.
+                    Transformez vos données en insights puissants. 
+                    Analyse, traitement intelligent et visualisation interactive.
                 </p>
             </div>
         </div>

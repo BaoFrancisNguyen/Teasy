@@ -1,0 +1,430 @@
+/* Variables de couleurs */
+:root {
+    --primary-color: #1c2b3a; /* Bleu marine légèrement adouci */
+    --secondary-color: #2a5d8f; /* Bleu intermédiaire plus doux */
+    --accent-color: #e74c3c;
+    --success-color: #2ecc71;
+    --warning-color: #ea940a;
+    --info-color: #4a90e2; /* Bleu plus clair pour info */
+    --light-color: #d3e0ea; /* Bleu très clair pour fond, assurant contraste avec le texte */
+    --dark-color: #1c2b3a;
+    --gray-color: #7d8c99;
+    --white-color: #ffffff;
+    
+    /* Couleurs spécifiques à l'application */
+    --sidebar-bg: #1c2b3a;
+    --card-header-bg: #2a5d8f;
+    --card-header-text: #ffffff;
+    --navbar-bg: #1c2b3a;
+    --navbar-text: #c0d3e5;
+    --footer-bg: #d1e3f4;
+}
+
+/* Style global */
+body {
+    font-family: 'Poppins', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--dark-color);
+    background-color: var(--light-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--navbar-bg) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-text {
+    color: var(--navbar-text) !important;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    transform: translateY(-2px);
+}
+
+.nav-link.active {
+    border-bottom: 2px solid var(--white-color);
+}
+
+/* Cards */
+.card-header {
+    background-color: var(--card-header-bg);
+    color: var(--card-header-text);
+}
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+
+.card-body {
+    padding: 20px;
+}
+
+.card-footer {
+    background-color: rgba(0, 0, 0, 0.03);
+    padding: 12px 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+/* Boutons */
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+    padding: 8px 16px;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-primary:hover {
+    background-color: #1e4c73;
+    border-color: #1e4c73;
+}
+
+.btn-outline-primary {
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--secondary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Formulaires */
+.form-control, .form-select {
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    padding: 10px 12px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.2rem rgba(42, 93, 143, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #495057;
+}
+
+/* Couleurs pour les badges et étiquettes */
+.bg-primary, .badge-primary {
+    background-color: var(--secondary-color) !important;
+}
+
+.bg-success, .badge-success {
+    background-color: var(--success-color) !important;
+}
+
+.bg-warning, .badge-warning {
+    background-color: var(--warning-color) !important;
+}
+
+.bg-danger, .badge-danger {
+    background-color: var(--accent-color) !important;
+}
+
+.bg-info, .badge-info {
+    background-color: var(--info-color) !important;
+}
+
+/* Footer */
+.footer {
+    padding: 20px 0;
+    background-color: var(--footer-bg);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Tableaux */
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.table thead th {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+    vertical-align: middle;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(42, 93, 143, 0.1);
+}
+
+/* Mettre en gras uniquement la ligne spécifique */
+.lead.mb-4 {
+    font-weight: bold;
+}
+
+/* Éléments spécifiques à l'application */
+.stats-card {
+    border-left: 4px solid var(--secondary-color);
+    transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+    border-left-width: 8px;
+}
+
+.stats-card .stats-icon {
+    font-size: 2rem;
+    color: var(--secondary-color);
+    opacity: 0.8;
+}
+
+.stats-card .stats-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.stats-card .stats-label {
+    font-size: 0.9rem;
+    color: var(--gray-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Zone de téléchargement de fichiers */
+.upload-area {
+    border: 2px dashed #bac9d8;
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #c5daf0;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.upload-area:hover {
+    border-color: var(--secondary-color);
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+.upload-icon {
+    font-size: 3rem;
+    color: var(--gray-color);
+    margin-bottom: 15px;
+}
+
+.upload-text {
+    color: var(--gray-color);
+    font-weight: 500;
+}
+
+/* Onglets */
+.nav-tabs {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    margin-bottom: 20px;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    color: var(--gray-color);
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    margin-right: 10px;
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: transparent;
+    color: var(--secondary-color);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--secondary-color);
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+/* Visualisations */
+.visualization-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.visualization-controls {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card-header {
+        padding: 10px 15px;
+    }
+    
+    .card-body {
+        padding: 15px;
+    }
+    
+    .stats-card .stats-value {
+        font-size: 1.5rem;
+    }
+    
+    .upload-area {
+        padding: 20px 10px;
+    }
+}
+
+/* Footer */
+.footer {
+    background-color: var(--footer-bg);
+}
+
+
+/* Fichier style.css existant avec les styles pour la reconnaissance de locuteurs */
+
+/* Styles existants... */
+
+/* Styles pour les éléments violets */
+.text-purple {
+    color: #7952b3;
+}
+
+.btn-outline-purple {
+    color: #7952b3;
+    border-color: #7952b3;
+}
+
+.btn-outline-purple:hover {
+    color: #fff;
+    background-color: #7952b3;
+    border-color: #7952b3;
+}
+
+/* Styles pour les étiquettes de locuteurs */
+.speaker-tag {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    margin-right: 0.5rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.speaker-1 {
+    background-color: #e6f7ff;
+    border: 1px solid #1890ff;
+    color: #1890ff;
+}
+
+.speaker-2 {
+    background-color: #f6ffed;
+    border: 1px solid #52c41a;
+    color: #52c41a;
+}
+
+.speaker-3 {
+    background-color: #fff2e8;
+    border: 1px solid #fa8c16;
+    color: #fa8c16;
+}
+
+.speaker-4 {
+    background-color: #f9f0ff;
+    border: 1px solid #722ed1;
+    color: #722ed1;
+}
+
+/* Styles pour la carte de l'onglet active */
+.nav-tabs .nav-link.active {
+    border-top: 3px solid #7952b3;
+    color: #7952b3;
+    font-weight: 600;
+}
+
+/* Styles pour les transcriptions */
+.transcription-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.transcription-line {
+    padding: 8px 0;
+    border-bottom: 1px dashed #eee;
+}
+
+.transcription-line.active {
+    background-color: #f0f8ff;
+}
+
+.timestamp {
+    color: #6c757d;
+    font-size: 0.85rem;
+    font-family: monospace;
+    margin-right: 5px;
+}
+
+/* Styles pour les profils vocaux */
+.bg-purple {
+    background-color: #7952b3;
+    color: white;
+}
+
+
+.text-teal {
+    color: #20c997;
+}
+.btn-outline-teal {
+    color: #20c997;
+    border-color: #20c997;
+}
+.btn-outline-teal:hover {
+    color: #fff;
+    background-color: #20c997;
+    border-color: #20c997;
+}

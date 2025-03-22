@@ -1,0 +1,15 @@
+{
+  "history": [
+    {
+      "type": "encoding",
+      "params": {
+        "columns": [
+          "Gender"
+        ],
+        "method": "one_hot",
+        "drop_original": true
+      },
+      "timestamp": "2025-03-18T00:53:08.183180"
+    }
+  ]
+}

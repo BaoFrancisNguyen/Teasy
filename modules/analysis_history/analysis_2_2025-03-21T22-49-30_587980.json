@@ -1,0 +1,32 @@
+{
+  "id": "analysis_2_2025-03-21T22-49-30_587980",
+  "dataset_name": "transactions_20250321",
+  "dataset_description": "Analyse IA - 2025-03-21 22:49",
+  "analysis": "Erreur de l'API IA (500): {\"error\":\"model requires more system memory (20.2 GiB) than is available (17.7 GiB)\"}...",
+  "timestamp": "2025-03-21T22:49:30.587980",
+  "metadata": {
+    "user_context": "donne moi les insights",
+    "dimensions": [
+      924,
+      15
+    ],
+    "columns": [
+      "id",
+      "date_transaction",
+      "montant_total",
+      "numero_facture",
+      "magasin",
+      "enseigne",
+      "moyen_paiement",
+      "canal_vente",
+      "points_gagnes",
+      "nom_article",
+      "quantite",
+      "prix_unitaire",
+      "remise_pourcentage",
+      "montant_ligne",
+      "categorie"
+    ],
+    "transformations": []
+  }
+}

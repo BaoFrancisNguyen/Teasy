@@ -1,0 +1,21 @@
+{
+  "history": [
+    {
+      "type": "encoding",
+      "params": {
+        "columns": [
+          "magasin",
+          "enseigne",
+          "moyen_paiement",
+          "canal_vente",
+          "nom_article",
+          "categorie"
+        ],
+        "method": "one_hot",
+        "drop_original": true
+      },
+      "timestamp": "2025-03-19T18:45:55.884953",
+      "applied_successfully": true
+    }
+  ]
+}

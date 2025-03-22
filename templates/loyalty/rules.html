@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block title %}Programme de Fidélité - Gestion des règles{% endblock %}
+
+{% block extra_css %}
+<style>
+    .rule-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+    .rule-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .rule-card.active {
+        border-left-color: #10b9ab;
+    }
+    .rule-card.inactive {
+        border-left-color: #adb5bd;
+        opacity: 0.7;
+    }
+    .rule-type-badge {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+    }
+    .action-buttons {
+        opacity: 0.3;
+        transition: opacity 0.3s ease;
+    }
+    .rule-card:hover .action-buttons {
+        opacity: 1;
+    }
+    .condition-text, .action-text {
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('loyalty_dashboard') }}">Programme de Fidélité</a></li>
+            <li class="breadcrumb-item active">Gestion des Règles</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="bi bi-list-check"></i> Règles de Fidélité
+        </h1>
+        <a href="{{ url_for('add_loyalty_rule') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Nouvelle Règle
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Filtres et recherche -->
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Filtres</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Type de règle</label>
+                        <select class="form-select form-select-sm" id="filter-type">
+                            <option value="all">Tous les types</option>
+                            <option value="nombre_achats">Nombre d'achats</option>
+                            <option value="montant_cumule">Montant cumulé</option>
+                            <option value="produit_specifique">Produit spécifique</option>
+                            <option value="categorie_specifique">Catégorie</option>
+                            <option value="premiere_visite">Première visite</option>
+                            <option value="anniversaire">Anniversaire</option>
+                            <option value="inactivite">Inactivité</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Statut</label>
+                        <select class="form-select form-select-sm" id="filter-status">
+                            <option value="all">Tous les statuts</option>
+                            <option value="1">Actif</option>
+                            <option value="0">Inactif</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Recherche</label>
+                        <input type="text" class="form-control form-control-sm" id="search-rules" placeholder="Nom de la règle...">
+                    </div>
+                    <button class="btn btn-sm btn-primary w-100" id="apply-filters">
+                        <i class="bi bi-funnel-fill"></i> Appliquer les filtres
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des règles -->
+        <div class="col-md-9">
+            {% if regles %}
+                <div class="row" id="rules-container">
+                    {% for regle in regles %}
+                        <div class="col-md-6 mb-4 rule-item" 
+                             data-type="{{ regle.type_regle }}" 
+                             data-status="{{ regle.est_active }}">
+                            <div class="card rule-card {{ 'active' if regle.est_active else 'inactive' }}">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div>
+                                        {% if regle.type_regle == 'nombre_achats' %}
+                                            <span class="rule-type-badge bg-primary text-white">Nombre d'achats</span>
+                                        {% elif regle.type_regle == 'montant_cumule' %}
+                                            <span class="rule-type-badge bg-success text-white">Montant cumulé</span>
+                                        {% elif regle.type_regle == 'produit_specifique' %}
+                                            <span class="rule-type-badge bg-info text-white">Produit spécifique</span>
+                                        {% elif regle.type_regle == 'categorie_specifique' %}
+                                            <span class="rule-type-badge bg-warning text-dark">Catégorie</span>
+                                        {% elif regle.type_regle == 'premiere_visite' %}
+                                            <span class="rule-type-badge bg-secondary text-white">Première visite</span>
+                                        {% elif regle.type_regle == 'anniversaire' %}
+                                            <span class="rule-type-badge bg-danger text-white">Anniversaire</span>
+                                        {% elif regle.type_regle == 'inactivite' %}
+                                            <span class="rule-type-badge bg-dark text-white">Inactivité</span>
+                                        {% else %}
+                                            <span class="rule-type-badge bg-secondary text-white">{{ regle.type_regle }}</span>
+                                        {% endif %}
+                                        
+                                        {% if regle.est_active %}
+                                            <span class="badge bg-success ms-2">Actif</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary ms-2">Inactif</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="action-buttons">
+                                        <a href="{{ url_for('edit_loyalty_rule', regle_id=regle.regle_id) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger delete-rule" data-rule-id="{{ regle.regle_id }}" data-rule-name="{{ regle.nom }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ regle.nom }}</h5>
+                                    {% if regle.description %}
+                                        <p class="text-muted small">{{ regle.description }}</p>
+                                    {% endif %}
+                                    
+                                    <div class="row mt-3">
+                                        <div class="col-6">
+                                            <h6>Condition</h6>
+                                            <div class="condition-text">
+                                                {% if regle.type_regle == 'nombre_achats' %}
+                                                    <i class="bi bi-cart-check me-1"></i> {{ regle.condition_valeur }} achats
+                                                    {% if regle.periode_jours %}
+                                                        <br><small class="text-muted">Période: {{ regle.periode_jours }} jours</small>
+                                                    {% endif %}
+                                                {% elif regle.type_regle == 'montant_cumule' %}
+                                                    <i class="bi bi-cash me-1"></i> {{ regle.condition_valeur }}€ cumulés
+                                                    {% if regle.periode_jours %}
+                                                        <br><small class="text-muted">Période: {{ regle.periode_jours }} jours</small>
+                                                    {% endif %}
+                                                {% elif regle.type_regle == 'produit_specifique' %}
+                                                    <i class="bi bi-box me-1"></i> Achat du produit #{{ regle.condition_valeur }}
+                                                {% elif regle.type_regle == 'categorie_specifique' %}
+                                                    <i class="bi bi-tags me-1"></i> Achat catégorie #{{ regle.condition_valeur }}
+                                                {% elif regle.type_regle == 'premiere_visite' %}
+                                                    <i class="bi bi-person-plus me-1"></i> {{ regle.condition_valeur }} jours après inscription
+                                                {% elif regle.type_regle == 'anniversaire' %}
+                                                    <i class="bi bi-calendar-event me-1"></i> {{ regle.condition_valeur }} jours avant anniversaire
+                                                {% elif regle.type_regle == 'inactivite' %}
+                                                    <i class="bi bi-slash-circle me-1"></i> {{ regle.condition_valeur }} jours d'inactivité
+                                                {% else %}
+                                                    {{ regle.condition_valeur }}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <h6>Action</h6>
+                                            <div class="action-text">
+                                                {% if regle.action_type == 'offre_points' %}
+                                                    <i class="bi bi-star me-1"></i> {{ regle.action_valeur }} points
+                                                {% elif regle.action_type == 'offre_cadeau' %}
+                                                    <i class="bi bi-gift me-1"></i> Cadeau
+                                                    {% if regle.recompense_nom %}
+                                                        <br><small class="text-muted">{{ regle.recompense_nom }}</small>
+                                                    {% endif %}
+                                                {% elif regle.action_type == 'reduction_pourcentage' %}
+                                                    <i class="bi bi-percent me-1"></i> {{ regle.action_valeur }}% de réduction
+                                                {% elif regle.action_type == 'reduction_montant' %}
+                                                    <i class="bi bi-currency-euro me-1"></i> {{ regle.action_valeur }}€ de réduction
+                                                {% elif regle.action_type == 'notification' %}
+                                                    <i class="bi bi-bell me-1"></i> Notification
+                                                {% else %}
+                                                    {{ regle.action_type }}: {{ regle.action_valeur }}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    {% if regle.priorite > 0 %}
+                                        <div class="mt-2">
+                                            <span class="badge bg-info">Priorité: {{ regle.priorite }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    Aucune règle de fidélité n'a été créée. <a href="{{ url_for('add_loyalty_rule') }}">Créer une première règle</a>.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmation de suppression -->
+<div class="modal fade" id="deleteRuleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmer la suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer la règle <strong id="rule-name-to-delete"></strong> ?</p>
+                <p class="text-danger">Cette action est irréversible.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <form id="delete-rule-form" method="POST">
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gestion des filtres
+        const filterType = document.getElementById('filter-type');
+        const filterStatus = document.getElementById('filter-status');
+        const searchInput = document.getElementById('search-rules');
+        const applyFiltersBtn = document.getElementById('apply-filters');
+        const rulesContainer = document.getElementById('rules-container');
+        const ruleItems = document.querySelectorAll('.rule-item');
+
+        // Appliquer les filtres
+        applyFiltersBtn.addEventListener('click', function() {
+            filterRules();
+        });
+
+        // Recherche en temps réel
+        searchInput.addEventListener('input', function() {
+            filterRules();
+        });
+
+        function filterRules() {
+            const typeFilter = filterType.value;
+            const statusFilter = filterStatus.value;
+            const searchTerm = searchInput.value.toLowerCase();
+
+            ruleItems.forEach(item => {
+                const ruleType = item.getAttribute('data-type');
+                const ruleStatus = item.getAttribute('data-status');
+                const ruleName = item.querySelector('.card-title').textContent.toLowerCase();
+                
+                const typeMatch = typeFilter === 'all' || ruleType === typeFilter;
+                const statusMatch = statusFilter === 'all' || ruleStatus === statusFilter;
+                const searchMatch = searchTerm === '' || ruleName.includes(searchTerm);
+                
+                if (typeMatch && statusMatch && searchMatch) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Gestion de la suppression
+        const deleteButtons = document.querySelectorAll('.delete-rule');
+        const deleteRuleModal = new bootstrap.Modal(document.getElementById('deleteRuleModal'));
+        const ruleNameToDelete = document.getElementById('rule-name-to-delete');
+        const deleteRuleForm = document.getElementById('delete-rule-form');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const ruleId = this.getAttribute('data-rule-id');
+                const ruleName = this.getAttribute('data-rule-name');
+                
+                ruleNameToDelete.textContent = ruleName;
+                deleteRuleForm.action = `/loyalty/rules/delete/${ruleId}`;
+                
+                deleteRuleModal.show();
+            });
+        });
+    });
+</script>
+{% endblock %}

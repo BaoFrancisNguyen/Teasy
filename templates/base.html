@@ -165,12 +165,39 @@
                             <i class="bi bi-geo-alt"></i> Cartographie
                         </a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if 'loyalty' in request.endpoint %}active{% endif %}" href="#" id="loyaltyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-award"></i> Programme Fidélité
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="loyaltyDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('loyalty_dashboard') }}">
+                                    <i class="bi bi-speedometer2"></i> Tableau de bord fidélité
+                                </a>
+                            </li>
+
+                                <a class="dropdown-item" href="{{ url_for('loyalty_rules') }}">
+                                    <i class="bi bi-list-check"></i> Règles
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('loyalty_offers') }}">
+                                    <i class="bi bi-gift"></i> Offres
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'history' %}active{% endif %}" href="{{ url_for('history') }}">
                             <i class="bi bi-clock-history"></i> Historique
                         </a>
                     </li>
                 </ul>
+                <li>
+                    <a class="dropdown-item" href="{{ url_for('loyalty_scheduler_config') }}">
+                        <i class="bi bi-clock"></i> Planificateur
+                    </a>
+                </li>
                 <div class="d-flex">
                     <a class="btn btn-outline-light" href="{{ url_for('settings') }}">
                         <i class="bi bi-gear"></i> Paramètres

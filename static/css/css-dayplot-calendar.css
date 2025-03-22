@@ -1,0 +1,193 @@
+/* Ajoutez ce CSS dans votre fichier CSS ou dans une balise <style> dans votre template */
+
+.calendar-controls {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+/* Ajustement de la taille du conteneur */
+#day-plot-calendar {
+    height: 600px !important; /* Force la hauteur */
+    width: 100%;              /* Largeur complète */
+    margin: 0 auto;           /* Centrage */
+}
+
+/* Style des info-bulles */
+.plotly-tooltip {
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+}
+
+/* Amélioration de l'apparence du sélecteur */
+#brand-select {
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid #dee2e6;
+    width: 100%;
+    max-width: 300px;
+    background-color: #fff;
+    transition: border-color 0.15s ease-in-out;
+}
+
+#brand-select:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Conteneur principal avec ombre et coins arrondis */
+.visualization-container {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+/* Titre du graphique */
+.visualization-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Ajustement de l'indicateur de chargement */
+#loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+}
+
+#loading-indicator .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Message d'erreur */
+#error-message {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f8d7da;
+    color: #721c24;
+    margin: 20px 0;
+}
+
+/* CSS supplémentaire pour les fonctionnalités avancées */
+
+/* Animation de pulsation pour le bouton */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(13, 110, 253, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(13, 110, 253, 0);
+    }
+}
+
+.btn-pulse {
+    animation: pulse 1s;
+    position: relative;
+}
+
+/* Style pour le conteneur des filtres */
+.calendar-controls {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Style pour les étiquettes des filtres */
+.form-label.fw-bold {
+    font-size: 0.9rem;
+    color: #495057;
+    margin-bottom: 0.3rem;
+}
+
+/* Style pour les sélecteurs */
+.form-select, .form-control {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 0.375rem 0.75rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Style pour le bouton d'application des filtres */
+#apply-filters {
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+#apply-filters:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+    transform: translateY(-2px);
+}
+
+#apply-filters:active {
+    transform: translateY(0);
+}
+
+/* Style pour la zone d'information des filtres */
+#filter-info {
+    background-color: #e9f5ff;
+    border-left: 4px solid #0d6efd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+#filter-info h6 {
+    color: #0d6efd;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+#active-filters {
+    padding-left: 20px;
+    margin: 0;
+}
+
+#active-filters li {
+    margin-bottom: 5px;
+    color: #495057;
+}
+
+/* Style pour le tooltip Plotly */
+.js-plotly-plot .plotly .hovertext {
+    font-family: 'Arial', sans-serif !important;
+    font-size: 12px !important;
+    padding: 8px !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Ajustements pour les écrans plus petits */
+@media (max-width: 768px) {
+    .calendar-controls {
+        padding: 15px;
+    }
+    
+    #apply-filters {
+        margin-top: 10px;
+        width: 100%;
+    }
+}

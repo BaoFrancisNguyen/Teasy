@@ -1,0 +1,1453 @@
+2025-03-22 17:10:07,136 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 17:10:07,136 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 17:10:07,136 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 17:10:07,136 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 17:10:07,136 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 17:10:07,144 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 17:10:07,144 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 17:10:07,170 - werkzeug - INFO -  * Restarting with stat
+2025-03-22 17:10:08,955 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 17:10:08,955 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 17:10:08,955 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 17:10:08,955 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 17:10:08,955 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 17:10:08,955 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 17:10:08,955 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 17:10:08,979 - werkzeug - WARNING -  * Debugger is active!
+2025-03-22 17:10:08,981 - werkzeug - INFO -  * Debugger PIN: 100-064-371
+2025-03-22 17:10:11,174 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-03-22 17:11:02,024 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:02] "GET / HTTP/1.1" 200 -
+2025-03-22 17:11:02,242 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:02] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:11:02,244 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:02] "[36mGET /static/img/teasy.png HTTP/1.1[0m" 304 -
+2025-03-22 17:11:02,244 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:02] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:11:02,244 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:02] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:11:02,464 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:02] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+2025-03-22 17:11:02,469 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:02] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:11:20,747 - modules.loyalty_scheduler_controller - INFO - Configuration par défaut créée.
+2025-03-22 17:11:20,750 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:20] "[32mGET /loyalty/scheduler HTTP/1.1[0m" 302 -
+2025-03-22 17:11:20,779 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:20] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 17:11:20,817 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:20] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:11:20,817 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:20] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:11:20,824 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:20] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:11:20,913 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:20] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:11:20,923 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:20] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 17:11:57,611 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:57] "[32mGET /loyalty/scheduler HTTP/1.1[0m" 302 -
+2025-03-22 17:11:57,621 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:57] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 17:11:57,647 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:57] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:11:57,648 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:57] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:11:57,651 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:57] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:11:57,754 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:57] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:11:57,763 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:11:57] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 17:12:52,109 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:12:52] "GET / HTTP/1.1" 200 -
+2025-03-22 17:12:52,140 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:12:52] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:12:52,140 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:12:52] "[36mGET /static/img/teasy.png HTTP/1.1[0m" 304 -
+2025-03-22 17:12:52,146 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:12:52] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:12:52,147 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:12:52] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:12:52,187 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:12:52] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+2025-03-22 17:12:52,189 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:12:52] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:12:53,586 - modules.history_manager_module - INFO - Analyse analysis_1_2025-03-22T12-11-31_171096 chargée avec succès
+2025-03-22 17:12:53,593 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:12:53] "GET /data_processing HTTP/1.1" 200 -
+2025-03-22 17:12:53,609 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:12:53] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:12:53,620 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:12:53] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:12:53,620 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:12:53] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:12:53,653 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:12:53] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:13:47,643 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:13:47] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 17:13:47,680 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:13:47] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:13:47,680 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:13:47] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:13:47,692 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:13:47] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:13:47,955 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:13:47] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:14:18,780 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:14:18] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:14:45,757 - modules.loyalty_scheduler_controller - ERROR - Échec du démarrage du planificateur: SyntaxError: Non-UTF-8 code starting with '\xe9' in file C:\Users\baofr\Desktop\Workspace\MILAN_ticket\temp_loyalty_scheduler.py on line 14, but no encoding declared; see https://peps.python.org/pep-0263/ for details
+
+2025-03-22 17:14:45,761 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:14:45] "[32mPOST /loyalty/scheduler/control/start HTTP/1.1[0m" 302 -
+2025-03-22 17:14:45,770 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:14:45] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 17:14:45,804 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:14:45] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:14:45,810 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:14:45] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:14:45,810 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:14:45] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:14:45,883 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:14:45] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:15:16,776 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:15:16] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:15:45,903 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:15:45] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:16:15,895 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:16:15] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:16:45,895 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:16:45] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:17:15,898 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:15] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:17:27,257 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:27] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 17:17:27,299 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:27] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:17:27,299 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:27] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:17:27,299 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:27] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:17:27,379 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:27] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:17:33,750 - werkzeug - INFO -  * Detected change in 'c:\\Users\\baofr\\Desktop\\Workspace\\MILAN_ticket\\temp_loyalty_scheduler.py', reloading
+2025-03-22 17:17:34,209 - werkzeug - INFO -  * Restarting with stat
+2025-03-22 17:17:36,178 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 17:17:36,178 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 17:17:36,178 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 17:17:36,178 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 17:17:36,178 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 17:17:36,178 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 17:17:36,178 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 17:17:36,200 - werkzeug - WARNING -  * Debugger is active!
+2025-03-22 17:17:36,201 - werkzeug - INFO -  * Debugger PIN: 100-064-371
+2025-03-22 17:17:38,522 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-03-22 17:17:44,616 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:44] "[32mPOST /loyalty/scheduler/save HTTP/1.1[0m" 302 -
+2025-03-22 17:17:44,641 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:44] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 17:17:44,731 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:44] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:17:44,752 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:44] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:17:44,753 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:44] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:17:44,770 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:44] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:17:53,269 - modules.loyalty_scheduler_controller - ERROR - Erreur lors de l'exécution de la tâche check_expired_offers: No module named 'loyalty_manager'
+2025-03-22 17:17:53,269 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:53] "[32mPOST /loyalty/scheduler/run-task/check_expired_offers HTTP/1.1[0m" 302 -
+2025-03-22 17:17:53,282 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:53] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 17:17:53,304 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:53] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:17:53,309 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:53] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:17:53,309 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:53] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:17:53,354 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:17:53] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:18:23,361 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:18:23] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:18:53,373 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:18:53] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:19:23,360 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:19:23] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:19:53,365 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:19:53] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:20:23,373 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:20:23] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:20:53,363 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:20:53] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:21:23,367 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:21:23] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:21:53,371 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:21:53] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:22:23,367 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:23] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:22:29,248 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:29] "GET / HTTP/1.1" 200 -
+2025-03-22 17:22:29,286 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:29] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:22:29,286 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:29] "[36mGET /static/img/teasy.png HTTP/1.1[0m" 304 -
+2025-03-22 17:22:29,296 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:29] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:22:29,296 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:29] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:22:29,325 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:29] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+2025-03-22 17:22:29,325 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:29] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:22:30,617 - modules.history_manager_module - INFO - Analyse analysis_1_2025-03-22T12-11-31_171096 chargée avec succès
+2025-03-22 17:22:30,633 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:30] "GET /data_processing HTTP/1.1" 200 -
+2025-03-22 17:22:30,658 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:30] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:22:30,662 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:30] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:22:30,666 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:30] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:22:30,691 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:30] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:22:41,300 - __main__ - INFO - Filtres appliqués: {'date_debut': '2024-12-22', 'date_fin': '2025-03-22', 'magasin_id': '', 'enseigne': '', 'ville': '', 'categorie_id': '', 'produit_id': '', 'moyen_paiement': '', 'montant_min': '', 'montant_max': '', 'include_items': True, 'include_demographics': True}
+2025-03-22 17:22:41,300 - __main__ - INFO - Requête SQL: 
+                SELECT t.transaction_id as id, t.date_transaction, t.montant_total, 
+                       t.numero_facture, pv.nom as magasin, pv.email as enseigne, 
+                       t.type_paiement as moyen_paiement, t.canal_vente, t.points_gagnes
+                ,
+                       t.client_id, c.genre, 
+                       (strftime('%Y', 'now') - strftime('%Y', c.date_naissance)) as age,
+                       c.segment as segment_client, cf.niveau_fidelite
+                    
+                FROM transactions t
+                LEFT JOIN points_vente pv ON t.magasin_id = pv.magasin_id
+                
+                    LEFT JOIN clients c ON t.client_id = c.client_id
+                    LEFT JOIN cartes_fidelite cf ON t.carte_id = cf.carte_id
+                     WHERE 1=1 AND date_transaction >= ? AND date_transaction <= ? ORDER BY t.date_transaction DESC LIMIT 5000
+2025-03-22 17:22:41,300 - __main__ - INFO - Paramètres: ['2024-12-22', '2025-03-22']
+2025-03-22 17:22:41,339 - __main__ - INFO - Décomposition des transactions : 912 lignes
+2025-03-22 17:22:41,347 - modules.transformations_persistence.TransformationManager - INFO - DataFrame original sauvegardé: uploads\db_export_20250322_172241_original.pkl
+2025-03-22 17:22:41,347 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame sauvegardé: (912, 20)
+2025-03-22 17:22:41,347 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:41] "[32mPOST /data_processing HTTP/1.1[0m" 302 -
+2025-03-22 17:22:41,363 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:22:41,363 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:22:41,363 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 17:22:41,363 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_original.pkl
+2025-03-22 17:22:41,363 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 20)
+2025-03-22 17:22:41,363 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 20)
+2025-03-22 17:22:41,429 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:41] "GET /data_preview HTTP/1.1" 200 -
+2025-03-22 17:22:41,475 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:41] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:22:41,475 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:41] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:22:41,479 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:41] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:22:41,519 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:41] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:22:41,582 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:22:41,584 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:22:41,584 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 17:22:41,586 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_original.pkl
+2025-03-22 17:22:41,586 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 20)
+2025-03-22 17:22:41,586 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 20)
+2025-03-22 17:22:41,592 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:41] "GET /api/client_demographics HTTP/1.1" 200 -
+2025-03-22 17:22:41,596 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:22:41,596 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:22:41,598 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 17:22:41,598 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_original.pkl
+2025-03-22 17:22:41,598 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 20)
+2025-03-22 17:22:41,598 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 20)
+2025-03-22 17:22:41,604 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:41] "GET /api/client_demographics HTTP/1.1" 200 -
+2025-03-22 17:22:49,048 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_original.pkl
+2025-03-22 17:22:49,054 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 20)
+2025-03-22 17:22:49,054 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:22:49,054 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:22:49,054 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 17:22:49,056 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_original.pkl
+2025-03-22 17:22:49,056 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 20)
+2025-03-22 17:22:49,056 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 20)
+2025-03-22 17:22:49,061 - modules.transformations_persistence.TransformationManager - WARNING - Historique des transformations non trouvé: uploads\db_export_20250322_172241_transforms.json
+2025-03-22 17:22:49,098 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:49] "GET /data_transform HTTP/1.1" 200 -
+2025-03-22 17:22:49,120 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:49] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:22:49,124 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:49] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:22:49,124 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:49] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:22:49,164 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:22:49] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:23:56,698 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:23:56] "GET /dashboard HTTP/1.1" 200 -
+2025-03-22 17:23:56,742 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:23:56] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:23:56,742 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:23:56] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:23:56,747 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:23:56] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:23:56,831 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:23:56] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:23:56,955 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:23:56] "GET /api/dashboard_data?date_range=30&store=all&payment=all&segment=all HTTP/1.1" 200 -
+2025-03-22 17:24:08,967 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:24:08] "GET /api/dashboard_data?date_range=90&store=all&payment=all&segment=all HTTP/1.1" 200 -
+2025-03-22 17:24:11,316 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:24:11] "GET /api/dashboard_data?date_range=7&store=all&payment=all&segment=all HTTP/1.1" 200 -
+2025-03-22 17:24:32,251 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:24:32] "GET /api/dashboard_data?date_range=90&store=all&payment=all&segment=all HTTP/1.1" 200 -
+2025-03-22 17:25:15,749 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:25:15,749 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:25:15,749 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 17:25:15,752 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_original.pkl
+2025-03-22 17:25:15,754 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 20)
+2025-03-22 17:25:15,754 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 20)
+2025-03-22 17:25:15,761 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:25:15] "GET /visualizations HTTP/1.1" 200 -
+2025-03-22 17:25:15,791 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:25:15] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:25:15,800 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:25:15] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:25:15,800 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:25:15] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:25:15,897 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:25:15] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:25:34,516 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:25:34,516 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:25:34,516 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 17:25:34,517 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_original.pkl
+2025-03-22 17:25:34,517 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 20)
+2025-03-22 17:25:34,517 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 20)
+2025-03-22 17:25:34,524 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:25:34] "POST /api/generate_visualization HTTP/1.1" 200 -
+2025-03-22 17:25:39,996 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:25:39,996 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:25:39,996 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 17:25:40,002 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_original.pkl
+2025-03-22 17:25:40,002 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 20)
+2025-03-22 17:25:40,002 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 20)
+2025-03-22 17:25:40,021 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:25:40] "POST /api/generate_visualization HTTP/1.1" 200 -
+2025-03-22 17:26:03,906 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:26:03,906 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:26:03,906 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 17:26:03,906 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_original.pkl
+2025-03-22 17:26:03,906 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 20)
+2025-03-22 17:26:03,906 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 20)
+2025-03-22 17:26:03,936 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:26:03] "GET /clustering HTTP/1.1" 200 -
+2025-03-22 17:26:03,987 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:26:03] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:26:03,995 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:26:03] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:26:03,995 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:26:03] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:26:04,044 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:26:04] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:26:33,682 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:26:33,682 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:26:33,682 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 17:26:33,682 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_original.pkl
+2025-03-22 17:26:33,682 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 20)
+2025-03-22 17:26:33,682 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 20)
+2025-03-22 17:26:34,862 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:26:34] "POST /api/elbow_method HTTP/1.1" 200 -
+2025-03-22 17:26:42,506 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:26:42,506 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:26:42,506 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 17:26:42,506 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_original.pkl
+2025-03-22 17:26:42,506 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 20)
+2025-03-22 17:26:42,506 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 20)
+2025-03-22 17:26:42,658 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé sauvegardé: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:26:42,658 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame sauvegardé: (912, 21)
+2025-03-22 17:26:42,667 - __main__ - INFO - Résultats du clustering sauvegardés dans uploads\clustering_results\clustering_20250322172642_1495e0.pkl
+2025-03-22 17:26:42,669 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé sauvegardé: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:26:42,669 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame sauvegardé: (912, 21)
+2025-03-22 17:26:42,675 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:26:42] "POST /run_clustering HTTP/1.1" 200 -
+2025-03-22 17:26:42,694 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:26:42] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:26:42,700 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:26:42] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:26:42,700 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:26:42] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:26:42,748 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:26:42] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:27:06,233 - __main__ - INFO - Début de l'analyse des clusters avec IA
+2025-03-22 17:27:06,234 - __main__ - INFO - Recherche du fichier de clustering: uploads\clustering_results\clustering_20250322172642_1495e0.pkl
+2025-03-22 17:27:06,234 - __main__ - INFO - Fichier de clustering chargé avec succès: clustering_20250322172642_1495e0
+2025-03-22 17:27:06,234 - __main__ - INFO - Contexte utilisateur reçu: Donne moi la description de chaque clusters...
+2025-03-22 17:27:06,234 - __main__ - INFO - Processeur de clustering initialisé
+2025-03-22 17:27:06,234 - __main__ - INFO - Démarrage de l'analyse des clusters avec IA...
+2025-03-22 17:27:06,234 - modules.clustering_module - INFO - Envoi d'une requête à Ollama pour l'analyse de clustering
+2025-03-22 17:27:06,234 - modules.clustering_module - INFO - URL: http://localhost:11434/api/generate
+2025-03-22 17:27:06,234 - modules.clustering_module - INFO - Prompt généré de 2949 caractères
+2025-03-22 17:27:06,234 - modules.clustering_module - INFO - Test de disponibilité d'Ollama...
+2025-03-22 17:27:08,278 - modules.clustering_module - WARNING - Le modèle 'mistral' n'est pas disponible dans Ollama
+2025-03-22 17:27:08,278 - modules.clustering_module - INFO - Utilisation du modèle alternatif: mistral:latest
+2025-03-22 17:27:08,278 - modules.clustering_module - INFO - Envoi de la requête à Ollama avec le modèle mistral:latest
+2025-03-22 17:27:38,595 - modules.clustering_module - INFO - Réponse reçue d'Ollama: 3602 caractères
+2025-03-22 17:27:38,595 - modules.clustering_module - INFO - Extrait de la réponse: 1. Interprétation des clusters trouvés:
+   - Cluster 0: Ce cluster regroupe les clients qui ont des ...
+2025-03-22 17:27:38,596 - __main__ - INFO - Analyse réussie, 3602 caractères générés
+2025-03-22 17:27:38,596 - __main__ - INFO - Extrait: 1. Interprétation des clusters trouvés:
+   - Cluster 0: Ce cluster regroupe les clients qui ont des ...
+2025-03-22 17:27:38,597 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:27:38] "POST /api/analyze_clusters_with_ai HTTP/1.1" 200 -
+2025-03-22 17:29:33,978 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:29:33,978 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:29:33,978 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:29:33,978 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:29:33,994 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:29:33] "GET /calendar HTTP/1.1" 200 -
+2025-03-22 17:29:34,032 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:29:34] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:29:34,039 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:29:34] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:29:34,040 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:29:34] "[36mGET /static/js/day-plot-calendar.js HTTP/1.1[0m" 304 -
+2025-03-22 17:29:34,043 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:29:34] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:29:34,110 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:29:34] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:29:34,123 - __main__ - INFO - Filtres reçus: brand=all, payment=all, article=all, gender=all, age=all
+2025-03-22 17:29:34,123 - __main__ - INFO - Requête complète: {'brand': 'all', 'payment_method': 'all', 'gender': 'all', 'age_range': 'all', 'article': 'all', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:29:34,129 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:29:34,129 - __main__ - INFO - Filtres reçus: brand=all, payment=all, article=all, gender=all, age=all
+2025-03-22 17:29:34,131 - __main__ - INFO - Requête complète: {'brand': 'all', 'payment_method': 'all', 'gender': 'all', 'age_range': 'all', 'article': 'all', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:29:34,131 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:29:34,132 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:29:34,132 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:29:34,132 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:29:34,132 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:29:34,132 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:29:34,132 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:29:34,132 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:29:34,132 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:29:34,132 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:29:34,138 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:29:34,140 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:29:34,140 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:29:34,140 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:29:34,140 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:29:34,148 - __main__ - INFO - Groupement réussi: 188 lignes de résultat
+2025-03-22 17:29:34,148 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:29:34] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:29:34,156 - __main__ - INFO - Groupement réussi: 188 lignes de résultat
+2025-03-22 17:29:34,159 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:29:34] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:29:48,599 - __main__ - INFO - Filtres reçus: brand=all, payment=all, article=Lunettes Solaires 3, gender=all, age=all
+2025-03-22 17:29:48,599 - __main__ - INFO - Requête complète: {'brand': 'all', 'payment_method': 'all', 'gender': 'all', 'age_range': 'all', 'article': 'Lunettes Solaires 3', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:29:48,599 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:29:48,599 - __main__ - INFO - Filtres reçus: brand=all, payment=all, article=Lunettes Solaires 3, gender=all, age=all
+2025-03-22 17:29:48,599 - __main__ - INFO - Requête complète: {'brand': 'all', 'payment_method': 'all', 'gender': 'all', 'age_range': 'all', 'article': 'Lunettes Solaires 3', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:29:48,599 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:29:48,603 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:29:48,603 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:29:48,603 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:29:48,603 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:29:48,605 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:29:48,605 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:29:48,611 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:29:48,611 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:29:48,611 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:29:48,611 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:29:48,615 - __main__ - INFO - Après filtre article: 13 lignes
+2025-03-22 17:29:48,618 - __main__ - INFO - Groupement réussi: 13 lignes de résultat
+2025-03-22 17:29:48,618 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:29:48,620 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:29:48] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:29:48,620 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:29:48,620 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:29:48,628 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:29:48,630 - __main__ - INFO - Après filtre article: 13 lignes
+2025-03-22 17:29:48,632 - __main__ - INFO - Groupement réussi: 13 lignes de résultat
+2025-03-22 17:29:48,634 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:29:48] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:29:53,364 - __main__ - INFO - Filtres reçus: brand=Boutique Lyon, payment=all, article=Lunettes Solaires 3, gender=all, age=all
+2025-03-22 17:29:53,364 - __main__ - INFO - Requête complète: {'brand': 'Boutique Lyon', 'payment_method': 'all', 'gender': 'all', 'age_range': 'all', 'article': 'Lunettes Solaires 3', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:29:53,364 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:29:53,370 - __main__ - INFO - Filtres reçus: brand=Boutique Lyon, payment=all, article=Lunettes Solaires 3, gender=all, age=all
+2025-03-22 17:29:53,370 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:29:53,370 - __main__ - INFO - Requête complète: {'brand': 'Boutique Lyon', 'payment_method': 'all', 'gender': 'all', 'age_range': 'all', 'article': 'Lunettes Solaires 3', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:29:53,370 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:29:53,370 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:29:53,370 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:29:53,370 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:29:53,370 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:29:53,370 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:29:53,380 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:29:53,380 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:29:53,380 - __main__ - INFO - Après filtre magasin: 154 lignes
+2025-03-22 17:29:53,380 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:29:53,380 - __main__ - INFO - Après filtre article: 4 lignes
+2025-03-22 17:29:53,380 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:29:53,386 - __main__ - INFO - Groupement réussi: 4 lignes de résultat
+2025-03-22 17:29:53,386 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:29:53,386 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:29:53,386 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:29:53,392 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:29:53] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:29:53,395 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:29:53,395 - __main__ - INFO - Après filtre magasin: 154 lignes
+2025-03-22 17:29:53,402 - __main__ - INFO - Après filtre article: 4 lignes
+2025-03-22 17:29:53,403 - __main__ - INFO - Groupement réussi: 4 lignes de résultat
+2025-03-22 17:29:53,403 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:29:53] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:30:01,806 - __main__ - INFO - Filtres reçus: brand=Boutique Lyon, payment=all, article=Lunettes Solaires 3, gender=all, age=36-50
+2025-03-22 17:30:01,807 - __main__ - INFO - Requête complète: {'brand': 'Boutique Lyon', 'payment_method': 'all', 'gender': 'all', 'age_range': '36-50', 'article': 'Lunettes Solaires 3', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:30:01,807 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:30:01,807 - __main__ - INFO - Filtres reçus: brand=Boutique Lyon, payment=all, article=Lunettes Solaires 3, gender=all, age=36-50
+2025-03-22 17:30:01,807 - __main__ - INFO - Requête complète: {'brand': 'Boutique Lyon', 'payment_method': 'all', 'gender': 'all', 'age_range': '36-50', 'article': 'Lunettes Solaires 3', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:30:01,807 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:30:01,807 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:30:01,807 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:30:01,807 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:30:01,807 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:30:01,812 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:30:01,812 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:30:01,814 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:30:01,814 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:30:01,814 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:30:01,821 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:30:01,823 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:30:01,823 - __main__ - INFO - Après filtre magasin: 154 lignes
+2025-03-22 17:30:01,823 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:30:01,823 - __main__ - INFO - Après filtre article: 4 lignes
+2025-03-22 17:30:01,823 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:30:01,823 - __main__ - INFO - Filtre âge '36-50' appliqué: 1/4 lignes
+2025-03-22 17:30:01,829 - __main__ - INFO - Groupement réussi: 1 lignes de résultat
+2025-03-22 17:30:01,835 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:30:01] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:30:01,838 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:30:01,838 - __main__ - INFO - Après filtre magasin: 154 lignes
+2025-03-22 17:30:01,838 - __main__ - INFO - Après filtre article: 4 lignes
+2025-03-22 17:30:01,838 - __main__ - INFO - Filtre âge '36-50' appliqué: 1/4 lignes
+2025-03-22 17:30:01,838 - __main__ - INFO - Groupement réussi: 1 lignes de résultat
+2025-03-22 17:30:01,845 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:30:01] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:30:09,206 - __main__ - INFO - Filtres reçus: brand=all, payment=all, article=Lunettes Solaires 3, gender=all, age=36-50
+2025-03-22 17:30:09,206 - __main__ - INFO - Requête complète: {'brand': 'all', 'payment_method': 'all', 'gender': 'all', 'age_range': '36-50', 'article': 'Lunettes Solaires 3', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:30:09,206 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:30:09,206 - __main__ - INFO - Filtres reçus: brand=all, payment=all, article=Lunettes Solaires 3, gender=all, age=36-50
+2025-03-22 17:30:09,206 - __main__ - INFO - Requête complète: {'brand': 'all', 'payment_method': 'all', 'gender': 'all', 'age_range': '36-50', 'article': 'Lunettes Solaires 3', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:30:09,206 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:30:09,213 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:30:09,213 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:30:09,213 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:30:09,213 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:30:09,213 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:30:09,213 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:30:09,213 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:30:09,213 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:30:09,213 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:30:09,213 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:30:09,213 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:30:09,221 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:30:09,221 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:30:09,221 - __main__ - INFO - Après filtre article: 13 lignes
+2025-03-22 17:30:09,228 - __main__ - INFO - Filtre âge '36-50' appliqué: 5/13 lignes
+2025-03-22 17:30:09,230 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:30:09,232 - __main__ - INFO - Groupement réussi: 5 lignes de résultat
+2025-03-22 17:30:09,232 - __main__ - INFO - Après filtre article: 13 lignes
+2025-03-22 17:30:09,232 - __main__ - INFO - Filtre âge '36-50' appliqué: 5/13 lignes
+2025-03-22 17:30:09,241 - __main__ - INFO - Groupement réussi: 5 lignes de résultat
+2025-03-22 17:30:09,241 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:30:09] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:30:09,244 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:30:09] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:30:34,717 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:30:34] "GET /maps HTTP/1.1" 200 -
+2025-03-22 17:30:34,749 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:30:34] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:30:34,753 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:30:34] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:30:34,805 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:30:34] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:30:34,816 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:30:34] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:30:42,420 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:30:42] "POST /api/generate_sales_map HTTP/1.1" 200 -
+2025-03-22 17:30:42,428 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:30:42] "POST /api/geographical_sales_analysis HTTP/1.1" 200 -
+2025-03-22 17:31:10,509 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:10] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 17:31:10,547 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:10] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:31:10,554 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:10] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:31:10,554 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:10] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:31:10,610 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:10] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:31:10,620 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:10] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 17:31:35,682 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:35] "GET /loyalty/rules HTTP/1.1" 200 -
+2025-03-22 17:31:35,712 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:35] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:31:35,718 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:35] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:31:35,718 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:35] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:31:35,759 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:35] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:31:40,398 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:40] "GET /loyalty/rules/add HTTP/1.1" 200 -
+2025-03-22 17:31:40,430 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:40] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:31:40,437 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:40] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:31:40,437 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:40] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:31:40,472 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:31:40] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:32:27,730 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:27] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 17:32:27,764 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:27] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:32:27,769 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:27] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:32:27,773 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:27] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:32:27,836 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:27] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:32:46,738 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:46] "GET /loyalty/scheduler/logs HTTP/1.1" 200 -
+2025-03-22 17:32:46,773 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:46] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:32:46,779 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:46] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:32:46,779 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:46] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:32:46,830 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:46] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:32:59,756 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:59] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 17:32:59,787 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:59] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:32:59,800 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:59] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:32:59,803 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:59] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:32:59,854 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:32:59] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:33:29,875 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:33:29] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:33:59,865 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:33:59] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:34:24,029 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:24] "GET /loyalty/rules HTTP/1.1" 200 -
+2025-03-22 17:34:24,071 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:24] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:34:24,083 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:24] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:34:24,083 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:24] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:24,126 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:24] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:36,479 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:36] "GET /loyalty/offers HTTP/1.1" 200 -
+2025-03-22 17:34:36,501 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:36] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:34:36,512 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:36] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:34:36,514 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:36] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:36,566 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:36] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:50,084 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:50] "GET /maps HTTP/1.1" 200 -
+2025-03-22 17:34:50,111 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:50] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:34:50,120 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:50] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:34:50,120 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:50] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:50,153 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:50] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:54,074 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:34:54,076 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:34:54,076 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:34:54,076 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:34:54,078 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:54] "GET /calendar HTTP/1.1" 200 -
+2025-03-22 17:34:54,109 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:54] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:34:54,119 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:54] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:34:54,119 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:54] "[36mGET /static/js/day-plot-calendar.js HTTP/1.1[0m" 304 -
+2025-03-22 17:34:54,126 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:54] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:54,179 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:54] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:54,374 - __main__ - INFO - Filtres reçus: brand=all, payment=all, article=all, gender=all, age=all
+2025-03-22 17:34:54,374 - __main__ - INFO - Requête complète: {'brand': 'all', 'payment_method': 'all', 'gender': 'all', 'age_range': 'all', 'article': 'all', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:34:54,374 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:34:54,374 - __main__ - INFO - Filtres reçus: brand=all, payment=all, article=all, gender=all, age=all
+2025-03-22 17:34:54,374 - __main__ - INFO - Requête complète: {'brand': 'all', 'payment_method': 'all', 'gender': 'all', 'age_range': 'all', 'article': 'all', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:34:54,374 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:34:54,374 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:34:54,374 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:34:54,374 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:34:54,374 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:34:54,374 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:34:54,374 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:34:54,390 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:34:54,390 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:34:54,390 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:34:54,390 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:34:54,393 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:34:54,393 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:34:54,396 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:34:54,400 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:34:54,407 - __main__ - INFO - Groupement réussi: 188 lignes de résultat
+2025-03-22 17:34:54,411 - __main__ - INFO - Groupement réussi: 188 lignes de résultat
+2025-03-22 17:34:54,411 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:54] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:34:54,415 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:54] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:34:55,825 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:34:55,827 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:34:55,827 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:34:55,827 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:34:55,827 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:55] "GET /clustering HTTP/1.1" 200 -
+2025-03-22 17:34:55,858 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:55] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:34:55,866 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:55] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:34:55,866 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:55] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:55,915 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:55] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:56,550 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:34:56,554 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:34:56,554 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:34:56,554 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:34:56,558 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:56] "GET /visualizations HTTP/1.1" 200 -
+2025-03-22 17:34:56,589 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:56] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:34:56,597 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:56] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:34:56,599 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:56] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:56,661 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:56] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:57,959 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:57] "GET /dashboard HTTP/1.1" 200 -
+2025-03-22 17:34:57,995 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:57] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:34:58,002 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:58] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:34:58,004 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:58] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:58,037 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:58] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:58,123 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:58] "GET /api/dashboard_data?date_range=30&store=all&payment=all&segment=all HTTP/1.1" 200 -
+2025-03-22 17:34:59,557 - modules.history_manager_module - INFO - Analyse analysis_1_2025-03-22T12-11-31_171096 chargée avec succès
+2025-03-22 17:34:59,557 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:59] "GET /data_processing HTTP/1.1" 200 -
+2025-03-22 17:34:59,594 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:59] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:34:59,594 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:59] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:34:59,594 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:59] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:34:59,643 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:34:59] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:35:00,933 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:35:00] "GET / HTTP/1.1" 200 -
+2025-03-22 17:35:00,975 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:35:00] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:35:00,982 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:35:00] "[36mGET /static/img/teasy.png HTTP/1.1[0m" 304 -
+2025-03-22 17:35:00,982 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:35:00] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:35:00,982 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:35:00] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:35:01,036 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:35:01] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+2025-03-22 17:35:01,041 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:35:01] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:35:23,412 - modules.history_manager_module - INFO - Analyse analysis_1_2025-03-22T12-11-31_171096 chargée avec succès
+2025-03-22 17:35:23,414 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:35:23] "GET /data_processing HTTP/1.1" 200 -
+2025-03-22 17:35:23,449 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:35:23] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:35:23,456 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:35:23] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:35:23,462 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:35:23] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:35:23,502 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:35:23] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:46:23,429 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:23] "GET /dashboard HTTP/1.1" 200 -
+2025-03-22 17:46:23,472 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:23] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:46:23,472 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:23] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:46:23,478 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:23] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:46:23,527 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:23] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:46:23,622 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:23] "GET /api/dashboard_data?date_range=30&store=all&payment=all&segment=all HTTP/1.1" 200 -
+2025-03-22 17:46:30,705 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:30] "GET /loyalty/rules HTTP/1.1" 200 -
+2025-03-22 17:46:30,737 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:30] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:46:30,746 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:30] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:46:30,747 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:30] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:46:30,789 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:30] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:46:33,356 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:33] "GET /loyalty/offers HTTP/1.1" 200 -
+2025-03-22 17:46:33,396 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:33] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:46:33,401 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:33] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:46:33,403 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:33] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:46:33,450 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:33] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:46:34,886 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:34] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 17:46:34,919 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:34] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:46:34,924 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:34] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:46:34,931 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:34] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:46:34,969 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:34] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:46:34,977 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:34] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 17:46:40,336 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:40] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 17:46:40,367 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:40] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:46:40,379 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:40] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:46:40,379 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:40] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:46:40,416 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:46:40] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:47:10,781 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:47:10] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:47:40,765 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:47:40] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:48:10,774 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:48:10] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:48:40,772 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:48:40] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:49:10,773 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:49:10] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:49:14,783 - werkzeug - INFO -  * Detected change in 'c:\\Users\\baofr\\Desktop\\Workspace\\MILAN_ticket\\modules\\loyalty_scheduler_controller.py', reloading
+2025-03-22 17:49:15,039 - werkzeug - INFO -  * Restarting with stat
+2025-03-22 17:49:16,991 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 17:49:16,991 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 17:49:16,993 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 17:49:16,993 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 17:49:16,993 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 17:49:16,993 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 17:49:16,993 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 17:49:17,007 - werkzeug - WARNING -  * Debugger is active!
+2025-03-22 17:49:17,014 - werkzeug - INFO -  * Debugger PIN: 100-064-371
+2025-03-22 17:49:19,374 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-03-22 17:49:43,747 - werkzeug - INFO -  * Detected change in 'c:\\Users\\baofr\\Desktop\\Workspace\\MILAN_ticket\\modules\\loyalty_scheduler_controller.py', reloading
+2025-03-22 17:49:44,027 - werkzeug - INFO -  * Restarting with stat
+2025-03-22 17:49:45,892 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 17:49:45,892 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 17:49:45,892 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 17:49:45,892 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 17:49:45,892 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 17:49:45,892 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 17:49:45,892 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 17:49:45,903 - werkzeug - WARNING -  * Debugger is active!
+2025-03-22 17:49:45,903 - werkzeug - INFO -  * Debugger PIN: 100-064-371
+2025-03-22 17:49:48,115 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-03-22 17:49:56,748 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:49:56] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 17:49:56,795 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:49:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:49:56,892 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:49:56] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:49:56,892 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:49:56] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:49:56,892 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:49:56] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:49:57,092 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:49:57] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:50:01,011 - werkzeug - INFO -  * Detected change in 'c:\\Users\\baofr\\Desktop\\Workspace\\MILAN_ticket\\temp_loyalty_scheduler.py', reloading
+2025-03-22 17:50:01,299 - werkzeug - INFO -  * Restarting with stat
+2025-03-22 17:50:03,021 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 17:50:03,021 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 17:50:03,021 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 17:50:03,021 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 17:50:03,021 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 17:50:03,021 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 17:50:03,021 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 17:50:03,041 - werkzeug - WARNING -  * Debugger is active!
+2025-03-22 17:50:03,045 - werkzeug - INFO -  * Debugger PIN: 100-064-371
+2025-03-22 17:50:05,059 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-03-22 17:50:15,668 - modules.loyalty_scheduler_controller - INFO - Le planificateur n'est pas en cours d'exécution.
+2025-03-22 17:50:19,679 - modules.loyalty_scheduler_controller - ERROR - Échec du démarrage du planificateur: Traceback (most recent call last):
+  File "C:\Users\baofr\Desktop\Workspace\MILAN_ticket\temp_loyalty_scheduler.py", line 2, in <module>
+    import schedule
+ModuleNotFoundError: No module named 'schedule'
+
+2025-03-22 17:50:19,680 - modules.loyalty_scheduler_controller - ERROR - Échec du redémarrage du planificateur: Échec du démarrage du planificateur: Traceback (most recent call last):
+  File "C:\Users\baofr\Desktop\Workspace\MILAN_ticket\temp_loyalty_scheduler.py", line 2, in <module>
+    import schedule
+ModuleNotFoundError: No module named 'schedule'
+
+2025-03-22 17:50:19,682 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:50:19] "[32mPOST /loyalty/scheduler/control/restart HTTP/1.1[0m" 302 -
+2025-03-22 17:50:19,712 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:50:19] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 17:50:19,878 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:50:19] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:50:19,892 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:50:19] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:50:19,892 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:50:19] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:50:19,959 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:50:19] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:50:22,222 - werkzeug - INFO -  * Detected change in 'c:\\Users\\baofr\\Desktop\\Workspace\\MILAN_ticket\\temp_loyalty_scheduler.py', reloading
+2025-03-22 17:50:22,520 - werkzeug - INFO -  * Restarting with stat
+2025-03-22 17:50:24,480 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 17:50:24,480 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 17:50:24,480 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 17:50:24,486 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 17:50:24,486 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 17:50:24,486 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 17:50:24,486 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 17:50:24,503 - werkzeug - WARNING -  * Debugger is active!
+2025-03-22 17:50:24,503 - werkzeug - INFO -  * Debugger PIN: 100-064-371
+2025-03-22 17:50:26,610 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-03-22 17:50:50,778 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:50:50] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:50:56,786 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:50:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:51:44,850 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 17:51:44,850 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 17:51:44,850 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 17:51:44,850 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 17:51:44,850 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 17:51:44,850 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 17:51:44,850 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 17:51:44,875 - werkzeug - INFO -  * Restarting with stat
+2025-03-22 17:51:46,737 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 17:51:46,737 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 17:51:46,737 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 17:51:46,737 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 17:51:46,737 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 17:51:46,737 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 17:51:46,737 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 17:51:46,759 - werkzeug - WARNING -  * Debugger is active!
+2025-03-22 17:51:46,761 - werkzeug - INFO -  * Debugger PIN: 100-064-371
+2025-03-22 17:51:48,796 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-03-22 17:51:50,767 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:51:50] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:51:56,783 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:51:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:52:07,613 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:07] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 17:52:07,691 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:07] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:52:07,712 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:07] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:52:07,715 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:07] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:52:07,750 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:07] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:52:13,862 - modules.loyalty_scheduler_controller - ERROR - Échec du démarrage du planificateur: Traceback (most recent call last):
+  File "C:\Users\baofr\Desktop\Workspace\MILAN_ticket\temp_loyalty_scheduler.py", line 2, in <module>
+    import schedule
+ModuleNotFoundError: No module named 'schedule'
+
+2025-03-22 17:52:13,864 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:13] "[32mPOST /loyalty/scheduler/control/start HTTP/1.1[0m" 302 -
+2025-03-22 17:52:13,867 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:13] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 17:52:13,895 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:13] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:52:13,903 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:13] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:52:13,903 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:13] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:52:13,937 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:13] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:52:14,694 - werkzeug - INFO -  * Detected change in 'c:\\Users\\baofr\\Desktop\\Workspace\\MILAN_ticket\\temp_loyalty_scheduler.py', reloading
+2025-03-22 17:52:14,974 - werkzeug - INFO -  * Restarting with stat
+2025-03-22 17:52:16,913 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 17:52:16,913 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 17:52:16,913 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 17:52:16,913 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 17:52:16,913 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 17:52:16,913 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 17:52:16,913 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 17:52:16,929 - werkzeug - WARNING -  * Debugger is active!
+2025-03-22 17:52:16,929 - werkzeug - INFO -  * Debugger PIN: 100-064-371
+2025-03-22 17:52:18,969 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-03-22 17:52:23,054 - modules.loyalty_scheduler_controller - ERROR - Échec du démarrage du planificateur: Traceback (most recent call last):
+  File "C:\Users\baofr\Desktop\Workspace\MILAN_ticket\temp_loyalty_scheduler.py", line 2, in <module>
+    import schedule
+ModuleNotFoundError: No module named 'schedule'
+
+2025-03-22 17:52:23,054 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:23] "[32mPOST /loyalty/scheduler/control/start HTTP/1.1[0m" 302 -
+2025-03-22 17:52:23,094 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:23] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 17:52:23,259 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:23] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:52:23,266 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:23] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:52:23,266 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:23] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:52:23,314 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:23] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:52:24,818 - werkzeug - INFO -  * Detected change in 'c:\\Users\\baofr\\Desktop\\Workspace\\MILAN_ticket\\temp_loyalty_scheduler.py', reloading
+2025-03-22 17:52:25,126 - werkzeug - INFO -  * Restarting with stat
+2025-03-22 17:52:27,028 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 17:52:27,028 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 17:52:27,028 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 17:52:27,028 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 17:52:27,028 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 17:52:27,028 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 17:52:27,028 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 17:52:27,043 - werkzeug - WARNING -  * Debugger is active!
+2025-03-22 17:52:27,049 - werkzeug - INFO -  * Debugger PIN: 100-064-371
+2025-03-22 17:52:29,344 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-03-22 17:52:53,779 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:53] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:52:56,774 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:52:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:53:11,359 - modules.history_manager_module - INFO - Analyse analysis_1_2025-03-22T12-11-31_171096 chargée avec succès
+2025-03-22 17:53:11,384 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:11] "GET /history HTTP/1.1" 200 -
+2025-03-22 17:53:11,482 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:11] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:53:11,499 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:11] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:53:11,499 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:11] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:53:11,531 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:11] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:53:15,422 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:15] "GET /maps HTTP/1.1" 200 -
+2025-03-22 17:53:15,460 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:15] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:53:15,462 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:15] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:53:15,462 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:15] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:53:15,504 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:15] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:53:18,310 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:18] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 17:53:18,350 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:18] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:53:18,350 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:18] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:53:18,360 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:18] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:53:18,390 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:18] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:53:18,399 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:18] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 17:53:21,160 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:21] "[32mPOST /loyalty/run-rules HTTP/1.1[0m" 302 -
+2025-03-22 17:53:21,168 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:21] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 17:53:21,184 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:21] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:53:21,184 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:21] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:53:21,184 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:21] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:53:21,218 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:21] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:53:21,226 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:21] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 17:53:32,946 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:32] "GET /loyalty/rules HTTP/1.1" 200 -
+2025-03-22 17:53:32,988 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:32] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:53:32,988 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:32] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:53:32,997 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:32] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:53:33,036 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:33] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:53:35,311 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:35] "GET /loyalty/rules/add HTTP/1.1" 200 -
+2025-03-22 17:53:35,351 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:35] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:53:35,351 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:35] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:53:35,389 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:35] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:53:35,392 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:35] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:53:56,783 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:53:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:54:56,789 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:54:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:55:56,779 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:55:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:56:10,841 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:56:10] "[32mPOST /loyalty/rules/add HTTP/1.1[0m" 302 -
+2025-03-22 17:56:10,849 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:56:10] "GET /loyalty/rules HTTP/1.1" 200 -
+2025-03-22 17:56:10,885 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:56:10] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:56:10,885 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:56:10] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:56:10,885 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:56:10] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:56:10,928 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:56:10] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:56:56,785 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:56:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:57:08,951 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:08] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 17:57:08,987 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:08] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:57:09,000 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:09] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:57:09,003 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:09] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:57:09,055 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:09] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:57:09,059 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:09] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 17:57:14,426 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:14] "[32mPOST /loyalty/run-rules HTTP/1.1[0m" 302 -
+2025-03-22 17:57:14,435 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:14] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 17:57:14,467 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:14] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:57:14,471 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:14] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:57:14,471 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:14] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:57:14,514 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:14] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:57:14,525 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:14] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 17:57:56,779 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:57:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:58:06,428 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:06] "GET /maps HTTP/1.1" 200 -
+2025-03-22 17:58:06,463 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:06] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:58:06,463 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:06] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:58:06,463 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:06] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:06,521 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:06] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:08,028 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:58:08,028 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:58:08,028 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:58:08,037 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:58:08,044 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:08] "GET /calendar HTTP/1.1" 200 -
+2025-03-22 17:58:08,091 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:08] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:58:08,095 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:08] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:58:08,102 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:08] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:08,102 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:08] "[36mGET /static/js/day-plot-calendar.js HTTP/1.1[0m" 304 -
+2025-03-22 17:58:08,176 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:08] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:08,290 - __main__ - INFO - Filtres reçus: brand=all, payment=all, article=all, gender=all, age=all
+2025-03-22 17:58:08,290 - __main__ - INFO - Requête complète: {'brand': 'all', 'payment_method': 'all', 'gender': 'all', 'age_range': 'all', 'article': 'all', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:58:08,290 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:58:08,290 - __main__ - INFO - Filtres reçus: brand=all, payment=all, article=all, gender=all, age=all
+2025-03-22 17:58:08,290 - __main__ - INFO - Requête complète: {'brand': 'all', 'payment_method': 'all', 'gender': 'all', 'age_range': 'all', 'article': 'all', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 17:58:08,290 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_172241
+2025-03-22 17:58:08,298 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:58:08,298 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:58:08,298 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:58:08,298 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:58:08,303 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:58:08,303 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:58:08,306 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_172241_transformed.pkl
+2025-03-22 17:58:08,306 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (912, 21)
+2025-03-22 17:58:08,306 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_172241, forme: (912, 21)
+2025-03-22 17:58:08,306 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:58:08,306 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie', 'cluster_kmeans']
+2025-03-22 17:58:08,314 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 17:58:08,314 - __main__ - INFO - Statistiques d'âge: min=20, max=80, moyenne=45.80701754385965
+2025-03-22 17:58:08,321 - __main__ - INFO - Groupement réussi: 188 lignes de résultat
+2025-03-22 17:58:08,323 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 17:58:08,331 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:08] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:58:08,333 - __main__ - INFO - Groupement réussi: 188 lignes de résultat
+2025-03-22 17:58:08,335 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:08] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 17:58:12,331 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:12] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 17:58:12,370 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:12] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:58:12,373 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:12] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:12,373 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:12] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:58:12,437 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:12] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:12,445 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:12] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 17:58:21,669 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:21] "GET /loyalty/offers HTTP/1.1" 200 -
+2025-03-22 17:58:21,706 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:21] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:58:21,713 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:21] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:58:21,716 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:21] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:21,768 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:21] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:24,213 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:24] "GET /loyalty/offers?status=all&date_from=2025-02-20&date_to=2025-03-22 HTTP/1.1" 200 -
+2025-03-22 17:58:24,230 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:24] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:58:24,237 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:24] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:58:24,237 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:24] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:24,271 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:24] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:30,892 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:30] "GET /loyalty/offers?status=all&date_from=2024-10-01&date_to=2025-03-22 HTTP/1.1" 200 -
+2025-03-22 17:58:30,928 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:30] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:58:30,934 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:30] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:30,936 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:30] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:58:31,014 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:31] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:35,551 - modules.history_manager_module - INFO - Analyse analysis_1_2025-03-22T12-11-31_171096 chargée avec succès
+2025-03-22 17:58:35,551 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:35] "GET /history HTTP/1.1" 200 -
+2025-03-22 17:58:35,586 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:35] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:58:35,600 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:35] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:58:35,602 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:35] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:35,635 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:35] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:40,016 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:40] "GET /loyalty/rules HTTP/1.1" 200 -
+2025-03-22 17:58:40,057 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:40] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:58:40,067 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:40] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:58:40,067 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:40] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:40,115 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:40] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:51,227 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:51] "GET /loyalty/rules/add HTTP/1.1" 200 -
+2025-03-22 17:58:51,253 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:51] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 17:58:51,265 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:51] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 17:58:51,265 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:51] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:51,302 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:51] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 17:58:56,779 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:58:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 17:59:56,781 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 17:59:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:00:07,657 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:00:07] "[32mPOST /loyalty/rules/add HTTP/1.1[0m" 302 -
+2025-03-22 18:00:07,672 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:00:07] "GET /loyalty/rules HTTP/1.1" 200 -
+2025-03-22 18:00:07,716 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:00:07] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:00:07,722 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:00:07] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:00:07,728 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:00:07] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:00:07,763 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:00:07] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:00:40,684 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:00:40] "GET /loyalty/rules/add HTTP/1.1" 200 -
+2025-03-22 18:00:40,716 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:00:40] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:00:40,725 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:00:40] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:00:40,725 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:00:40] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:00:40,780 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:00:40] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:00:56,789 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:00:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:01:56,779 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:01:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:02:09,971 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:02:09] "[32mPOST /loyalty/rules/add HTTP/1.1[0m" 302 -
+2025-03-22 18:02:09,981 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:02:09] "GET /loyalty/rules HTTP/1.1" 200 -
+2025-03-22 18:02:10,012 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:02:10] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:02:10,019 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:02:10] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:02:10,021 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:02:10] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:02:10,053 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:02:10] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:02:56,779 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:02:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:03:56,775 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:03:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:04:56,773 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:04:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:05:56,789 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:05:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:06:56,783 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:06:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:07:56,774 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:07:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:08:56,775 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:08:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:09:20,052 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:09:20] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 18:09:20,099 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:09:20] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:09:20,106 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:09:20] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:09:20,108 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:09:20] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:09:20,145 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:09:20] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:09:23,423 - modules.loyalty_scheduler_controller - ERROR - Échec du démarrage du planificateur: Traceback (most recent call last):
+  File "C:\Users\baofr\Desktop\Workspace\MILAN_ticket\temp_loyalty_scheduler.py", line 2, in <module>
+    import schedule
+ModuleNotFoundError: No module named 'schedule'
+
+2025-03-22 18:09:23,423 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:09:23] "[32mPOST /loyalty/scheduler/control/start HTTP/1.1[0m" 302 -
+2025-03-22 18:09:23,430 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:09:23] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 18:09:23,471 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:09:23] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:09:23,476 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:09:23] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:09:23,480 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:09:23] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:09:23,513 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:09:23] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:09:25,890 - werkzeug - INFO -  * Detected change in 'c:\\Users\\baofr\\Desktop\\Workspace\\MILAN_ticket\\temp_loyalty_scheduler.py', reloading
+2025-03-22 18:09:26,182 - werkzeug - INFO -  * Restarting with stat
+2025-03-22 18:09:28,142 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 18:09:28,142 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 18:09:28,142 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 18:09:28,142 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 18:09:28,142 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 18:09:28,142 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 18:09:28,142 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 18:09:28,164 - werkzeug - WARNING -  * Debugger is active!
+2025-03-22 18:09:28,166 - werkzeug - INFO -  * Debugger PIN: 100-064-371
+2025-03-22 18:09:30,080 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-03-22 18:09:53,772 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:09:53] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:09:56,785 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:09:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:10:23,777 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:10:23] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:10:53,773 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:10:53] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:10:56,779 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:10:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:11:00,165 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:00] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:11:00,336 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:00] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:11:00,345 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:00] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:11:00,345 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:00] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:11:00,397 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:00] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:11:00,404 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:00] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:11:02,863 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:02] "[32mPOST /loyalty/run-rules HTTP/1.1[0m" 302 -
+2025-03-22 18:11:02,873 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:02] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:11:02,909 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:02] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:11:02,909 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:02] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:11:02,909 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:02] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:11:02,957 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:02] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:11:02,972 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:02] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:11:48,577 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:48] "GET /loyalty/rules HTTP/1.1" 200 -
+2025-03-22 18:11:48,607 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:48] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:11:48,616 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:48] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:11:48,618 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:48] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:11:48,664 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:48] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:11:50,065 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:50] "GET /loyalty/rules/add HTTP/1.1" 200 -
+2025-03-22 18:11:50,096 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:50] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:11:50,100 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:50] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:11:50,100 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:50] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:11:50,145 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:50] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:11:56,778 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:11:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:12:44,154 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:44] "[32mPOST /loyalty/rules/add HTTP/1.1[0m" 302 -
+2025-03-22 18:12:44,162 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:44] "GET /loyalty/rules HTTP/1.1" 200 -
+2025-03-22 18:12:44,195 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:44] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:12:44,201 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:44] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:12:44,203 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:44] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:12:44,249 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:44] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:12:50,609 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:50] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:12:50,651 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:50] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:12:50,655 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:50] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:12:50,656 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:50] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:12:50,703 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:50] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:12:50,714 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:50] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:12:52,319 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:52] "[32mPOST /loyalty/run-rules HTTP/1.1[0m" 302 -
+2025-03-22 18:12:52,329 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:52] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:12:52,352 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:52] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:12:52,352 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:52] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:12:52,352 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:52] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:12:52,397 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:52] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:12:52,409 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:52] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:12:56,780 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:12:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:13:14,425 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:14] "GET /loyalty/rules HTTP/1.1" 200 -
+2025-03-22 18:13:14,464 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:14] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:13:14,474 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:14] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:13:14,477 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:14] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:13:14,529 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:14] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:13:16,596 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:16] "GET /loyalty/rules/add HTTP/1.1" 200 -
+2025-03-22 18:13:16,627 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:16] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:13:16,627 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:16] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:13:16,635 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:16] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:13:16,691 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:16] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:13:53,611 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:53] "[32mPOST /loyalty/rules/add HTTP/1.1[0m" 302 -
+2025-03-22 18:13:53,619 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:53] "GET /loyalty/rules HTTP/1.1" 200 -
+2025-03-22 18:13:53,659 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:53] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:13:53,669 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:53] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:13:53,669 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:53] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:13:53,721 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:53] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:13:56,782 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:13:57,903 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:57] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:13:57,930 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:57] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:13:57,938 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:57] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:13:57,938 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:57] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:13:57,996 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:57] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:13:58,004 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:58] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:13:59,344 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:59] "[32mPOST /loyalty/run-rules HTTP/1.1[0m" 302 -
+2025-03-22 18:13:59,360 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:59] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:13:59,399 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:59] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:13:59,402 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:59] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:13:59,402 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:59] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:13:59,450 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:59] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:13:59,463 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:13:59] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:14:56,784 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:14:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:15:56,783 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:15:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:16:56,783 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:16:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:17:12,489 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:17:12] "[32mPOST /loyalty/run-rules HTTP/1.1[0m" 302 -
+2025-03-22 18:17:12,497 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:17:12] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:17:12,513 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:17:12] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:17:12,522 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:17:12] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:17:12,522 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:17:12] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:17:12,565 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:17:12] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:17:12,571 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:17:12] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:17:56,789 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:17:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:18:56,786 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:18:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:19:56,776 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:19:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:20:56,775 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:20:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:21:23,781 - werkzeug - INFO -  * Detected change in 'c:\\Users\\baofr\\Desktop\\Workspace\\MILAN_ticket\\app_routes.py', reloading
+2025-03-22 18:21:24,010 - werkzeug - INFO -  * Restarting with stat
+2025-03-22 18:21:25,878 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 18:21:25,878 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 18:21:25,878 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 18:21:25,878 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 18:21:25,878 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 18:21:25,878 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 18:21:25,878 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 18:21:25,902 - werkzeug - WARNING -  * Debugger is active!
+2025-03-22 18:21:25,902 - werkzeug - INFO -  * Debugger PIN: 100-064-371
+2025-03-22 18:21:28,131 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-03-22 18:21:28,320 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:28] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:21:28,404 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:28] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:21:28,406 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:28] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:21:28,448 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:28] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:21:28,456 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:28] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:21:28,524 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:28] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:21:29,655 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:29] "[32mPOST /loyalty/run-rules HTTP/1.1[0m" 302 -
+2025-03-22 18:21:29,661 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:29] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:21:29,700 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:29] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:21:29,702 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:29] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:21:29,702 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:29] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:21:29,778 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:29] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:21:29,792 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:29] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:21:56,782 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:21:56] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:22:32,998 - werkzeug - INFO -  * Detected change in 'c:\\Users\\baofr\\Desktop\\Workspace\\MILAN_ticket\\app_routes.py', reloading
+2025-03-22 18:22:33,283 - werkzeug - INFO -  * Restarting with stat
+2025-03-22 18:22:35,010 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 18:22:35,010 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 18:22:35,010 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 18:22:35,010 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 18:22:35,010 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 18:22:35,010 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 18:22:35,010 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 18:22:35,022 - werkzeug - WARNING -  * Debugger is active!
+2025-03-22 18:22:35,022 - werkzeug - INFO -  * Debugger PIN: 100-064-371
+2025-03-22 18:22:37,188 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-03-22 18:22:42,269 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:42] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:22:42,425 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:42] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:22:42,431 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:42] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:22:42,432 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:42] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:22:42,476 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:42] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:22:42,482 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:42] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:22:44,498 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:44] "[32mPOST /loyalty/run-rules HTTP/1.1[0m" 302 -
+2025-03-22 18:22:44,508 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:44] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:22:44,544 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:44] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:22:44,545 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:44] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:22:44,549 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:44] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:22:44,595 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:44] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:22:44,611 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:44] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:22:54,559 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:22:54] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:23:10,779 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:23:10] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:23:40,402 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:23:40] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:23:58,860 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:23:58] "[32mPOST /loyalty/run-rules HTTP/1.1[0m" 302 -
+2025-03-22 18:23:58,872 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:23:58] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:23:58,901 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:23:58] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:23:58,907 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:23:58] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:23:58,907 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:23:58] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:23:58,959 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:23:58] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:23:58,973 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:23:58] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:24:03,870 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:03] "GET / HTTP/1.1" 200 -
+2025-03-22 18:24:03,909 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:03] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:24:03,919 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:03] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:24:03,919 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:03] "[36mGET /static/img/teasy.png HTTP/1.1[0m" 304 -
+2025-03-22 18:24:03,919 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:03] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:24:03,950 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:03] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+2025-03-22 18:24:03,958 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:03] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:24:05,934 - modules.history_manager_module - INFO - Analyse analysis_1_2025-03-22T12-11-31_171096 chargée avec succès
+2025-03-22 18:24:05,948 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:05] "GET /data_processing HTTP/1.1" 200 -
+2025-03-22 18:24:05,979 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:05] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:24:05,988 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:05] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:24:05,988 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:05] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:24:06,034 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:06] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:24:24,010 - __main__ - INFO - Filtres appliqués: {'date_debut': '2014-01-22', 'date_fin': '2025-03-22', 'magasin_id': '', 'enseigne': '', 'ville': '', 'categorie_id': '', 'produit_id': '', 'moyen_paiement': '', 'montant_min': '', 'montant_max': '', 'include_items': True, 'include_demographics': True}
+2025-03-22 18:24:24,010 - __main__ - INFO - Requête SQL: 
+                SELECT t.transaction_id as id, t.date_transaction, t.montant_total, 
+                       t.numero_facture, pv.nom as magasin, pv.email as enseigne, 
+                       t.type_paiement as moyen_paiement, t.canal_vente, t.points_gagnes
+                ,
+                       t.client_id, c.genre, 
+                       (strftime('%Y', 'now') - strftime('%Y', c.date_naissance)) as age,
+                       c.segment as segment_client, cf.niveau_fidelite
+                    
+                FROM transactions t
+                LEFT JOIN points_vente pv ON t.magasin_id = pv.magasin_id
+                
+                    LEFT JOIN clients c ON t.client_id = c.client_id
+                    LEFT JOIN cartes_fidelite cf ON t.carte_id = cf.carte_id
+                     WHERE 1=1 AND date_transaction >= ? AND date_transaction <= ? ORDER BY t.date_transaction DESC LIMIT 5000
+2025-03-22 18:24:24,010 - __main__ - INFO - Paramètres: ['2014-01-22', '2025-03-22']
+2025-03-22 18:24:24,121 - __main__ - INFO - Décomposition des transactions : 5108 lignes
+2025-03-22 18:24:24,139 - modules.transformations_persistence.TransformationManager - INFO - DataFrame original sauvegardé: uploads\db_export_20250322_182424_original.pkl
+2025-03-22 18:24:24,139 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame sauvegardé: (5108, 20)
+2025-03-22 18:24:24,145 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:24] "[32mPOST /data_processing HTTP/1.1[0m" 302 -
+2025-03-22 18:24:24,153 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_182424
+2025-03-22 18:24:24,153 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_182424_transformed.pkl
+2025-03-22 18:24:24,153 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 18:24:24,153 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_182424_original.pkl
+2025-03-22 18:24:24,161 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (5108, 20)
+2025-03-22 18:24:24,161 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_182424, forme: (5108, 20)
+2025-03-22 18:24:24,203 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:24] "GET /data_preview HTTP/1.1" 200 -
+2025-03-22 18:24:24,257 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:24] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:24:24,260 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:24] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:24:24,260 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:24] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:24:24,329 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:24] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:24:24,399 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_182424
+2025-03-22 18:24:24,399 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_182424_transformed.pkl
+2025-03-22 18:24:24,399 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 18:24:24,407 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_182424_original.pkl
+2025-03-22 18:24:24,407 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (5108, 20)
+2025-03-22 18:24:24,407 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_182424, forme: (5108, 20)
+2025-03-22 18:24:24,407 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:24] "GET /api/client_demographics HTTP/1.1" 200 -
+2025-03-22 18:24:24,417 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_182424
+2025-03-22 18:24:24,417 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_182424_transformed.pkl
+2025-03-22 18:24:24,417 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 18:24:24,423 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_182424_original.pkl
+2025-03-22 18:24:24,423 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (5108, 20)
+2025-03-22 18:24:24,423 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_182424, forme: (5108, 20)
+2025-03-22 18:24:24,434 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:24] "GET /api/client_demographics HTTP/1.1" 200 -
+2025-03-22 18:24:31,193 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:31] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:24:31,221 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:31] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:24:31,234 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:31] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:24:31,234 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:31] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:24:31,279 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:31] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:24:31,291 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:31] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:24:32,832 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:32] "[32mPOST /loyalty/run-rules HTTP/1.1[0m" 302 -
+2025-03-22 18:24:32,834 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:32] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:24:32,871 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:32] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:24:32,876 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:32] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:24:32,876 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:32] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:24:32,921 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:32] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:24:32,933 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:32] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:24:35,546 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:35] "GET /maps HTTP/1.1" 200 -
+2025-03-22 18:24:35,581 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:35] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:24:35,590 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:35] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:24:35,624 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:35] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:24:35,632 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:35] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:24:40,706 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:40] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:24:46,893 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:46] "POST /api/generate_sales_map HTTP/1.1" 200 -
+2025-03-22 18:24:46,893 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:24:46] "POST /api/geographical_sales_analysis HTTP/1.1" 200 -
+2025-03-22 18:25:10,854 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_182424
+2025-03-22 18:25:10,854 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_182424_transformed.pkl
+2025-03-22 18:25:10,855 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 18:25:10,860 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_182424_original.pkl
+2025-03-22 18:25:10,860 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (5108, 20)
+2025-03-22 18:25:10,860 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_182424, forme: (5108, 20)
+2025-03-22 18:25:10,869 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:10] "GET /visualizations HTTP/1.1" 200 -
+2025-03-22 18:25:10,918 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:10] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:25:10,926 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:10] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:25:10,926 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:10] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:25:11,009 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:11] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:25:11,752 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:11] "GET /dashboard HTTP/1.1" 200 -
+2025-03-22 18:25:11,777 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:11] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:25:11,785 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:11] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:25:11,785 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:11] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:25:11,842 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:11] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:25:11,976 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:11] "GET /api/dashboard_data?date_range=30&store=all&payment=all&segment=all HTTP/1.1" 200 -
+2025-03-22 18:25:26,523 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:26] "GET /api/dashboard_data?date_range=custom&store=all&payment=all&segment=all&start_date=2017-01-22&end_date= HTTP/1.1" 200 -
+2025-03-22 18:25:27,333 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:27] "GET /api/dashboard_data?date_range=custom&store=all&payment=all&segment=all&start_date=2017-01-22&end_date= HTTP/1.1" 200 -
+2025-03-22 18:25:31,887 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:31] "GET /api/dashboard_data?date_range=custom&store=all&payment=all&segment=all&start_date=2017-01-22&end_date=2025-03-22 HTTP/1.1" 200 -
+2025-03-22 18:25:41,693 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:25:41] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:26:42,704 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:26:42] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:27:43,714 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:27:43] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:28:44,705 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:28:44] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:29:45,698 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:29:45] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:30:46,698 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:30:46] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:31:47,704 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:31:47] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:32:06,897 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:06] "GET / HTTP/1.1" 200 -
+2025-03-22 18:32:06,945 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:06] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:32:06,945 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:06] "[36mGET /static/img/teasy.png HTTP/1.1[0m" 304 -
+2025-03-22 18:32:06,950 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:06] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:06,950 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:06] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:32:07,016 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:07] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+2025-03-22 18:32:07,016 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:07] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:08,412 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:08] "GET / HTTP/1.1" 200 -
+2025-03-22 18:32:08,436 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:08] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:32:08,441 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:08] "[36mGET /static/img/teasy.png HTTP/1.1[0m" 304 -
+2025-03-22 18:32:08,444 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:08] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:32:08,444 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:08] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:08,493 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:08] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+2025-03-22 18:32:08,493 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:08] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:11,078 - modules.history_manager_module - INFO - Analyse analysis_1_2025-03-22T12-11-31_171096 chargée avec succès
+2025-03-22 18:32:11,078 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:11] "GET /data_processing HTTP/1.1" 200 -
+2025-03-22 18:32:11,103 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:11] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:32:11,111 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:11] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:32:11,111 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:11] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:11,165 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:11] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:12,060 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:12] "GET /dashboard HTTP/1.1" 200 -
+2025-03-22 18:32:12,102 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:12] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:32:12,108 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:12] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:32:12,110 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:12] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:12,166 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:12] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:12,287 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:12] "GET /api/dashboard_data?date_range=30&store=all&payment=all&segment=all HTTP/1.1" 200 -
+2025-03-22 18:32:13,639 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_182424
+2025-03-22 18:32:13,639 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_182424_transformed.pkl
+2025-03-22 18:32:13,639 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 18:32:13,648 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_182424_original.pkl
+2025-03-22 18:32:13,648 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (5108, 20)
+2025-03-22 18:32:13,648 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_182424, forme: (5108, 20)
+2025-03-22 18:32:13,649 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:13] "GET /visualizations HTTP/1.1" 200 -
+2025-03-22 18:32:13,672 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:13] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:32:13,684 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:13] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:32:13,684 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:13] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:13,746 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:13] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:14,715 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_182424
+2025-03-22 18:32:14,722 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_182424_transformed.pkl
+2025-03-22 18:32:14,722 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 18:32:14,726 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_182424_original.pkl
+2025-03-22 18:32:14,726 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (5108, 20)
+2025-03-22 18:32:14,726 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_182424, forme: (5108, 20)
+2025-03-22 18:32:14,751 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:14] "GET /clustering HTTP/1.1" 200 -
+2025-03-22 18:32:14,794 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:14] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:32:14,805 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:14] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:32:14,805 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:14] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:14,877 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:14] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:15,918 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_182424
+2025-03-22 18:32:15,918 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_182424_transformed.pkl
+2025-03-22 18:32:15,918 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 18:32:15,924 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_182424_original.pkl
+2025-03-22 18:32:15,924 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (5108, 20)
+2025-03-22 18:32:15,924 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_182424, forme: (5108, 20)
+2025-03-22 18:32:15,932 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:15] "GET /calendar HTTP/1.1" 200 -
+2025-03-22 18:32:15,961 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:15] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:32:15,969 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:15] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:32:15,974 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:15] "[36mGET /static/js/day-plot-calendar.js HTTP/1.1[0m" 304 -
+2025-03-22 18:32:15,975 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:15] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:16,035 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:16] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:16,155 - __main__ - INFO - Filtres reçus: brand=all, payment=all, article=all, gender=all, age=all
+2025-03-22 18:32:16,155 - __main__ - INFO - Requête complète: {'brand': 'all', 'payment_method': 'all', 'gender': 'all', 'age_range': 'all', 'article': 'all', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 18:32:16,155 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_182424
+2025-03-22 18:32:16,155 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_182424_transformed.pkl
+2025-03-22 18:32:16,155 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 18:32:16,159 - __main__ - INFO - Filtres reçus: brand=all, payment=all, article=all, gender=all, age=all
+2025-03-22 18:32:16,159 - __main__ - INFO - Requête complète: {'brand': 'all', 'payment_method': 'all', 'gender': 'all', 'age_range': 'all', 'article': 'all', 'date_start': '2024-12-22', 'date_end': '2025-03-22'}
+2025-03-22 18:32:16,159 - modules.transformations_persistence.TransformationManager - INFO - Récupération du DataFrame courant pour db_export_20250322_182424
+2025-03-22 18:32:16,159 - modules.transformations_persistence.TransformationManager - WARNING - Fichier non trouvé: uploads\db_export_20250322_182424_transformed.pkl
+2025-03-22 18:32:16,159 - modules.transformations_persistence.TransformationManager - INFO - Tentative de chargement du DataFrame original à la place
+2025-03-22 18:32:16,159 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_182424_original.pkl
+2025-03-22 18:32:16,164 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (5108, 20)
+2025-03-22 18:32:16,164 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_182424, forme: (5108, 20)
+2025-03-22 18:32:16,166 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie']
+2025-03-22 18:32:16,166 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 18:32:16,166 - __main__ - INFO - Statistiques d'âge: min=18, max=80, moyenne=44.239624119028974
+2025-03-22 18:32:16,172 - modules.transformations_persistence.TransformationManager - INFO - DataFrame chargé avec succès: uploads\db_export_20250322_182424_original.pkl
+2025-03-22 18:32:16,174 - modules.transformations_persistence.TransformationManager - INFO - Forme du DataFrame chargé: (5108, 20)
+2025-03-22 18:32:16,174 - modules.transformations_persistence.TransformationManager - INFO - DataFrame transformé chargé pour db_export_20250322_182424, forme: (5108, 20)
+2025-03-22 18:32:16,176 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 18:32:16,177 - __main__ - INFO - Colonnes disponibles dans le DataFrame: ['id', 'date_transaction', 'montant_total', 'numero_facture', 'magasin', 'enseigne', 'moyen_paiement', 'canal_vente', 'points_gagnes', 'client_id', 'genre', 'age', 'segment_client', 'niveau_fidelite', 'nom_article', 'quantite', 'prix_unitaire', 'remise_pourcentage', 'montant_ligne', 'categorie']
+2025-03-22 18:32:16,179 - __main__ - INFO - Groupement réussi: 188 lignes de résultat
+2025-03-22 18:32:16,179 - __main__ - INFO - Valeurs uniques de genre: ['homme' 'femme']
+2025-03-22 18:32:16,179 - __main__ - INFO - Statistiques d'âge: min=18, max=80, moyenne=44.239624119028974
+2025-03-22 18:32:16,189 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:16] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 18:32:16,189 - __main__ - INFO - Colonnes identifiées: date=date_transaction, store=magasin, payment=moyen_paiement, gender=genre, age=age, article=nom_article
+2025-03-22 18:32:16,194 - __main__ - INFO - Groupement réussi: 188 lignes de résultat
+2025-03-22 18:32:16,197 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:16] "POST /api/calendar_data HTTP/1.1" 200 -
+2025-03-22 18:32:17,005 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:17] "GET /maps HTTP/1.1" 200 -
+2025-03-22 18:32:17,038 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:17] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:32:17,038 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:17] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:17,038 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:17] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:32:17,086 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:17] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:19,369 - modules.history_manager_module - INFO - Analyse analysis_1_2025-03-22T12-11-31_171096 chargée avec succès
+2025-03-22 18:32:19,378 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:19] "GET /history HTTP/1.1" 200 -
+2025-03-22 18:32:19,403 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:19] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:32:19,403 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:19] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:19,409 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:19] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:32:19,445 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:19] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:21,769 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:21] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:32:21,816 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:21] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:32:21,823 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:21] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:32:21,824 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:21] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:21,864 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:21] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:32:21,879 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:21] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:32:48,705 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:32:48] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:33:26,458 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:33:26] "GET / HTTP/1.1" 200 -
+2025-03-22 18:33:26,485 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:33:26] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:33:26,491 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:33:26] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:33:26,496 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:33:26] "[36mGET /static/img/teasy.png HTTP/1.1[0m" 304 -
+2025-03-22 18:33:26,496 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:33:26] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:33:26,532 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:33:26] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+2025-03-22 18:33:26,536 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:33:26] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:33:49,701 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:33:49] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:34:50,704 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:34:50] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:35:51,707 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:35:51] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:36:52,703 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:36:52] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:37:53,697 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:37:53] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:38:54,708 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:38:54] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:39:48,719 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:39:48] "GET / HTTP/1.1" 200 -
+2025-03-22 18:39:48,736 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:39:48] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:39:48,738 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:39:48] "[36mGET /static/img/teasy.png HTTP/1.1[0m" 304 -
+2025-03-22 18:39:48,740 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:39:48] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:39:48,740 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:39:48] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:39:48,779 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:39:48] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+2025-03-22 18:39:48,784 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:39:48] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:39:55,711 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:39:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:40:55,711 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:40:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:41:55,707 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:41:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:42:55,716 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:42:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:43:08,930 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:43:08] "GET / HTTP/1.1" 200 -
+2025-03-22 18:43:08,957 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:43:08] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:43:08,964 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:43:08] "[36mGET /static/img/teasy.png HTTP/1.1[0m" 304 -
+2025-03-22 18:43:08,964 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:43:08] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:43:08,964 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:43:08] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:43:09,040 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:43:09] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+2025-03-22 18:43:09,041 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:43:09] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:43:55,705 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:43:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:44:26,467 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:44:26] "GET / HTTP/1.1" 200 -
+2025-03-22 18:44:26,485 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:44:26] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:44:26,485 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:44:26] "[36mGET /static/img/teasy.png HTTP/1.1[0m" 304 -
+2025-03-22 18:44:26,485 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:44:26] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:44:26,485 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:44:26] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:44:26,546 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:44:26] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+2025-03-22 18:44:26,547 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:44:26] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:44:55,720 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:44:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:45:15,656 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:45:15] "GET / HTTP/1.1" 200 -
+2025-03-22 18:45:15,677 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:45:15] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:45:15,677 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:45:15] "[36mGET /static/img/teasy.png HTTP/1.1[0m" 304 -
+2025-03-22 18:45:15,687 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:45:15] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:45:15,688 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:45:15] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:45:15,734 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:45:15] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+2025-03-22 18:45:15,735 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:45:15] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:45:55,707 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:45:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:46:55,711 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:46:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:47:55,704 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:47:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:48:06,351 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:06] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:48:06,376 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:06] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:48:06,385 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:06] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:48:06,385 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:06] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:48:06,420 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:06] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:48:06,434 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:06] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:48:31,382 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:31] "GET /loyalty/rules HTTP/1.1" 200 -
+2025-03-22 18:48:31,412 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:31] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:48:31,421 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:31] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:48:31,424 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:31] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:48:31,464 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:31] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:48:37,866 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:37] "GET /loyalty/rules/edit/7 HTTP/1.1" 200 -
+2025-03-22 18:48:37,882 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:37] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:48:37,892 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:37] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:48:37,892 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:37] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:48:37,923 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:37] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:48:55,703 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:48:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:49:13,342 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:49:13] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:49:13,360 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:49:13] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:49:13,369 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:49:13] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:49:13,369 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:49:13] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:49:13,410 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:49:13] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:49:13,427 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:49:13] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:49:17,969 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:49:17] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 18:49:18,006 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:49:18] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:49:18,014 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:49:18] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:49:18,018 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:49:18] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:49:18,059 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:49:18] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:49:48,064 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:49:48] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:49:55,706 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:49:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:50:18,065 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:50:18] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:50:30,112 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:50:30] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 18:50:30,150 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:50:30] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 18:50:30,155 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:50:30] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 18:50:30,159 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:50:30] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 18:50:30,210 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:50:30] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 18:50:30,227 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:50:30] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 18:50:55,716 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:50:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:51:55,711 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:51:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:52:55,712 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:52:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:53:55,710 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:53:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:54:55,714 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:54:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:55:55,708 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:55:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:56:55,710 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:56:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:57:55,715 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:57:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:58:55,710 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:58:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 18:59:55,701 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 18:59:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:00:02,288 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:02] "[32mPOST /loyalty/run-rules HTTP/1.1[0m" 302 -
+2025-03-22 19:00:02,300 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:02] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 19:00:02,329 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:02] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 19:00:02,329 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:02] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 19:00:02,336 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:02] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 19:00:02,552 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:02] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 19:00:02,653 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:02] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 19:00:21,237 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:21] "[32mPOST /loyalty/run-rules HTTP/1.1[0m" 302 -
+2025-03-22 19:00:21,241 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:21] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 19:00:21,274 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:21] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 19:00:21,281 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:21] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 19:00:21,284 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:21] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 19:00:21,371 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:21] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 19:00:21,382 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:21] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 19:00:55,708 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:00:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:01:55,703 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:01:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:02:38,453 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:02:38] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:03:09,695 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:03:09] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:03:39,708 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:03:39] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:04:40,700 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:04:40] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:05:41,702 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:05:41] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:06:42,704 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:06:42] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:07:00,543 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:00] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 19:07:00,568 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:00] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 19:07:00,568 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:00] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 19:07:00,568 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:00] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 19:07:00,753 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:00] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 19:07:00,759 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:00] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 19:07:02,763 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:02] "[32mPOST /loyalty/run-rules HTTP/1.1[0m" 302 -
+2025-03-22 19:07:02,768 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:02] "GET /loyalty HTTP/1.1" 200 -
+2025-03-22 19:07:02,785 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:02] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 19:07:02,793 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:02] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 19:07:02,793 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:02] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 19:07:02,867 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:02] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 19:07:02,875 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:02] "GET /api/loyalty/stats HTTP/1.1" 200 -
+2025-03-22 19:07:07,011 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:07] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 19:07:07,054 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:07] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 19:07:07,058 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:07] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 19:07:07,058 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:07] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 19:07:07,105 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:07] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 19:07:10,760 - modules.loyalty_scheduler_controller - ERROR - Échec du démarrage du planificateur: Traceback (most recent call last):
+  File "C:\Users\baofr\Desktop\Workspace\MILAN_ticket\temp_loyalty_scheduler.py", line 2, in <module>
+    import schedule
+ModuleNotFoundError: No module named 'schedule'
+
+2025-03-22 19:07:10,760 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:10] "[32mPOST /loyalty/scheduler/control/start HTTP/1.1[0m" 302 -
+2025-03-22 19:07:10,763 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:10] "GET /loyalty/scheduler HTTP/1.1" 200 -
+2025-03-22 19:07:10,791 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:10] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2025-03-22 19:07:10,792 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:10] "[36mGET /static/img/hetic.jpg HTTP/1.1[0m" 304 -
+2025-03-22 19:07:10,795 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:10] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-03-22 19:07:10,825 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:10] "[36mGET /static/img/carre.jpeg HTTP/1.1[0m" 304 -
+2025-03-22 19:07:11,111 - werkzeug - INFO -  * Detected change in 'c:\\Users\\baofr\\Desktop\\Workspace\\MILAN_ticket\\temp_loyalty_scheduler.py', reloading
+2025-03-22 19:07:11,397 - werkzeug - INFO -  * Restarting with stat
+2025-03-22 19:07:13,241 - modules.db_connection.DatabaseManager - INFO - Base de données existante: init_database/fidelity_db
+2025-03-22 19:07:13,241 - modules.transformations_persistence.TransformationManager - INFO - TransformationManager initialisé avec répertoire de stockage: uploads
+2025-03-22 19:07:13,241 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse, répertoire: analysis_history
+2025-03-22 19:07:13,241 - modules.history_manager_module - INFO - Répertoire existant: analysis_history
+2025-03-22 19:07:13,246 - modules.history_manager_module - INFO - Index chargé: 1 analyses trouvées
+2025-03-22 19:07:13,246 - modules.history_manager_module - INFO - Initialisation de l'historique d'analyse PDF, répertoire: analysis_history/pdf
+2025-03-22 19:07:13,246 - modules.history_manager_module - INFO - Index PDF chargé: 0 analyses trouvées
+2025-03-22 19:07:13,257 - werkzeug - WARNING -  * Debugger is active!
+2025-03-22 19:07:13,265 - werkzeug - INFO -  * Debugger PIN: 100-064-371
+2025-03-22 19:07:15,576 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-03-22 19:07:17,649 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:17] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:07:39,703 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:39] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:07:41,703 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:07:41] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:08:09,704 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:08:09] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:08:11,699 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:08:11] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:08:41,709 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:08:41] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:08:55,703 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:08:55] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -
+2025-03-22 19:09:11,700 - werkzeug - INFO - 127.0.0.1 - - [22/Mar/2025 19:09:11] "GET /api/loyalty/scheduler/status HTTP/1.1" 200 -

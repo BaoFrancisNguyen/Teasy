@@ -1,0 +1,588 @@
+[
+  {
+    "id": "post2000",
+    "source": "instagram",
+    "caption": "Mon nouveau smartphones est arrivé ! 😍 #new #happy #shopping",
+    "created_at": "2025-03-21T04:18:06Z",
+    "author": {
+      "id": "user3000",
+      "username": "insta_user_695",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 268,
+      "comment_count": 3
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.6689689520607615
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.9293028207666862
+      }
+    ],
+    "hashtags": [
+      "new",
+      "happy",
+      "shopping"
+    ]
+  },
+  {
+    "id": "post2001",
+    "source": "instagram",
+    "caption": "Quand tu hésites entre plusieurs modèles de smartphones... 🤔 #choices #help",
+    "created_at": "2025-03-21T10:18:06Z",
+    "author": {
+      "id": "user3001",
+      "username": "insta_user_236",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 365,
+      "comment_count": 7
+    },
+    "sentiment": {
+      "label": "neutral",
+      "score": 0.0659607092141849
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.7832014404398473
+      }
+    ],
+    "hashtags": [
+      "choices",
+      "help"
+    ]
+  },
+  {
+    "id": "post2002",
+    "source": "instagram",
+    "caption": "Unboxing de mon smartphones ! #unboxing #newstuff",
+    "created_at": "2025-03-20T20:18:06Z",
+    "author": {
+      "id": "user3002",
+      "username": "insta_user_578",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 227,
+      "comment_count": 29
+    },
+    "sentiment": {
+      "label": "neutral",
+      "score": -0.1328735735854775
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.8729865054349524
+      }
+    ],
+    "hashtags": [
+      "unboxing",
+      "newstuff"
+    ]
+  },
+  {
+    "id": "post2003",
+    "source": "instagram",
+    "caption": "Tellement content de mon achat smartphones ! La qualité est au rendez-vous ✨ #quality #premium",
+    "created_at": "2025-03-20T22:18:06Z",
+    "author": {
+      "id": "user3003",
+      "username": "insta_user_161",
+      "is_verified": true
+    },
+    "metrics": {
+      "like_count": 450,
+      "comment_count": 22
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.6752363637637274
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.9287501552520246
+      }
+    ],
+    "hashtags": [
+      "quality",
+      "premium"
+    ]
+  },
+  {
+    "id": "post2004",
+    "source": "instagram",
+    "caption": "Petit cadeau à moi-même : le smartphones tant attendu ! #treatyourself #noregrets",
+    "created_at": "2025-03-17T14:18:06Z",
+    "author": {
+      "id": "user3004",
+      "username": "insta_user_180",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 130,
+      "comment_count": 48
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.7925203006466732
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.8775813453005324
+      }
+    ],
+    "hashtags": [
+      "treatyourself",
+      "noregrets"
+    ]
+  },
+  {
+    "id": "post2005",
+    "source": "instagram",
+    "caption": "Coup de cœur pour ce smartphones 💖 #love #musthave #recommendation",
+    "created_at": "2025-03-20T19:18:06Z",
+    "author": {
+      "id": "user3005",
+      "username": "insta_user_687",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 481,
+      "comment_count": 18
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.6288378758042875
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.9079067724479037
+      }
+    ],
+    "hashtags": [
+      "love",
+      "musthave",
+      "recommendation"
+    ]
+  },
+  {
+    "id": "post2006",
+    "source": "instagram",
+    "caption": "Mon nouveau smartphones est arrivé ! 😍 #new #happy #shopping",
+    "created_at": "2025-03-21T21:18:06Z",
+    "author": {
+      "id": "user3006",
+      "username": "insta_user_176",
+      "is_verified": true
+    },
+    "metrics": {
+      "like_count": 175,
+      "comment_count": 47
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.6747462446558341
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.9888140776140198
+      }
+    ],
+    "hashtags": [
+      "new",
+      "happy",
+      "shopping"
+    ]
+  },
+  {
+    "id": "post2007",
+    "source": "instagram",
+    "caption": "Mon nouveau smartphones est arrivé ! 😍 #new #happy #shopping",
+    "created_at": "2025-03-19T18:18:06Z",
+    "author": {
+      "id": "user3007",
+      "username": "insta_user_813",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 283,
+      "comment_count": 5
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.8671423978154433
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.9205943403034644
+      }
+    ],
+    "hashtags": [
+      "new",
+      "happy",
+      "shopping"
+    ]
+  },
+  {
+    "id": "post2008",
+    "source": "instagram",
+    "caption": "Mon nouveau smartphones est arrivé ! 😍 #new #happy #shopping",
+    "created_at": "2025-03-15T19:18:06Z",
+    "author": {
+      "id": "user3008",
+      "username": "insta_user_182",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 262,
+      "comment_count": 19
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.8398934676051116
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.9190016803764223
+      }
+    ],
+    "hashtags": [
+      "new",
+      "happy",
+      "shopping"
+    ]
+  },
+  {
+    "id": "post2009",
+    "source": "instagram",
+    "caption": "Tellement content de mon achat smartphones ! La qualité est au rendez-vous ✨ #quality #premium",
+    "created_at": "2025-03-16T23:18:06Z",
+    "author": {
+      "id": "user3009",
+      "username": "insta_user_755",
+      "is_verified": true
+    },
+    "metrics": {
+      "like_count": 495,
+      "comment_count": 19
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.9361267664616674
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.7583194148282949
+      }
+    ],
+    "hashtags": [
+      "quality",
+      "premium"
+    ]
+  },
+  {
+    "id": "post2010",
+    "source": "instagram",
+    "caption": "Unboxing de mon smartphones ! #unboxing #newstuff",
+    "created_at": "2025-03-15T17:18:06Z",
+    "author": {
+      "id": "user3010",
+      "username": "insta_user_118",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 106,
+      "comment_count": 19
+    },
+    "sentiment": {
+      "label": "neutral",
+      "score": 0.26924637133940627
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.9997061466876038
+      }
+    ],
+    "hashtags": [
+      "unboxing",
+      "newstuff"
+    ]
+  },
+  {
+    "id": "post2011",
+    "source": "instagram",
+    "caption": "Coup de cœur pour ce smartphones 💖 #love #musthave #recommendation",
+    "created_at": "2025-03-20T13:18:06Z",
+    "author": {
+      "id": "user3011",
+      "username": "insta_user_960",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 28,
+      "comment_count": 36
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.7722371395570196
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.7355101239421283
+      }
+    ],
+    "hashtags": [
+      "love",
+      "musthave",
+      "recommendation"
+    ]
+  },
+  {
+    "id": "post2012",
+    "source": "instagram",
+    "caption": "Coup de cœur pour ce smartphones 💖 #love #musthave #recommendation",
+    "created_at": "2025-03-17T07:18:06Z",
+    "author": {
+      "id": "user3012",
+      "username": "insta_user_969",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 125,
+      "comment_count": 26
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.913806218756969
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.7320703723384291
+      }
+    ],
+    "hashtags": [
+      "love",
+      "musthave",
+      "recommendation"
+    ]
+  },
+  {
+    "id": "post2013",
+    "source": "instagram",
+    "caption": "Tellement content de mon achat smartphones ! La qualité est au rendez-vous ✨ #quality #premium",
+    "created_at": "2025-03-21T09:18:06Z",
+    "author": {
+      "id": "user3013",
+      "username": "insta_user_601",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 283,
+      "comment_count": 42
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.9963472338410617
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.7948683517166419
+      }
+    ],
+    "hashtags": [
+      "quality",
+      "premium"
+    ]
+  },
+  {
+    "id": "post2014",
+    "source": "instagram",
+    "caption": "Journée shopping : j'ai craqué pour le smartphones #shopping #newthings",
+    "created_at": "2025-03-18T03:18:06Z",
+    "author": {
+      "id": "user3014",
+      "username": "insta_user_588",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 277,
+      "comment_count": 38
+    },
+    "sentiment": {
+      "label": "neutral",
+      "score": -0.20794135225407426
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.9550955441552065
+      }
+    ],
+    "hashtags": [
+      "shopping",
+      "newthings"
+    ]
+  },
+  {
+    "id": "post2015",
+    "source": "instagram",
+    "caption": "Le smartphones change vraiment la donne, meilleur investissement de l'année 👌 #worthit",
+    "created_at": "2025-03-16T13:18:06Z",
+    "author": {
+      "id": "user3015",
+      "username": "insta_user_931",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 276,
+      "comment_count": 28
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.6425081675962414
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.7303121743524665
+      }
+    ],
+    "hashtags": [
+      "worthit"
+    ]
+  },
+  {
+    "id": "post2016",
+    "source": "instagram",
+    "caption": "Le smartphones ne fonctionne pas comme prévu, c'est frustrant 😤 #frustrated #help",
+    "created_at": "2025-03-20T22:18:06Z",
+    "author": {
+      "id": "user3016",
+      "username": "insta_user_391",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 396,
+      "comment_count": 20
+    },
+    "sentiment": {
+      "label": "negative",
+      "score": -0.8744810706158095
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.8022184283979569
+      }
+    ],
+    "hashtags": [
+      "frustrated",
+      "help"
+    ]
+  },
+  {
+    "id": "post2017",
+    "source": "instagram",
+    "caption": "Unboxing de mon smartphones ! #unboxing #newstuff",
+    "created_at": "2025-03-14T14:18:06Z",
+    "author": {
+      "id": "user3017",
+      "username": "insta_user_328",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 12,
+      "comment_count": 33
+    },
+    "sentiment": {
+      "label": "neutral",
+      "score": -0.2306831381629588
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.8692938883974255
+      }
+    ],
+    "hashtags": [
+      "unboxing",
+      "newstuff"
+    ]
+  },
+  {
+    "id": "post2018",
+    "source": "instagram",
+    "caption": "Coup de cœur pour ce smartphones 💖 #love #musthave #recommendation",
+    "created_at": "2025-03-18T15:18:06Z",
+    "author": {
+      "id": "user3018",
+      "username": "insta_user_765",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 283,
+      "comment_count": 40
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.8254801626067685
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.7819287794617066
+      }
+    ],
+    "hashtags": [
+      "love",
+      "musthave",
+      "recommendation"
+    ]
+  },
+  {
+    "id": "post2019",
+    "source": "instagram",
+    "caption": "Le smartphones change vraiment la donne, meilleur investissement de l'année 👌 #worthit",
+    "created_at": "2025-03-15T19:18:06Z",
+    "author": {
+      "id": "user3019",
+      "username": "insta_user_987",
+      "is_verified": false
+    },
+    "metrics": {
+      "like_count": 300,
+      "comment_count": 13
+    },
+    "sentiment": {
+      "label": "positive",
+      "score": 0.7189759492295555
+    },
+    "product_mentions": [
+      {
+        "product": "smartphones",
+        "confidence": 0.80734295029471
+      }
+    ],
+    "hashtags": [
+      "worthit"
+    ]
+  }
+]

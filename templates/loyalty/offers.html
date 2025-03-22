@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+
+{% block title %}Programme de Fidélité - Gestion des offres{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+    .offer-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+    .offer-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .offer-card.generee {
+        border-left-color: #0dcaf0;
+    }
+    .offer-card.envoyee {
+        border-left-color: #10b9ab;
+    }
+    .offer-card.utilisee {
+        border-left-color: #198754;
+    }
+    .offer-card.expiree {
+        border-left-color: #6c757d;
+    }
+    .status-badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 30px;
+        font-size: 0.75rem;
+    }
+    .status-generee { background-color: #e2f3f5; color: #0c7b93; }
+    .status-envoyee { background-color: #b5ead7; color: #086972; }
+    .status-utilisee { background-color: #c7ceea; color: #284b63; }
+    .status-expiree { background-color: #f6eec7; color: #b68d40; }
+    
+    .action-buttons {
+        opacity: 0.3;
+        transition: opacity 0.3s ease;
+    }
+    .offer-card:hover .action-buttons {
+        opacity: 1;
+    }
+    .offer-filter {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .stats-card {
+        transition: all 0.3s ease;
+    }
+    .stats-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    .stats-icon {
+        font-size: 2rem;
+        color: #10b9ab;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('loyalty_dashboard') }}">Programme de Fidélité</a></li>
+            <li class="breadcrumb-item active">Gestion des Offres</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="bi bi-gift"></i> Offres de Fidélité
+        </h1>
+        <form method="POST" action="{{ url_for('send_loyalty_offers') }}" id="send-offers-form">
+            <button type="submit" class="btn btn-primary" id="send-offers-btn" disabled>
+                <i class="bi bi-envelope"></i> Envoyer les offres sélectionnées
+            </button>
+        </form>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="row mb-4">
+        {% set status_colors = {
+            'generee': 'info',
+            'envoyee': 'primary',
+            'utilisee': 'success',
+            'expiree': 'secondary'
+        } %}
+        
+        {% for stat in stats %}
+            <div class="col-md-3 mb-3">
+                <div class="card stats-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="h3 mb-0">{{ stat.count }}</div>
+                                <div class="text-muted">
+                                    Offres 
+                                    {% if stat.statut == 'generee' %}
+                                        générées
+                                    {% elif stat.statut == 'envoyee' %}
+                                        envoyées
+                                    {% elif stat.statut == 'utilisee' %}
+                                        utilisées
+                                    {% elif stat.statut == 'expiree' %}
+                                        expirées
+                                    {% else %}
+                                        {{ stat.statut }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="stats-icon">
+                                <i class="bi bi-{% if stat.statut == 'generee' %}plus-circle{% elif stat.statut == 'envoyee' %}envelope{% elif stat.statut == 'utilisee' %}check-circle{% else %}clock-history{% endif %}"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Filtres -->
+    <div class="offer-filter mb-4">
+        <form method="GET" action="{{ url_for('loyalty_offers') }}" class="row g-3">
+            <div class="col-md-3">
+                <label for="status" class="form-label">Statut</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="all" {% if status_filter == 'all' %}selected{% endif %}>Tous les statuts</option>
+                    <option value="generee" {% if status_filter == 'generee' %}selected{% endif %}>Générées</option>
+                    <option value="envoyee" {% if status_filter == 'envoyee' %}selected{% endif %}>Envoyées</option>
+                    <option value="utilisee" {% if status_filter == 'utilisee' %}selected{% endif %}>Utilisées</option>
+                    <option value="expiree" {% if status_filter == 'expiree' %}selected{% endif %}>Expirées</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="date_from" class="form-label">Du</label>
+                <input type="date" class="form-control date-picker" id="date_from" name="date_from" value="{{ date_from }}">
+            </div>
+            <div class="col-md-3">
+                <label for="date_to" class="form-label">Au</label>
+                <input type="date" class="form-control date-picker" id="date_to" name="date_to" value="{{ date_to }}">
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-funnel"></i> Filtrer
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Liste des offres -->
+    {% if offres %}
+        <div class="mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="select-all-offers">
+                <label class="form-check-label" for="select-all-offers">
+                    Sélectionner toutes les offres générées
+                </label>
+            </div>
+        </div>
+        
+        <div class="row" id="offers-container">
+            {% for offre in offres %}
+                <div class="col-md-6 mb-4">
+                    <div class="card offer-card {{ offre.statut }}">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="status-badge status-{{ offre.statut }}">
+                                    {% if offre.statut == 'generee' %}
+                                        Générée
+                                    {% elif offre.statut == 'envoyee' %}
+                                        Envoyée
+                                    {% elif offre.statut == 'utilisee' %}
+                                        Utilisée
+                                    {% elif offre.statut == 'expiree' %}
+                                        Expirée
+                                    {% else %}
+                                        {{ offre.statut }}
+                                    {% endif %}
+                                </span>
+                                
+                                <span class="ms-2 text-muted small">
+                                    #{{ offre.offre_id }}
+                                </span>
+                            </div>
+                            <div class="action-buttons">
+                                {% if offre.statut == 'generee' %}
+                                    <div class="form-check">
+                                        <input class="form-check-input offer-checkbox" type="checkbox" name="offer_ids" value="{{ offre.offre_id }}" form="send-offers-form">
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-8">
+                                    <h5 class="card-title">{{ offre.regle_nom }}</h5>
+                                    <h6 class="text-muted">
+                                        <i class="bi bi-person-circle me-1"></i> {{ offre.client_nom }}
+                                    </h6>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    {% if offre.recompense_nom %}
+                                        <span class="badge bg-info"><i class="bi bi-award me-1"></i> {{ offre.recompense_nom }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <div class="border-start ps-2">
+                                        <div class="small text-muted">Générée le:</div>
+                                        <div>{{ offre.date_generation.split(' ')[0] }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="border-start ps-2">
+                                        <div class="small text-muted">Expire le:</div>
+                                        <div>{{ offre.date_expiration if offre.date_expiration else 'N/A' }}</div>
+                                    </div>
+                                </div>
+                                
+                                {% if offre.date_envoi %}
+                                <div class="col-6">
+                                    <div class="border-start ps-2">
+                                        <div class="small text-muted">Envoyée le:</div>
+                                        <div>{{ offre.date_envoi.split(' ')[0] }}</div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if offre.statut == 'utilisee' %}
+                                <div class="col-6">
+                                    <div class="border-start ps-2">
+                                        <div class="small text-muted">Utilisée le:</div>
+                                        <div>{{ offre.date_utilisation.split(' ')[0] if offre.date_utilisation else 'N/A' }}</div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            {% if offre.code_unique %}
+                            <div class="mt-3 p-2 bg-light rounded">
+                                <div class="text-muted small">Code unique:</div>
+                                <div class="font-monospace">{{ offre.code_unique }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer d-flex justify-content-between align-items-center">
+                            <a href="{{ url_for('client_loyalty', client_id=offre.client_id) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i> Voir le client
+                            </a>
+                            
+                            {% if offre.statut == 'generee' %}
+                            <form method="POST" action="{{ url_for('send_loyalty_offers') }}" class="d-inline">
+                                <input type="hidden" name="offer_ids" value="{{ offre.offre_id }}">
+                                <button type="submit" class="btn btn-sm btn-outline-success">
+                                    <i class="bi bi-envelope"></i> Envoyer
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            Aucune offre trouvée avec les filtres actuels.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialiser les sélecteurs de date
+        flatpickr('.date-picker', {
+            dateFormat: "Y-m-d",
+            allowInput: true
+        });
+        
+        // Gestion de la sélection des offres
+        const selectAllCheckbox = document.getElementById('select-all-offers');
+        const offerCheckboxes = document.querySelectorAll('.offer-checkbox');
+        const sendOffersBtn = document.getElementById('send-offers-btn');
+        
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function() {
+                const isChecked = this.checked;
+                
+                offerCheckboxes.forEach(checkbox => {
+                    checkbox.checked = isChecked;
+                });
+                
+                updateSendButton();
+            });
+        }
+        
+        offerCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateSendButton);
+        });
+        
+        function updateSendButton() {
+            const selectedCount = document.querySelectorAll('.offer-checkbox:checked').length;
+            sendOffersBtn.disabled = selectedCount === 0;
+            
+            if (selectedCount > 0) {
+                sendOffersBtn.innerHTML = `<i class="bi bi-envelope"></i> Envoyer ${selectedCount} offre${selectedCount > 1 ? 's' : ''}`;
+            } else {
+                sendOffersBtn.innerHTML = `<i class="bi bi-envelope"></i> Envoyer les offres sélectionnées`;
+            }
+        }
+        
+        // Initial update
+        updateSendButton();
+    });
+</script>
+{% endblock %}

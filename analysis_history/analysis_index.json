@@ -1,0 +1,22 @@
+{
+  "analyses": [
+    {
+      "id": "analysis_1_2025-03-22T12-11-31_171096",
+      "dataset_name": "transactions_20250322",
+      "timestamp": "2025-03-22T12:11:31.171096",
+      "summary": "1. Résumé et insights principaux:\n    Cette base de données représente des transactions effectuées d..."
+    }
+  ],
+  "datasets": {
+    "transactions_20250322": {
+      "description": "Analyse IA - 2025-03-22 12:11",
+      "first_analysis": "2025-03-22T12:11:31.171096",
+      "last_analysis": "2025-03-22T12:11:31.171096",
+      "analyses_count": 1,
+      "analyses": [
+        "analysis_1_2025-03-22T12-11-31_171096"
+      ]
+    }
+  },
+  "last_updated": "2025-03-22T12:11:31.173102"
+}

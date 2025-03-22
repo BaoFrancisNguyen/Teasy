@@ -1,0 +1,319 @@
+{% extends "base.html" %}
+
+{% block title %}Configuration du Planificateur de Fidélité{% endblock %}
+
+{% block extra_css %}
+<style>
+    .scheduler-status {
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .scheduler-status.running {
+        background-color: #d1fae5;
+        border: 1px solid #10b981;
+    }
+    .scheduler-status.stopped {
+        background-color: #fee2e2;
+        border: 1px solid #ef4444;
+    }
+    .task-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid #10b9ab;
+    }
+    .task-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .task-card.disabled {
+        border-left-color: #6c757d;
+        opacity: 0.7;
+    }
+    .log-container {
+        background-color: #1e293b;
+        color: #e2e8f0;
+        border-radius: 8px;
+        padding: 15px;
+        font-family: monospace;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    .log-entry {
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+    }
+    .log-entry.info {
+        color: #93c5fd;
+    }
+    .log-entry.error {
+        color: #fca5a5;
+    }
+    .log-entry.warning {
+        color: #fcd34d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('loyalty_dashboard') }}">Programme de Fidélité</a></li>
+            <li class="breadcrumb-item active">Configuration du Planificateur</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="bi bi-clock"></i> Planificateur de Fidélité
+        </h1>
+        <div>
+            {% if scheduler_status.is_running %}
+                <form action="{{ url_for('loyalty_scheduler_control', action='stop') }}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-stop-circle"></i> Arrêter le planificateur
+                    </button>
+                </form>
+            {% else %}
+                <form action="{{ url_for('loyalty_scheduler_control', action='start') }}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-play-circle"></i> Démarrer le planificateur
+                    </button>
+                </form>
+            {% endif %}
+            <form action="{{ url_for('loyalty_scheduler_control', action='restart') }}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-arrow-clockwise"></i> Redémarrer
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Statut du planificateur -->
+    <div class="scheduler-status {% if scheduler_status.is_running %}running{% else %}stopped{% endif %} mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="mb-1">Statut: 
+                    {% if scheduler_status.is_running %}
+                        <span class="text-success">En fonctionnement</span>
+                    {% else %}
+                        <span class="text-danger">Arrêté</span>
+                    {% endif %}
+                </h4>
+                <p class="mb-0">
+                    {% if scheduler_status.is_running %}
+                        Actif depuis: {{ scheduler_status.active_since }}
+                    {% else %}
+                        Dernière exécution: {{ scheduler_status.last_run or 'Jamais' }}
+                    {% endif %}
+                </p>
+            </div>
+            <div class="text-center">
+                <div class="h1 mb-0">
+                    {% if scheduler_status.is_running %}
+                        <i class="bi bi-check-circle-fill text-success"></i>
+                    {% else %}
+                        <i class="bi bi-x-circle-fill text-danger"></i>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Configuration des tâches -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0">Tâches planifiées</h4>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('loyalty_scheduler_config_save') }}" method="post">
+                        {% for task in scheduler_tasks %}
+                            <div class="card task-card mb-3 {% if not task.enabled %}disabled{% endif %}">
+                                <div class="card-body">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" 
+                                               id="task_enabled_{{ loop.index }}" 
+                                               name="task_enabled_{{ task.id }}" 
+                                               {% if task.enabled %}checked{% endif %}>
+                                        <label class="form-check-label fw-bold" for="task_enabled_{{ loop.index }}">
+                                            {{ task.name }}
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-md-6">
+                                            <label for="task_schedule_{{ loop.index }}" class="form-label">Fréquence</label>
+                                            <select class="form-select" id="task_schedule_{{ loop.index }}" name="task_schedule_{{ task.id }}">
+                                                <option value="daily" {% if task.schedule_type == 'daily' %}selected{% endif %}>Quotidienne</option>
+                                                <option value="weekly" {% if task.schedule_type == 'weekly' %}selected{% endif %}>Hebdomadaire</option>
+                                                <option value="monthly" {% if task.schedule_type == 'monthly' %}selected{% endif %}>Mensuelle</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="task_time_{{ loop.index }}" class="form-label">Heure d'exécution</label>
+                                            <input type="time" class="form-control" 
+                                                   id="task_time_{{ loop.index }}" 
+                                                   name="task_time_{{ task.id }}" 
+                                                   value="{{ task.time }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="task_description_{{ loop.index }}" class="form-label">Description</label>
+                                        <textarea class="form-control" id="task_description_{{ loop.index }}" name="task_description_{{ task.id }}" rows="2" readonly>{{ task.description }}</textarea>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-end">
+                                        <form action="{{ url_for('loyalty_scheduler_run_task', task_id=task.id) }}" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-play-fill"></i> Exécuter maintenant
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Enregistrer les modifications
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <!-- Derniers logs -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Derniers logs</h4>
+                    <a href="{{ url_for('loyalty_scheduler_logs') }}" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-file-text"></i> Voir tous les logs
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="log-container">
+                        {% for log in scheduler_logs %}
+                            <div class="log-entry {{ log.level }}">
+                                <span class="log-time">{{ log.timestamp }}</span>
+                                {{ log.message }}
+                            </div>
+                        {% else %}
+                            <div class="text-center text-muted">
+                                <i class="bi bi-info-circle"></i> Aucun log disponible
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Informations sur le planificateur -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Informations</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Service</div>
+                                Planificateur de tâches de fidélité
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Version</div>
+                                1.0
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Fichier de configuration</div>
+                                loyalty_scheduler_config.json
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Fichier de log</div>
+                                loyalty_scheduler.log
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-refresh status every 30 seconds
+        setInterval(function() {
+            fetch('/api/loyalty/scheduler/status')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update status indicators
+                        const statusContainer = document.querySelector('.scheduler-status');
+                        const statusText = document.querySelector('.scheduler-status h4 span');
+                        const statusIcon = document.querySelector('.scheduler-status .h1 i');
+                        const statusInfo = document.querySelector('.scheduler-status p');
+                        
+                        if (data.is_running) {
+                            statusContainer.classList.remove('stopped');
+                            statusContainer.classList.add('running');
+                            statusText.className = 'text-success';
+                            statusText.textContent = 'En fonctionnement';
+                            statusIcon.className = 'bi bi-check-circle-fill text-success';
+                            statusInfo.textContent = `Actif depuis: ${data.active_since}`;
+                        } else {
+                            statusContainer.classList.remove('running');
+                            statusContainer.classList.add('stopped');
+                            statusText.className = 'text-danger';
+                            statusText.textContent = 'Arrêté';
+                            statusIcon.className = 'bi bi-x-circle-fill text-danger';
+                            statusInfo.textContent = `Dernière exécution: ${data.last_run || 'Jamais'}`;
+                        }
+                        
+                        // Update control buttons
+                        const controlButtons = document.querySelector('.d-flex.justify-content-between.align-items-center.mb-4 div');
+                        if (data.is_running) {
+                            controlButtons.innerHTML = `
+                                <form action="{{ url_for('loyalty_scheduler_control', action='stop') }}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="bi bi-stop-circle"></i> Arrêter le planificateur
+                                    </button>
+                                </form>
+                                <form action="{{ url_for('loyalty_scheduler_control', action='restart') }}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-arrow-clockwise"></i> Redémarrer
+                                    </button>
+                                </form>
+                            `;
+                        } else {
+                            controlButtons.innerHTML = `
+                                <form action="{{ url_for('loyalty_scheduler_control', action='start') }}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-play-circle"></i> Démarrer le planificateur
+                                    </button>
+                                </form>
+                                <form action="{{ url_for('loyalty_scheduler_control', action='restart') }}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-arrow-clockwise"></i> Redémarrer
+                                    </button>
+                                </form>
+                            `;
+                        }
+                    }
+                })
+                .catch(error => console.error('Error updating scheduler status:', error));
+        }, 30000);
+    });
+</script>
+{% endblock %}

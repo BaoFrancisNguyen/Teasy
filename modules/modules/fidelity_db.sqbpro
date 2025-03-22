@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="fidelity_db.sqlite" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached><db schema="fidelity_db" path="C:\Users\baofr\Desktop\Workspace\MILAN_ticket\modules\modules\fidelity_db.sqlite"/></attached><window><main_tabs open="structure browser pragmas query" current="0"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="9966"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/><expanded_item id="4" parent="1"/></tab_structure><tab_browse><table title="analyse_rfm" custom_title="0" dock_id="5" table="4,11:mainanalyse_rfm"/><dock_state state="000000ff00000000fd0000000100000002000005b000000387fc0100000005fb000000160064006f0063006b00420072006f00770073006500310100000000000005b00000000000000000fb000000160064006f0063006b00420072006f00770073006500320100000000000005b00000000000000000fb000000160064006f0063006b00420072006f00770073006500330100000000000005b00000000000000000fb000000160064006f0063006b00420072006f00770073006500340100000000000005b00000000000000000fb000000160064006f0063006b00420072006f00770073006500350100000000ffffffff0000012100ffffff0000028c0000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">-- Schema SQL pour le programme de fidélité
+-- À exécuter pour initialiser ou mettre à jour la base de données
+
+-- Table des règles de fidélité
+CREATE TABLE IF NOT EXISTS regles_fidelite (
+    regle_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom TEXT NOT NULL,
+    description TEXT,
+    type_regle TEXT NOT NULL, -- nombre_achats, montant_cumule, produit_specifique, categorie_specifique, premiere_visite, anniversaire, inactivite
+    condition_valeur TEXT NOT NULL, -- valeur de la condition (nombre, montant, ID produit, etc.)
+    periode_jours INTEGER, -- période en jours pour la condition (optionnel)
+    recompense_id INTEGER, -- ID de la récompense associée (optionnel)
+    action_type TEXT NOT NULL, -- offre_points, offre_cadeau, reduction_pourcentage, reduction_montant, notification
+    action_valeur TEXT, -- valeur de l'action (points, pourcentage, montant, etc.)
+    segments_cibles TEXT, -- JSON array des segments clients ciblés (optionnel)
+    priorite INTEGER DEFAULT 0, -- priorité de la règle (plus élevé = plus prioritaire)
+    est_active INTEGER DEFAULT 1, -- 1 = active, 0 = inactive
+    date_debut TEXT, -- date de début de validité (format ISO, optionnel)
+    date_fin TEXT, -- date de fin de validité (format ISO, optionnel)
+    creation_date TEXT DEFAULT CURRENT_TIMESTAMP,
+    modification_date TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (recompense_id) REFERENCES recompenses(recompense_id)
+);
+
+-- Table des récompenses
+CREATE TABLE IF NOT EXISTS recompenses (
+    recompense_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom TEXT NOT NULL,
+    description TEXT,
+    type_recompense TEXT NOT NULL, -- produit, service, reduction, bon_achat
+    valeur REAL, -- valeur de la récompense si applicable
+    points_necessaires INTEGER NOT NULL, -- nombre de points nécessaires pour obtenir la récompense
+    image_url TEXT, -- URL de l'image (optionnel)
+    statut TEXT DEFAULT 'active', -- active, inactive, epuisee
+    quantite_disponible INTEGER, -- quantité disponible (optionnel)
+    creation_date TEXT DEFAULT CURRENT_TIMESTAMP,
+    modification_date TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des offres clients
+CREATE TABLE IF NOT EXISTS offres_client (
+    offre_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    regle_id INTEGER NOT NULL,
+    recompense_id INTEGER,
+    date_generation TEXT DEFAULT CURRENT_TIMESTAMP,
+    date_envoi TEXT,
+    date_utilisation TEXT,
+    date_expiration TEXT NOT NULL, -- date d'expiration de l'offre
+    statut TEXT DEFAULT 'generee', -- generee, envoyee, utilisee, expiree, annulee
+    canal_envoi TEXT, -- email, sms, push, etc.
+    code_unique TEXT, -- code unique pour l'offre
+    commentaire TEXT,
+    transaction_utilisation_id INTEGER, -- ID de la transaction où l'offre a été utilisée
+    FOREIGN KEY (client_id) REFERENCES clients(client_id),
+    FOREIGN KEY (regle_id) REFERENCES regles_fidelite(regle_id),
+    FOREIGN KEY (recompense_id) REFERENCES recompenses(recompense_id),
+    FOREIGN KEY (transaction_utilisation_id) REFERENCES transactions(transaction_id)
+);
+
+-- Table des cartes de fidélité
+CREATE TABLE IF NOT EXISTS cartes_fidelite (
+    carte_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL UNIQUE,
+    numero_carte TEXT, -- numéro de carte (optionnel)
+    points_actuels INTEGER DEFAULT 0,
+    points_en_attente INTEGER DEFAULT 0,
+    niveau_fidelite TEXT DEFAULT 'standard', -- standard, silver, or, platine
+    date_creation TEXT DEFAULT CURRENT_TIMESTAMP,
+    date_expiration TEXT, -- date d'expiration de la carte (optionnel)
+    date_derniere_activite TEXT DEFAULT CURRENT_TIMESTAMP,
+    statut TEXT DEFAULT 'active', -- active, bloquee, expiree
+    FOREIGN KEY (client_id) REFERENCES clients(client_id)
+);
+
+-- Table de l'historique des points
+CREATE TABLE IF NOT EXISTS historique_points (
+    historique_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    date_operation TEXT DEFAULT CURRENT_TIMESTAMP,
+    type_operation TEXT NOT NULL, -- ajout, utilisation, expiration, ajustement
+    points INTEGER NOT NULL,
+    transaction_id INTEGER, -- ID de la transaction associée (optionnel)
+    commentaire TEXT,
+    FOREIGN KEY (client_id) REFERENCES clients(client_id),
+    FOREIGN KEY (transaction_id) REFERENCES transactions(transaction_id)
+);
+
+-- Table des utilisations de récompenses
+CREATE TABLE IF NOT EXISTS utilisations_recompenses (
+    utilisation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    recompense_id INTEGER NOT NULL,
+    date_utilisation TEXT DEFAULT CURRENT_TIMESTAMP,
+    transaction_id INTEGER, -- ID de la transaction associée (optionnel)
+    points_utilises INTEGER NOT NULL,
+    statut TEXT DEFAULT 'en_attente', -- en_attente, validee, refusee, annulee
+    commentaire TEXT,
+    FOREIGN KEY (client_id) REFERENCES clients(client_id),
+    FOREIGN KEY (recompense_id) REFERENCES recompenses(recompense_id),
+    FOREIGN KEY (transaction_id) REFERENCES transactions(transaction_id)
+);
+
+-- Table d'historique des évaluations de règles
+CREATE TABLE IF NOT EXISTS historique_evaluations_regles (
+    evaluation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    regle_id INTEGER NOT NULL,
+    date_evaluation TEXT DEFAULT CURRENT_TIMESTAMP,
+    nombre_clients_evalues INTEGER DEFAULT 0,
+    nombre_offres_generees INTEGER DEFAULT 0,
+    commentaire TEXT,
+    FOREIGN KEY (regle_id) REFERENCES regles_fidelite(regle_id)
+);
+
+-- Table des événements client
+CREATE TABLE IF NOT EXISTS evenements_client (
+    evenement_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    type_evenement TEXT NOT NULL, -- changement_niveau, anniversaire, premier_achat, etc.
+    date_evenement TEXT DEFAULT CURRENT_TIMESTAMP,
+    details TEXT, -- JSON avec détails additionnels
+    FOREIGN KEY (client_id) REFERENCES clients(client_id)
+);
+
+-- Index pour optimiser les performances
+CREATE INDEX IF NOT EXISTS idx_offres_client_statut ON offres_client(statut);
+CREATE INDEX IF NOT EXISTS idx_offres_client_date_expiration ON offres_client(date_expiration);
+CREATE INDEX IF NOT EXISTS idx_historique_points_client_id ON historique_points(client_id);
+CREATE INDEX IF NOT EXISTS idx_historique_points_date ON historique_points(date_operation);
+CREATE INDEX IF NOT EXISTS idx_cartes_fidelite_niveau ON cartes_fidelite(niveau_fidelite);
+CREATE INDEX IF NOT EXISTS idx_regles_fidelite_active ON regles_fidelite(est_active);
+CREATE INDEX IF NOT EXISTS idx_evenements_client_type ON evenements_client(type_evenement);
+
+-- Maintenant que nous connaissons la structure existante de la table niveaux_fidelite,
+-- nous pouvons insérer des données de manière compatible
+
+-- Insertions pour les niveaux de fidélité standards (avec la structure existante)
+INSERT OR IGNORE INTO niveaux_fidelite (
+    niveau_id, nom, points_minimum, points_maximum, 
+    multiplicateur_points, avantages, duree_validite, seuil_maintien
+) VALUES 
+    (1, 'Standard', 0, 499, 1.0, '{&quot;reductions&quot;: [], &quot;services&quot;: []}', 365, 0),
+    (2, 'Silver', 500, 1999, 1.2, '{&quot;reductions&quot;: [&quot;5% sur les accessoires&quot;], &quot;services&quot;: [&quot;Livraison gratuite&quot;]}', 365, 400),
+    (3, 'Or', 2000, 4999, 1.5, '{&quot;reductions&quot;: [&quot;10% sur les accessoires&quot;, &quot;5% sur les chaussures&quot;], &quot;services&quot;: [&quot;Livraison gratuite&quot;, &quot;Retours gratuits&quot;]}', 365, 1800),
+    (4, 'Platine', 5000, 999999, 2.0, '{&quot;reductions&quot;: [&quot;15% sur les accessoires&quot;, &quot;10% sur les chaussures&quot;, &quot;5% sur tout le reste&quot;], &quot;services&quot;: [&quot;Livraison express gratuite&quot;, &quot;Retours gratuits&quot;, &quot;Service client prioritaire&quot;]}', 365, 4500);
+
+-- Commentons également cette section sur les récompenses car la structure de la table existante est différente
+/*
+-- Insertions pour les récompenses standards (à exécuter une fois)
+INSERT OR IGNORE INTO recompenses (nom, description, type_recompense, valeur, points_necessaires, statut)
+VALUES 
+    ('Bon d''achat 5€', 'Bon d''achat de 5€ valable sur tout le site', 'bon_achat', 5.0, 500, 'active'),
+    ('Bon d''achat 10€', 'Bon d''achat de 10€ valable sur tout le site', 'bon_achat', 10.0, 900, 'active'),
+    ('Bon d''achat 20€', 'Bon d''achat de 20€ valable sur tout le site', 'bon_achat', 20.0, 1800, 'active'),
+    ('Réduction 15%', 'Réduction de 15% sur votre prochain achat', 'reduction', 15.0, 1000, 'active'),
+    ('Livraison gratuite', 'Livraison gratuite sur votre prochain achat', 'service', NULL, 300, 'active'),
+    ('Produit surprise', 'Recevez un produit surprise avec votre prochain achat', 'produit', NULL, 1500, 'active');
+*/
+
+-- Nous ne savons pas la structure exacte de la table recompenses
+-- Il faudrait l'examiner avec PRAGMA table_info(recompenses)
+
+-- Trigger pour mettre à jour la date de modification sur les règles de fidélité
+CREATE TRIGGER IF NOT EXISTS update_regle_modification_date
+AFTER UPDATE ON regles_fidelite
+BEGIN
+    UPDATE regles_fidelite 
+    SET modification_date = CURRENT_TIMESTAMP
+    WHERE regle_id = NEW.regle_id;
+END;
+
+-- Trigger pour mettre à jour la date de modification sur les récompenses
+CREATE TRIGGER IF NOT EXISTS update_recompense_modification_date
+AFTER UPDATE ON recompenses
+BEGIN
+    UPDATE recompenses 
+    SET modification_date = CURRENT_TIMESTAMP
+    WHERE recompense_id = NEW.recompense_id;
+END;
+
+-- Vue pour les statistiques des offres par client
+CREATE VIEW IF NOT EXISTS vw_stats_offres_client AS
+SELECT 
+    c.client_id,
+    c.prenom || ' ' || c.nom AS nom_complet,
+    COUNT(o.offre_id) AS total_offres,
+    SUM(CASE WHEN o.statut = 'utilisee' THEN 1 ELSE 0 END) AS offres_utilisees,
+    SUM(CASE WHEN o.statut = 'expiree' THEN 1 ELSE 0 END) AS offres_expirees,
+    CAST(SUM(CASE WHEN o.statut = 'utilisee' THEN 1 ELSE 0 END) AS FLOAT) / 
+        CASE WHEN COUNT(o.offre_id) &gt; 0 THEN COUNT(o.offre_id) ELSE 1 END * 100 AS taux_utilisation
+FROM clients c
+LEFT JOIN offres_client o ON c.client_id = o.client_id
+GROUP BY c.client_id;
+
+-- Vue pour les statistiques de performance des règles
+CREATE VIEW IF NOT EXISTS vw_performance_regles AS
+SELECT 
+    r.regle_id,
+    r.nom,
+    r.type_regle,
+    COUNT(o.offre_id) AS total_offres,
+    SUM(CASE WHEN o.statut = 'utilisee' THEN 1 ELSE 0 END) AS offres_utilisees,
+    SUM(CASE WHEN o.statut = 'expiree' THEN 1 ELSE 0 END) AS offres_expirees,
+    CAST(SUM(CASE WHEN o.statut = 'utilisee' THEN 1 ELSE 0 END) AS FLOAT) / 
+        CASE WHEN COUNT(o.offre_id) &gt; 0 THEN COUNT(o.offre_id) ELSE 1 END * 100 AS taux_utilisation
+FROM regles_fidelite r
+LEFT JOIN offres_client o ON r.regle_id = o.regle_id
+GROUP BY r.regle_id;</sql><current_tab id="0"/></tab_sql></sqlb_project>

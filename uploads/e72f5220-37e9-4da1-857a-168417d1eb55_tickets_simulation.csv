@@ -1,0 +1,21 @@
+date_achat,heure_achat,magasin,ville,montant_total,moyen_paiement,categorie_principale,nombre_articles,saison
+2025-01-15,14:30:00,Carrefour City,Paris,45.67,Carte bancaire,Alimentation,7,Hiver
+2025-01-16,09:15:00,Monoprix,Lyon,23.45,Espèces,Hygiène,3,Hiver
+2025-01-17,18:45:00,Leclerc,Marseille,78.90,Carte bancaire,Électroménager,2,Hiver
+2025-02-02,11:20:00,Auchan,Toulouse,56.78,Ticket restaurant,Vêtements,5,Hiver
+2025-02-05,16:10:00,Franprix,Nice,34.56,Sans contact,Alimentation,6,Hiver
+2025-02-10,13:40:00,Lidl,Strasbourg,22.34,Chèque,Boissons,4,Hiver
+2025-03-01,10:05:00,Intermarché,Bordeaux,67.89,Apple Pay,Bricolage,3,Printemps
+2025-03-07,15:25:00,Biocoop,Lille,89.01,Carte bancaire,Alimentation bio,8,Printemps
+2025-03-12,17:50:00,Naturalia,Nantes,45.23,PayPal,Produits frais,6,Printemps
+2025-03-15,08:40:00,Carrefour Market,Dijon,33.45,Espèces,Hygiène,4,Printemps
+2025-04-01,12:15:00,Auchan Drive,Rennes,66.78,Carte bancaire,Électronique,2,Printemps
+2025-04-05,19:30:00,Franprix,Bordeaux,55.67,Sans contact,Vêtements,5,Printemps
+2025-04-10,10:50:00,Leclerc,Toulouse,44.56,Ticket restaurant,Jardin,3,Printemps
+2025-05-02,16:40:00,Monoprix,Paris,77.89,Chèque,Décoration,4,Printemps
+2025-05-07,14:20:00,Biocoop,Lyon,88.90,Apple Pay,Alimentation bio,7,Printemps
+2025-05-12,11:30:00,Intermarché,Marseille,22.34,PayPal,Boissons,5,Printemps
+2025-06-01,09:45:00,Lidl,Nice,56.78,Carte bancaire,Alimentation,6,Été
+2025-06-05,18:15:00,Carrefour City,Strasbourg,67.89,Espèces,Pique-nique,8,Été
+2025-06-10,13:55:00,Naturalia,Bordeaux,34.56,Sans contact,Produits frais,4,Été
+2025-06-15,16:30:00,Auchan,Dijon,45.67,Ticket restaurant,Été,5,Été
