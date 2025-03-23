@@ -352,9 +352,14 @@
             .then(data => {
                 if (data.success) {
                     createOverviewChart(data);
+                } else {
+                    showNoDataMessage();
                 }
             })
-            .catch(error => console.error('Erreur de chargement des statistiques:', error));
+            .catch(error => {
+                console.error('Erreur de chargement des statistiques:', error);
+                showNoDataMessage();
+            });
 
         function createOverviewChart(data) {
             // Extraire les données pour le graphique
@@ -366,32 +371,40 @@
                     months.push(formatMonth(item.mois));
                     offerCounts.push(item.nb_offres);
                 });
-            }
-
-            // Créer le graphique
-            const ctx = document.getElementById('loyalty-chart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: months,
-                    datasets: [{
-                        label: 'Offres générées',
-                        data: offerCounts,
-                        backgroundColor: 'rgba(16, 185, 171, 0.6)',
-                        borderColor: 'rgba(16, 185, 171, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
+                
+                // Créer le graphique
+                const ctx = document.getElementById('loyalty-chart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Offres générées',
+                            data: offerCounts,
+                            backgroundColor: 'rgba(16, 185, 171, 0.6)',
+                            borderColor: 'rgba(16, 185, 171, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
                         }
                     }
-                }
-            });
+                });
+            } else {
+                showNoDataMessage();
+            }
+        }
+
+        function showNoDataMessage() {
+            // Afficher un message quand aucune donnée n'est disponible
+            const container = document.getElementById('loyalty-chart');
+            container.innerHTML = '<div class="text-center py-5 text-muted"><i class="bi bi-bar-chart-line" style="font-size: 3rem;"></i><p class="mt-3">Aucune donnée disponible pour le graphique. Générez des offres pour voir les statistiques.</p></div>';
         }
 
         function formatMonth(monthStr) {
