@@ -625,6 +625,184 @@
                         </div>
                     </div>
                 </div>
+                                <!-- Offres ciblées par cluster -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header card-header-primary">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-bullseye"></i> Offres ciblées par cluster
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            Créez des offres personnalisées pour chaque cluster identifié et envoyez-les directement aux clients concernés.
+                        </div>
+                        
+                        <form id="cluster-offers-form" method="post" action="{{ url_for('cluster_offers.create_cluster_offers') }}">
+                            <input type="hidden" name="clustering_id" value="{{ clustering_id }}">
+                            
+                            <div class="accordion" id="clustersAccordion">
+                                {% for cluster_id, size in clustering_result.cluster_sizes.items() %}
+                                {% if cluster_id != -1 %}  <!-- Ignorer le cluster de bruit pour DBSCAN -->
+                                <div class="accordion-item mb-3">
+                                    <h2 class="accordion-header" id="heading{{ cluster_id }}">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                                data-bs-target="#collapse{{ cluster_id }}" aria-expanded="false" 
+                                                aria-controls="collapse{{ cluster_id }}">
+                                            <span class="d-flex justify-content-between align-items-center w-100">
+                                                <strong>Cluster {{ cluster_id }}</strong>
+                                                <span class="badge bg-primary ms-2">{{ size }} clients</span>
+                                            </span>
+                                        </button>
+                                    </h2>
+                                    <div id="collapse{{ cluster_id }}" class="accordion-collapse collapse" 
+                                        aria-labelledby="heading{{ cluster_id }}" data-bs-parent="#clustersAccordion">
+                                        <div class="accordion-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6>Caractéristiques du cluster:</h6>
+                                                    <div class="card bg-light mb-3">
+                                                        <div class="card-body">
+                                                            <div class="cluster-stats small">
+                                                                {% if clustering_result.algorithm == 'dbscan' %}
+                                                                    {% for col, values in clustering_result.cluster_stats[cluster_id].items() %}
+                                                                    <div class="mb-1">
+                                                                        <strong>{{ col }}:</strong> Moyenne: {{ "%.2f"|format(values.mean) }}, 
+                                                                        Médiane: {{ "%.2f"|format(values.median) }}
+                                                                    </div>
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    {% for col, values in clustering_result.cluster_stats[cluster_id].items() %}
+                                                                    <div class="mb-1">
+                                                                        <strong>{{ col }}:</strong> Moyenne: {{ "%.2f"|format(values.mean) }}, 
+                                                                        Médiane: {{ "%.2f"|format(values.median) }}
+                                                                    </div>
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="offer-type-{{ cluster_id }}">Type d'offre:</label>
+                                                        <select class="form-select offer-type-select" id="offer-type-{{ cluster_id }}" 
+                                                                name="offer_type_{{ cluster_id }}">
+                                                            <option value="manual">Définir manuellement</option>
+                                                            <option value="generated">Générer automatiquement</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <div class="manual-offer-options" id="manual-options-{{ cluster_id }}">
+                                                        <div class="form-group mb-3">
+                                                            <label for="action-type-{{ cluster_id }}">Type d'action:</label>
+                                                            <select class="form-select action-type-select" id="action-type-{{ cluster_id }}" 
+                                                                    name="action_type_{{ cluster_id }}">
+                                                                <option value="offre_points">Offrir des points</option>
+                                                                <option value="reduction_pourcentage">Réduction en pourcentage</option>
+                                                                <option value="reduction_montant">Réduction en montant</option>
+                                                                <option value="offre_cadeau">Offrir un cadeau</option>
+                                                                <option value="notification">Notification simple</option>
+                                                            </select>
+                                                        </div>
+                                                        
+                                                        <div class="form-group mb-3 value-field">
+                                                            <label for="action-value-{{ cluster_id }}">Valeur:</label>
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control" id="action-value-{{ cluster_id }}" 
+                                                                    name="action_value_{{ cluster_id }}" placeholder="Entrez une valeur">
+                                                                <span class="input-group-text value-suffix" id="value-suffix-{{ cluster_id }}">points</span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="form-group mb-3 gift-field" style="display: none;">
+                                                            <label for="gift-id-{{ cluster_id }}">Cadeau:</label>
+                                                            <select class="form-select" id="gift-id-{{ cluster_id }}" name="gift_id_{{ cluster_id }}">
+                                                                <option value="">-- Sélectionnez un cadeau --</option>
+                                                                {% for reward in rewards %}
+                                                                <option value="{{ reward.recompense_id }}">{{ reward.nom }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="generated-offer-options" id="generated-options-{{ cluster_id }}" style="display: none;">
+                                                        <div class="form-group mb-3">
+                                                            <label for="generation-context-{{ cluster_id }}">Contexte pour la génération:</label>
+                                                            <textarea class="form-control" id="generation-context-{{ cluster_id }}" 
+                                                                    name="generation_context_{{ cluster_id }}" rows="3"
+                                                                    placeholder="Ex: Privilégier des réductions sur les produits premium..."></textarea>
+                                                        </div>
+                                                        <button type="button" class="btn btn-outline-primary btn-sm generate-suggestion-btn"
+                                                                data-cluster-id="{{ cluster_id }}">
+                                                            <i class="bi bi-magic"></i> Générer une suggestion
+                                                        </button>
+                                                        <div class="suggestion-result mt-2" id="suggestion-result-{{ cluster_id }}" style="display: none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group mb-3 mt-3">
+                                                <label for="offer-message-{{ cluster_id }}">Message personnalisé:</label>
+                                                <textarea class="form-control" id="offer-message-{{ cluster_id }}" 
+                                                        name="offer_message_{{ cluster_id }}" rows="2"
+                                                        placeholder="Message optionnel à inclure avec l'offre"></textarea>
+                                            </div>
+                                            
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="checkbox" id="enable-offer-{{ cluster_id }}" 
+                                                    name="enable_offer_{{ cluster_id }}" value="1" checked>
+                                                <label class="form-check-label" for="enable-offer-{{ cluster_id }}">
+                                                    Activer cette offre pour ce cluster
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="expiration-days">Délai d'expiration (jours):</label>
+                                <input type="number" class="form-control" id="expiration-days" name="expiration_days" 
+                                    value="30" min="1" max="365">
+                                <div class="form-text">Nombre de jours avant expiration des offres générées.</div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-send"></i> Créer et envoyer les offres
+                                </button>
+                                <button type="button" class="btn btn-outline-primary" id="preview-offers-btn">
+                                    <i class="bi bi-eye"></i> Prévisualiser les offres
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Modale de prévisualisation des offres -->
+                <div class="modal fade" id="previewOffersModal" tabindex="-1" aria-labelledby="previewOffersModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="previewOffersModalLabel">Prévisualisation des offres par cluster</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="offers-preview-content">
+                                    <!-- Contenu généré dynamiquement -->
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                <button type="button" class="btn btn-primary" id="confirm-offers-btn">Confirmer et envoyer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         {% endif %}
@@ -958,13 +1136,72 @@
             });
         }
         
+        
         // Bouton pour visualiser en 3D
         const visualize3DBtn = document.getElementById('btn-visualize-3d');
         if (visualize3DBtn) {
             visualize3DBtn.addEventListener('click', function() {
-                // Rediriger vers la page de visualisation 3D ou ouvrir une modale
-                alert('Fonctionnalité de visualisation 3D à implémenter');
+                // Ouvrir une modale pour la visualisation 3D
+                const modal3d = new bootstrap.Modal(document.getElementById('visualization3dModal'));
+                modal3d.show();
+                
+                // Initialiser la visualisation 3D
+                initialize3DVisualization();
             });
+        }
+
+        // Fonction pour initialiser la visualisation 3D
+        function initialize3DVisualization() {
+            // Récupérer les données PCA et les labels
+            const pcaData = {{ clustering_result.pca_result|tojson if clustering_result and clustering_result.success else '[]' }};
+            const labels = {{ clustering_result.labels|tojson if clustering_result and clustering_result.success else '[]' }};
+            
+            // Si nous n'avons pas assez de composantes PCA, ajouter des zéros pour la 3ème dimension
+            const data3D = pcaData.map(point => {
+                return point.length >= 3 ? point : [...point, 0];
+            });
+            
+            // Créer les traces pour chaque cluster
+            const uniqueLabels = [...new Set(labels)];
+            const traces = [];
+            
+            const colors = [
+                '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+                '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'
+            ];
+            
+            uniqueLabels.forEach((label, index) => {
+                const clusterPoints = data3D.filter((_, i) => labels[i] === label);
+                
+                traces.push({
+                    x: clusterPoints.map(p => p[0]),
+                    y: clusterPoints.map(p => p[1]),
+                    z: clusterPoints.map(p => p[2]),
+                    mode: 'markers',
+                    type: 'scatter3d',
+                    name: label === -1 ? 'Bruit (Cluster -1)' : `Cluster ${label}`,
+                    marker: {
+                        color: label === -1 ? 'rgb(169, 169, 169)' : colors[index % colors.length],
+                        size: 5,
+                        opacity: 0.7
+                    }
+                });
+            });
+            
+            // Créer le layout
+            const layout = {
+                title: '{{ clustering_result.algorithm|capitalize if clustering_result and clustering_result.success else "Clustering" }} - Visualisation 3D',
+                scene: {
+                    xaxis: { title: 'Composante 1' },
+                    yaxis: { title: 'Composante 2' },
+                    zaxis: { title: 'Composante 3' }
+                },
+                margin: { l: 0, r: 0, b: 0, t: 50 },
+                hovermode: 'closest'
+            };
+            
+            // Créer le graphique
+            Plotly.newPlot('visualization3d-plot', traces, layout);
         }
         
         // Fonctionnalité d'analyse IA des clusters
@@ -1073,4 +1310,23 @@
         }
     });
 </script>
+<script src="{{ url_for('static', filename='js/cluster_offers.js') }}"></script>
+
+<!-- Modale pour la visualisation 3D -->
+<div class="modal fade" id="visualization3dModal" tabindex="-1" aria-labelledby="visualization3dModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="visualization3dModalLabel">Visualisation 3D des clusters</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="visualization3d-plot" style="height: 600px;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
