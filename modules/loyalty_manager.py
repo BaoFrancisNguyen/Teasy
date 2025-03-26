@@ -666,6 +666,255 @@ class LoyaltyManager:
             'offers_generated': offers_generated
         }
     
+    def evaluate_rules_for_client(self, client_id):
+        """
+        Évalue les règles de fidélité pour un client spécifique
+        
+        Args:
+            client_id: ID du client à évaluer
+            
+        Returns:
+            dict: Résultat de l'évaluation
+        """
+        try:
+            conn = self._get_connection()
+            
+            # Récupérer les règles actives
+            rules = conn.execute('''
+                SELECT * FROM regles_fidelite 
+                WHERE est_active = 1
+                AND (date_debut IS NULL OR date_debut <= date('now'))
+                AND (date_fin IS NULL OR date_fin >= date('now'))
+                ORDER BY priorite DESC
+            ''').fetchall()
+            
+            offers_generated = 0
+            rules_applied = []
+            
+            # Pour chaque règle, vérifier si le client est éligible
+            for rule in rules:
+                rule_dict = dict(rule)
+                
+                # Appeler la méthode spécifique selon le type de règle
+                eligible = False
+                
+                if rule['type_regle'] == 'nombre_achats':
+                    eligible = self._check_purchase_count_eligibility(conn, client_id, rule_dict)
+                
+                elif rule['type_regle'] == 'montant_cumule':
+                    eligible = self._check_cumulative_amount_eligibility(conn, client_id, rule_dict)
+                
+                elif rule['type_regle'] == 'produit_specifique':
+                    eligible = self._check_specific_product_eligibility(conn, client_id, rule_dict)
+                
+                elif rule['type_regle'] == 'categorie_specifique':
+                    eligible = self._check_specific_category_eligibility(conn, client_id, rule_dict)
+                
+                elif rule['type_regle'] == 'premiere_visite':
+                    eligible = self._check_first_visit_eligibility(conn, client_id, rule_dict)
+                
+                elif rule['type_regle'] == 'anniversaire':
+                    eligible = self._check_birthday_eligibility(conn, client_id, rule_dict)
+                
+                elif rule['type_regle'] == 'inactivite':
+                    eligible = self._check_inactivity_eligibility(conn, client_id, rule_dict)
+                
+                # Si le client est éligible, créer l'offre
+                if eligible:
+                    # Vérifier que le client n'a pas déjà cette offre
+                    existing_offer = conn.execute('''
+                        SELECT offre_id FROM offres_client 
+                        WHERE client_id = ? AND regle_id = ?
+                    ''', (client_id, rule['regle_id'])).fetchone()
+                    
+                    if not existing_offer:
+                        # Créer l'offre
+                        expiration_date = (datetime.now() + timedelta(days=30)).strftime('%Y-%m-%d')
+                        
+                        conn.execute('''
+                            INSERT INTO offres_client (
+                                client_id, regle_id, recompense_id, date_generation, date_expiration, 
+                                statut, commentaire
+                            ) VALUES (?, ?, ?, date('now'), ?, 'generee', ?)
+                        ''', (
+                            client_id,
+                            rule['regle_id'],
+                            rule['recompense_id'],
+                            expiration_date,
+                            f"Offre générée après scan de ticket"
+                        ))
+                        
+                        # Récupérer le nom de la règle
+                        rule_name = rule['nom']
+                        
+                        # Ajouter aux statistiques
+                        offers_generated += 1
+                        rules_applied.append({
+                            'rule_id': rule['regle_id'],
+                            'rule_name': rule_name,
+                            'rule_type': rule['type_regle']
+                        })
+                        
+                        logger.info(f"Offre créée pour le client {client_id} selon la règle '{rule_name}'")
+            
+            # Générer des codes uniques pour les nouvelles offres
+            conn.execute('''
+                UPDATE offres_client
+                SET code_unique = 'OF-' || offre_id || '-' || substr(hex(randomblob(4)), 1, 8)
+                WHERE code_unique IS NULL OR code_unique = ''
+            ''')
+            
+            conn.commit()
+            conn.close()
+            
+            return {
+                'success': True,
+                'offers_generated': offers_generated,
+                'rules_applied': rules_applied
+            }
+            
+        except Exception as e:
+            logger.error(f"Erreur lors de l'évaluation des règles pour le client {client_id}: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e),
+                'offers_generated': 0,
+                'rules_applied': []
+            }
+        
+    def _check_purchase_count_eligibility(self, conn, client_id, rule):
+        """Vérifie si le client est éligible selon le nombre d'achats"""
+        period_condition = ""
+        if rule['periode_jours']:
+            period_condition = f"AND date_transaction >= date('now', '-{rule['periode_jours']} days')"
+        
+        query = f'''
+            SELECT COUNT(DISTINCT transaction_id) as nb_achats
+            FROM transactions
+            WHERE client_id = ?
+            {period_condition}
+        '''
+        
+        result = conn.execute(query, (client_id,)).fetchone()
+        return result and result['nb_achats'] >= rule['condition_valeur']
+
+    def _check_cumulative_amount_eligibility(self, conn, client_id, rule):
+        """Vérifie si le client est éligible selon le montant cumulé"""
+        period_condition = ""
+        if rule['periode_jours']:
+            period_condition = f"AND date_transaction >= date('now', '-{rule['periode_jours']} days')"
+        
+        query = f'''
+            SELECT SUM(montant_total) as montant_cumule
+            FROM transactions
+            WHERE client_id = ?
+            {period_condition}
+        '''
+        
+        result = conn.execute(query, (client_id,)).fetchone()
+        return result and result['montant_cumule'] and result['montant_cumule'] >= rule['condition_valeur']
+
+    def _check_specific_product_eligibility(self, conn, client_id, rule):
+        """Vérifie si le client est éligible selon l'achat d'un produit spécifique"""
+        period_condition = ""
+        if rule['periode_jours']:
+            period_condition = f"AND t.date_transaction >= date('now', '-{rule['periode_jours']} days')"
+        
+        query = f'''
+            SELECT COUNT(*) as count
+            FROM transactions t
+            JOIN details_transactions dt ON t.transaction_id = dt.transaction_id
+            WHERE t.client_id = ?
+            AND dt.produit_id = ?
+            {period_condition}
+        '''
+        
+        result = conn.execute(query, (client_id, rule['condition_valeur'])).fetchone()
+        return result and result['count'] > 0
+
+    def _check_specific_category_eligibility(self, conn, client_id, rule):
+        """Vérifie si le client est éligible selon l'achat dans une catégorie spécifique"""
+        period_condition = ""
+        if rule['periode_jours']:
+            period_condition = f"AND t.date_transaction >= date('now', '-{rule['periode_jours']} days')"
+        
+        query = f'''
+            SELECT COUNT(*) as count
+            FROM transactions t
+            JOIN details_transactions dt ON t.transaction_id = dt.transaction_id
+            JOIN produits p ON dt.produit_id = p.produit_id
+            WHERE t.client_id = ?
+            AND p.categorie_id = ?
+            {period_condition}
+        '''
+        
+        result = conn.execute(query, (client_id, rule['condition_valeur'])).fetchone()
+        return result and result['count'] > 0
+
+    def _check_first_visit_eligibility(self, conn, client_id, rule):
+        """Vérifie si le client est éligible selon sa première visite"""
+        query = '''
+            SELECT MIN(date_transaction) as premiere_visite
+            FROM transactions
+            WHERE client_id = ?
+        '''
+        
+        result = conn.execute(query, (client_id,)).fetchone()
+        if not result or not result['premiere_visite']:
+            return False
+        
+        # Calculer le nombre de jours depuis la première visite
+        first_visit_date = datetime.strptime(result['premiere_visite'], '%Y-%m-%d')
+        days_since_first_visit = (datetime.now() - first_visit_date).days
+        
+        return days_since_first_visit <= rule['condition_valeur']
+
+    def _check_birthday_eligibility(self, conn, client_id, rule):
+        """Vérifie si le client est éligible selon son anniversaire"""
+        # Récupérer la date de naissance
+        query = '''
+            SELECT date_naissance
+            FROM clients
+            WHERE client_id = ?
+        '''
+        
+        result = conn.execute(query, (client_id,)).fetchone()
+        if not result or not result['date_naissance']:
+            return False
+        
+        # Calculer les jours jusqu'au prochain anniversaire
+        birth_date = datetime.strptime(result['date_naissance'], '%Y-%m-%d')
+        today = datetime.now()
+        
+        # Prochain anniversaire cette année
+        next_birthday = datetime(today.year, birth_date.month, birth_date.day)
+        
+        # Si l'anniversaire est déjà passé cette année, prendre celui de l'année prochaine
+        if next_birthday < today:
+            next_birthday = datetime(today.year + 1, birth_date.month, birth_date.day)
+        
+        days_until_birthday = (next_birthday - today).days
+        
+        return days_until_birthday <= rule['condition_valeur']
+
+    def _check_inactivity_eligibility(self, conn, client_id, rule):
+        """Vérifie si le client est éligible selon son inactivité"""
+        query = '''
+            SELECT MAX(date_transaction) as derniere_transaction
+            FROM transactions
+            WHERE client_id = ?
+        '''
+        
+        result = conn.execute(query, (client_id,)).fetchone()
+        if not result or not result['derniere_transaction']:
+            return False
+        
+        # Calculer le nombre de jours depuis la dernière transaction
+        last_transaction_date = datetime.strptime(result['derniere_transaction'], '%Y-%m-%d')
+        days_since_last_transaction = (datetime.now() - last_transaction_date).days
+        
+        return days_since_last_transaction >= rule['condition_valeur']
+    
     def send_offers(self, offer_ids=None, channel='email'):
         """
         Envoie les offres générées aux clients.
