@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block title %}Programme de Fidélité - Profil Client #{{ client.client_id }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .client-card {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .stat-card {
+        transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #10b9ab;
+    }
+    .offer-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+    .offer-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .offer-card.generee { border-left-color: #0dcaf0; }
+    .offer-card.envoyee { border-left-color: #10b9ab; }
+    .offer-card.utilisee { border-left-color: #198754; }
+    .offer-card.expiree { border-left-color: #6c757d; }
+    .status-badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 30px;
+        font-size: 0.75rem;
+    }
+    .status-generee { background-color: #e2f3f5; color: #0c7b93; }
+    .status-envoyee { background-color: #b5ead7; color: #086972; }
+    .status-utilisee { background-color: #c7ceea; color: #284b63; }
+    .status-expiree { background-color: #f6eec7; color: #b68d40; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('loyalty_dashboard') }}">Programme de Fidélité</a></li>
+            <li class="breadcrumb-item active">Profil Client #{{ client.client_id }}</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="bi bi-person-badge"></i> Client #{{ client.client_id }}
+        </h1>
+        <a href="{{ url_for('loyalty_dashboard') }}" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left"></i> Retour au tableau de bord
+        </a>
+    </div>
+
+    <!-- Informations client (anonymisées) -->
+    <div class="card client-card mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Informations client</h4>
+                <table class="table table-borderless">
+                    <tr>
+                        <th>ID Client:</th>
+                        <td>{{ client.client_id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Segment:</th>
+                        <td>{{ client.segment or 'Standard' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Niveau de fidélité:</th>
+                        <td>{{ client.niveau_fidelite or 'Standard' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Statut:</th>
+                        <td>
+                            {% if client.statut == 'actif' %}
+                                <span class="badge bg-success">Actif</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ client.statut }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h4>Statistiques</h4>
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <div class="card stat-card h-100">
+                            <div class="card-body text-center">
+                                <div class="stat-value">{{ client_info.statistiques.nb_transactions or 0 }}</div>
+                                <div class="text-muted">Transactions</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="card stat-card h-100">
+                            <div class="card-body text-center">
+                                <div class="stat-value">{{ client.points_actuels or 0 }}</div>
+                                <div class="text-muted">Points</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Offres du client -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">Offres</h4>
+        </div>
+        <div class="card-body">
+            {% if offres %}
+                <div class="row">
+                    {% for offre in offres %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card offer-card {{ offre.statut }}">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <span class="status-badge status-{{ offre.statut }}">
+                                        {% if offre.statut == 'generee' %}
+                                            Générée
+                                        {% elif offre.statut == 'envoyee' %}
+                                            Envoyée
+                                        {% elif offre.statut == 'utilisee' %}
+                                            Utilisée
+                                        {% elif offre.statut == 'expiree' %}
+                                            Expirée
+                                        {% else %}
+                                            {{ offre.statut }}
+                                        {% endif %}
+                                    </span>
+                                    <small class="text-muted">{{ offre.date_generation.split(' ')[0] }}</small>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ offre.nom_regle }}</h5>
+                                    {% if offre.nom_recompense %}
+                                        <div class="mb-2">
+                                            <span class="badge bg-info">
+                                                <i class="bi bi-award me-1"></i> {{ offre.nom_recompense }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <div class="row g-2 mt-2">
+                                        <div class="col-6">
+                                            <div class="border-start ps-2">
+                                                <div class="small text-muted">Générée:</div>
+                                                <div>{{ offre.date_generation.split(' ')[0] }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="border-start ps-2">
+                                                <div class="small text-muted">Expire:</div>
+                                                <div>{{ offre.date_expiration }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    {% if offre.code_unique %}
+                                        <div class="mt-3 p-2 bg-light rounded">
+                                            <div class="text-muted small">Code:</div>
+                                            <div class="font-monospace">{{ offre.code_unique }}</div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    Aucune offre trouvée pour ce client.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Historique des points -->
+    <div class="card">
+        <div class="card-header">
+            <h4 class="mb-0">Historique des points</h4>
+        </div>
+        <div class="card-body">
+            {% if historique_points %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Points</th>
+                                <th>Commentaire</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for h in historique_points %}
+                                <tr>
+                                    <td>{{ h.date_transaction }}</td>
+                                    <td>
+                                        {% if h.type_operation == 'ajout' %}
+                                            <span class="badge bg-success">Ajout</span>
+                                        {% elif h.type_operation == 'utilisation' %}
+                                            <span class="badge bg-warning">Utilisation</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ h.type_operation }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ h.points }}</td>
+                                    <td>{{ h.commentaire }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    Aucun historique de points trouvé pour ce client.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
