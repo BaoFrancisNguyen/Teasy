@@ -11,6 +11,7 @@ import logging
 import subprocess
 import signal
 import time
+import sys
 from datetime import datetime
 import psutil
 
@@ -118,8 +119,25 @@ def generate_scheduler_code(config):
     """Génère le code de planification à partir de la configuration."""
     tasks = config['tasks']
     
-    code = """# -*- coding: utf-8 -*-
-import schedule
+    # Obtenir les chemins d'accès absolus pour les ajouter au code
+    current_dir = os.path.abspath(os.path.dirname(__file__))
+    project_dir = os.path.abspath(os.path.join(current_dir, '..'))
+    
+    code = f"""# -*- coding: utf-8 -*-
+import sys
+import os
+
+# Ajouter les chemins d'accès pour que les imports fonctionnent correctement
+sys.path.append(r'{current_dir}')
+sys.path.append(r'{project_dir}')
+
+try:
+    import schedule
+except ImportError:
+    import subprocess
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "schedule"])
+    import schedule
+
 import time
 from loyalty_manager import LoyaltyManager
 import logging
@@ -141,11 +159,11 @@ def evaluate_rules_task():
         result = loyalty_manager.evaluate_all_rules()
         if result['success']:
             stats = result['stats']
-            logger.info(f"Évaluation terminée: {stats['total_offers_generated']} offres générées pour {stats['total_clients_evaluated']} clients")
+            logger.info(f"Évaluation terminée: {{stats['total_offers_generated']}} offres générées pour {{stats['total_clients_evaluated']}} clients")
         else:
-            logger.error(f"Échec de l'évaluation des règles: {result.get('error', 'Erreur inconnue')}")
+            logger.error(f"Échec de l'évaluation des règles: {{result.get('error', 'Erreur inconnue')}}")
     except Exception as e:
-        logger.error(f"Exception lors de l'évaluation des règles: {str(e)}")
+        logger.error(f"Exception lors de l'évaluation des règles: {{str(e)}}")
 
 def check_expired_offers_task():
     # Tache pour verifier les offres expirees
@@ -153,11 +171,11 @@ def check_expired_offers_task():
     try:
         result = loyalty_manager.check_expired_offers()
         if result['success']:
-            logger.info(f"{result['offers_expired']} offres marquées comme expirées")
+            logger.info(f"{{result['offers_expired']}} offres marquées comme expirées")
         else:
-            logger.error(f"Échec de la vérification des offres expirées: {result.get('error', 'Erreur inconnue')}")
+            logger.error(f"Échec de la vérification des offres expirées: {{result.get('error', 'Erreur inconnue')}}")
     except Exception as e:
-        logger.error(f"Exception lors de la vérification des offres expirées: {str(e)}")
+        logger.error(f"Exception lors de la vérification des offres expirées: {{str(e)}}")
 
 def send_pending_offers_task():
     # Tache pour envoyer les offres en attente
@@ -165,11 +183,11 @@ def send_pending_offers_task():
     try:
         result = loyalty_manager.send_offers(channel='email')
         if result['success']:
-            logger.info(f"{result['offers_sent']} offres envoyées")
+            logger.info(f"{{result['offers_sent']}} offres envoyées")
         else:
-            logger.error(f"Échec de l'envoi des offres: {result.get('error', 'Erreur inconnue')}")
+            logger.error(f"Échec de l'envoi des offres: {{result.get('error', 'Erreur inconnue')}}")
     except Exception as e:
-        logger.error(f"Exception lors de l'envoi des offres: {str(e)}")
+        logger.error(f"Exception lors de l'envoi des offres: {{str(e)}}")
 
 def setup_schedules():
     # Configure les taches planifiees
@@ -183,11 +201,11 @@ def setup_schedules():
             
             schedule_code = ""
             if schedule_type == 'daily':
-                schedule_code = f"schedule.every().day.at(\"{time}\").do({function_name})"
+                schedule_code = f'schedule.every().day.at("{time}").do({function_name})'
             elif schedule_type == 'weekly':
-                schedule_code = f"schedule.every().monday.at(\"{time}\").do({function_name})"
+                schedule_code = f'schedule.every().monday.at("{time}").do({function_name})'
             elif schedule_type == 'monthly':
-                schedule_code = f"schedule.every(30).days.at(\"{time}\").do({function_name})"
+                schedule_code = f'schedule.every(30).days.at("{time}").do({function_name})'
                 
             code += f"    {schedule_code}\n"
     
@@ -238,15 +256,45 @@ def is_scheduler_running():
             if process.is_running() and 'python' in process.name().lower() and any('loyalty_scheduler' in cmd.lower() for cmd in process.cmdline()):
                 return True
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-            pass
-    
-    # Si on arrive ici, c'est que le processus n'est pas en cours d'exécution
-    # Mettre à jour le statut
-    config['status']['is_running'] = False
-    config['status']['pid'] = None
-    save_config(config)
+            # Le processus n'existe plus ou on n'a pas les droits
+            config['status']['is_running'] = False
+            config['status']['pid'] = None
+            save_config(config)
+            return False
     
     return False
+
+def restart_scheduler():
+    """Redémarre le planificateur."""
+    logger.info("Tentative de redémarrage du planificateur")
+    
+    # Arrêter le planificateur s'il est en cours d'exécution
+    if is_scheduler_running():
+        stop_result = stop_scheduler()
+        if not stop_result['success']:
+            logger.error(f"Échec de l'arrêt du planificateur lors du redémarrage: {stop_result['message']}")
+            return {
+                'success': False,
+                'message': f"Échec du redémarrage: impossible d'arrêter le planificateur - {stop_result['message']}"
+            }
+    
+    # Attendre un peu pour s'assurer que le processus est bien arrêté
+    time.sleep(2)
+    
+    # Démarrer le planificateur
+    start_result = start_scheduler()
+    if start_result['success']:
+        logger.info("Planificateur redémarré avec succès")
+        return {
+            'success': True,
+            'message': "Planificateur redémarré avec succès"
+        }
+    else:
+        logger.error(f"Échec du démarrage du planificateur lors du redémarrage: {start_result['message']}")
+        return {
+            'success': False,
+            'message': f"Échec du redémarrage: impossible de démarrer le planificateur - {start_result['message']}"
+        }
 
 def start_scheduler():
     """Démarre le planificateur."""
@@ -264,16 +312,19 @@ def start_scheduler():
         # Générer le code du planificateur à partir de la configuration
         scheduler_code = generate_scheduler_code(config)
         
-        # Sauvegarder le code dans un fichier temporaire
-        temp_scheduler_file = 'temp_loyalty_scheduler.py'
+        # Créer un dossier 'temp' s'il n'existe pas
+        os.makedirs('temp', exist_ok=True)
+        
+        # Sauvegarder le code dans un fichier temporaire dans le dossier 'temp'
+        temp_scheduler_file = os.path.join('temp', 'temp_loyalty_scheduler.py')
         with open(temp_scheduler_file, 'w', encoding='utf-8') as f:
             f.write(scheduler_code)
         
         # Démarrer le processus
-        process = subprocess.Popen(['python', temp_scheduler_file], 
-                                   stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE,
-                                   start_new_session=True)
+        process = subprocess.Popen([sys.executable, temp_scheduler_file], 
+                                  stdout=subprocess.PIPE,
+                                  stderr=subprocess.PIPE,
+                                  start_new_session=True)
         
         # Attendre un peu pour s'assurer que le processus démarre correctement
         time.sleep(2)
@@ -306,8 +357,6 @@ def start_scheduler():
             'success': False,
             'message': f"Erreur lors du démarrage du planificateur: {str(e)}"
         }
-
-
 
 def stop_scheduler():
     """Arrête le planificateur."""
@@ -346,175 +395,241 @@ def stop_scheduler():
             'message': "Planificateur arrêté avec succès"
         }
     
-    except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-        # Le processus n'existe plus ou on n'a pas les droits
+    except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess) as e:
+        # Mettre à jour le statut quand même car le processus n'existe plus ou est inaccessible
         config['status']['is_running'] = False
         config['status']['pid'] = None
         save_config(config)
         
-        logger.info("Le processus du planificateur n'existe plus")
+        logger.warning(f"Exception lors de l'arrêt du planificateur, mais considéré comme arrêté: {str(e)}")
         return {
             'success': True,
-            'message': "Le processus du planificateur n'existe plus"
+            'message': f"Planificateur considéré comme arrêté: {str(e)}"
         }
-    
     except Exception as e:
         logger.error(f"Erreur lors de l'arrêt du planificateur: {str(e)}")
         return {
             'success': False,
             'message': f"Erreur lors de l'arrêt du planificateur: {str(e)}"
         }
-
-def restart_scheduler():
-    """Redémarre le planificateur."""
-    stop_result = stop_scheduler()
-    
-    # Attendre un peu pour s'assurer que le processus est bien arrêté
-    time.sleep(2)
-    
-    start_result = start_scheduler()
-    
-    if start_result['success']:
-        logger.info("Planificateur redémarré avec succès")
-        return {
-            'success': True,
-            'message': "Planificateur redémarré avec succès"
-        }
-    else:
-        logger.error(f"Échec du redémarrage du planificateur: {start_result['message']}")
-        return {
-            'success': False,
-            'message': f"Échec du redémarrage du planificateur: {start_result['message']}"
-        }
-
+        
 def run_specific_task(task_id):
-    """Exécute une tâche spécifique immédiatement."""
+    """Exécute manuellement une tâche spécifique."""
+    logger.info(f"Exécution manuelle de la tâche {task_id}")
+    
     config = load_config()
     
-    # Trouver la tâche dans la configuration
-    task = next((t for t in config['tasks'] if t['id'] == task_id), None)
+    # Chercher la tâche dans la configuration
+    task = None
+    for t in config['tasks']:
+        if t['id'] == task_id:
+            task = t
+            break
     
     if not task:
-        logger.error(f"Tâche non trouvée: {task_id}")
+        logger.error(f"Tâche inconnue: {task_id}")
         return {
             'success': False,
-            'message': f"Tâche non trouvée: {task_id}"
+            'message': f"Tâche inconnue: {task_id}"
         }
     
+    # Vérifier si la tâche est activée
+    if not task['enabled']:
+        logger.warning(f"La tâche {task_id} est désactivée, mais sera exécutée manuellement")
+    
+    # Construire le code pour exécuter la tâche
+    exec_code = f"""
+import sys
+import os
+
+# Obtenir les chemins actuels
+current_dir = os.path.abspath(os.path.dirname(__file__))
+project_dir = os.path.abspath(os.path.join(current_dir, '..'))
+
+# Ajouter les chemins au sys.path
+sys.path.append(current_dir)
+sys.path.append(project_dir)
+
+from loyalty_manager import LoyaltyManager
+import logging
+from datetime import datetime
+
+# Configuration du logging
+logging.basicConfig(level=logging.INFO, 
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    filename='loyalty_task_manual.log')
+logger = logging.getLogger(__name__)
+
+# Initialiser le gestionnaire de fidélité
+loyalty_manager = LoyaltyManager()
+
+def evaluate_rules_task():
+    logger.info("Exécution manuelle de la tâche d'évaluation des règles")
     try:
-        from loyalty_manager import LoyaltyManager
-        loyalty_manager = LoyaltyManager()
-        
-        # Exécuter la fonction correspondante
-        if task['function'] == 'evaluate_rules_task':
-            logger.info("Exécution manuelle de l'évaluation des règles")
-            result = loyalty_manager.evaluate_all_rules()
-            if result['success']:
-                stats = result['stats']
-                message = f"Évaluation terminée: {stats['total_offers_generated']} offres générées pour {stats['total_clients_evaluated']} clients"
-                logger.info(message)
-                return {
-                    'success': True,
-                    'message': message
-                }
-            else:
-                error_msg = f"Échec de l'évaluation des règles: {result.get('error', 'Erreur inconnue')}"
-                logger.error(error_msg)
-                return {
-                    'success': False,
-                    'message': error_msg
-                }
-                
-        elif task['function'] == 'check_expired_offers_task':
-            logger.info("Exécution manuelle de la vérification des offres expirées")
-            result = loyalty_manager.check_expired_offers()
-            if result['success']:
-                message = f"{result['offers_expired']} offres marquées comme expirées"
-                logger.info(message)
-                return {
-                    'success': True,
-                    'message': message
-                }
-            else:
-                error_msg = f"Échec de la vérification des offres expirées: {result.get('error', 'Erreur inconnue')}"
-                logger.error(error_msg)
-                return {
-                    'success': False,
-                    'message': error_msg
-                }
-                
-        elif task['function'] == 'send_pending_offers_task':
-            logger.info("Exécution manuelle de l'envoi des offres en attente")
-            result = loyalty_manager.send_offers(channel='email')
-            if result['success']:
-                message = f"{result['offers_sent']} offres envoyées"
-                logger.info(message)
-                return {
-                    'success': True,
-                    'message': message
-                }
-            else:
-                error_msg = f"Échec de l'envoi des offres: {result.get('error', 'Erreur inconnue')}"
-                logger.error(error_msg)
-                return {
-                    'success': False,
-                    'message': error_msg
-                }
-        
+        result = loyalty_manager.evaluate_all_rules()
+        if result['success']:
+            stats = result['stats']
+            logger.info(f"Évaluation terminée: {{stats['total_offers_generated']}} offres générées pour {{stats['total_clients_evaluated']}} clients")
+            return {{
+                'success': True,
+                'stats': stats
+            }}
         else:
-            logger.error(f"Fonction inconnue: {task['function']}")
+            logger.error(f"Échec de l'évaluation des règles: {{result.get('error', 'Erreur inconnue')}}")
+            return {{
+                'success': False,
+                'error': result.get('error', 'Erreur inconnue')
+            }}
+    except Exception as e:
+        logger.error(f"Exception lors de l'évaluation des règles: {{str(e)}}")
+        return {{
+            'success': False,
+            'error': str(e)
+        }}
+
+def check_expired_offers_task():
+    logger.info("Exécution manuelle de la tâche de vérification des offres expirées")
+    try:
+        result = loyalty_manager.check_expired_offers()
+        if result['success']:
+            logger.info(f"{{result['offers_expired']}} offres marquées comme expirées")
+            return {{
+                'success': True,
+                'offers_expired': result['offers_expired']
+            }}
+        else:
+            logger.error(f"Échec de la vérification des offres expirées: {{result.get('error', 'Erreur inconnue')}}")
+            return {{
+                'success': False,
+                'error': result.get('error', 'Erreur inconnue')
+            }}
+    except Exception as e:
+        logger.error(f"Exception lors de la vérification des offres expirées: {{str(e)}}")
+        return {{
+            'success': False,
+            'error': str(e)
+        }}
+
+def send_pending_offers_task():
+    logger.info("Exécution manuelle de la tâche d'envoi des offres en attente")
+    try:
+        result = loyalty_manager.send_offers(channel='email')
+        if result['success']:
+            logger.info(f"{{result['offers_sent']}} offres envoyées")
+            return {{
+                'success': True,
+                'offers_sent': result['offers_sent']
+            }}
+        else:
+            logger.error(f"Échec de l'envoi des offres: {{result.get('error', 'Erreur inconnue')}}")
+            return {{
+                'success': False,
+                'error': result.get('error', 'Erreur inconnue')
+            }}
+    except Exception as e:
+        logger.error(f"Exception lors de l'envoi des offres: {{str(e)}}")
+        return {{
+            'success': False,
+            'error': str(e)
+        }}
+
+# Exécuter la tâche spécifiée
+result = {task['function']}()
+print(result)  # Pour récupérer le résultat
+    """
+    
+    # Créer un dossier 'temp' s'il n'existe pas
+    os.makedirs('temp', exist_ok=True)
+    
+    # Sauvegarder le code dans un fichier temporaire
+    temp_task_file = os.path.join('temp', f'temp_loyalty_task_{task_id}.py')
+    with open(temp_task_file, 'w', encoding='utf-8') as f:
+        f.write(exec_code)
+    
+    try:
+        # Exécuter le script
+        process = subprocess.Popen([sys.executable, temp_task_file], 
+                                  stdout=subprocess.PIPE,
+                                  stderr=subprocess.PIPE)
+        
+        # Récupérer la sortie
+        stdout, stderr = process.communicate(timeout=60)  # 60 secondes max
+        
+        if process.returncode != 0:
+            error_msg = stderr.decode() if stderr else "Erreur inconnue"
+            logger.error(f"Échec de l'exécution de la tâche {task_id}: {error_msg}")
             return {
                 'success': False,
-                'message': f"Fonction inconnue: {task['function']}"
+                'message': f"Échec de l'exécution: {error_msg}"
             }
-            
+        
+        # Analyser la sortie pour récupérer le résultat
+        output = stdout.decode()
+        logger.info(f"Résultat de l'exécution de la tâche {task_id}: {output}")
+        
+        return {
+            'success': True,
+            'message': f"Tâche {task_id} exécutée avec succès",
+            'output': output
+        }
+        
+    except subprocess.TimeoutExpired:
+        logger.error(f"Timeout lors de l'exécution de la tâche {task_id}")
+        return {
+            'success': False,
+            'message': "L'exécution de la tâche a dépassé le délai imparti (60s)"
+        }
     except Exception as e:
         logger.error(f"Erreur lors de l'exécution de la tâche {task_id}: {str(e)}")
         return {
             'success': False,
-            'message': f"Erreur lors de l'exécution de la tâche: {str(e)}"
+            'message': f"Erreur lors de l'exécution: {str(e)}"
         }
-
-def get_scheduler_logs(limit=20):
-    """Récupère les derniers logs du planificateur."""
+    finally:
+        # Nettoyage: supprimer le fichier temporaire
+        try:
+            if os.path.exists(temp_task_file):
+                os.remove(temp_task_file)
+        except Exception as e:
+            logger.warning(f"Erreur lors de la suppression du fichier temporaire: {str(e)}")
+            
+def get_scheduler_logs(limit=50):
+    """Récupère les dernières entrées du fichier de log du planificateur."""
     logs = []
     
-    try:
-        if os.path.exists(LOG_FILE):
-            with open(LOG_FILE, 'r', encoding='utf-8') as f:
+    if os.path.exists(LOG_FILE):
+        try:
+            with open(LOG_FILE, 'r') as f:
+                # Lire les dernières lignes du fichier
                 lines = f.readlines()
+                logs = lines[-limit:] if len(lines) > limit else lines
                 
-                # Prendre les dernières lignes
-                last_lines = lines[-limit:] if len(lines) > limit else lines
-                
-                for line in last_lines:
-                    # Analyser chaque ligne de log
-                    try:
-                        parts = line.strip().split(' - ', 3)
-                        if len(parts) >= 4:
-                            timestamp, module, level, message = parts
-                            logs.append({
-                                'timestamp': timestamp,
-                                'module': module,
-                                'level': level.lower(),
-                                'message': message
-                            })
-                    except:
-                        # Si le format est incorrect, ajouter la ligne brute
-                        logs.append({
-                            'timestamp': '',
-                            'module': '',
-                            'level': 'info',
-                            'message': line.strip()
+                # Formatter les logs
+                formatted_logs = []
+                for log in logs:
+                    # Extraire la date et le niveau de log si possible
+                    parts = log.split(' - ', 3)
+                    if len(parts) >= 3:
+                        timestamp = parts[0]
+                        level = parts[1]
+                        message = parts[2] if len(parts) == 3 else parts[3]
+                        
+                        formatted_logs.append({
+                            'timestamp': timestamp,
+                            'level': level,
+                            'message': message.strip()
                         })
-    except Exception as e:
-        logger.error(f"Erreur lors de la récupération des logs: {str(e)}")
-        logs.append({
-            'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            'module': 'controller',
-            'level': 'error',
-            'message': f"Erreur lors de la récupération des logs: {str(e)}"
-        })
+                    else:
+                        # Si le format ne correspond pas, ajouter la ligne brute
+                        formatted_logs.append({
+                            'timestamp': '',
+                            'level': 'INFO',
+                            'message': log.strip()
+                        })
+                
+                return formatted_logs
+        except Exception as e:
+            logger.error(f"Erreur lors de la lecture des logs: {str(e)}")
     
     return logs
 
@@ -523,13 +638,16 @@ def get_scheduler_status():
     config = load_config()
     status = config['status']
     
-    # Vérifier si le statut est cohérent avec l'état réel du processus
-    is_running = is_scheduler_running()
-    
-    if is_running != status['is_running']:
-        status['is_running'] = is_running
-        if not is_running:
+    # Mettre à jour le statut si nécessaire
+    current_running = is_scheduler_running()
+    if status['is_running'] != current_running:
+        status['is_running'] = current_running
+        if not current_running:
             status['pid'] = None
         save_config(config)
     
     return status
+
+# Initialiser la configuration au démarrage du module
+if not os.path.exists(CONFIG_FILE):
+    create_default_config()
