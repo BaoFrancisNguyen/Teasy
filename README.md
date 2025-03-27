@@ -162,4 +162,4 @@ Ce projet est distribué sous licence MIT. Voir le fichier `LICENSE` pour plus d
 
 ## Contact
 
-Pour toute question ou suggestion, veuillez contacter: contact@example.com
+Pour toute question ou suggestion, veuillez contacter: bao.francis.nguyen@gmail.com
