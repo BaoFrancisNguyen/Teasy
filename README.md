@@ -77,8 +77,8 @@ L'extension `AIEnhancedClusteringProcessor` ajoute des capacités d'analyse IA:
 
 1. Cloner le dépôt:
 ```bash
-git clone https://github.com/username/data-clustering-project.git
-cd data-clustering-project
+git clone https://github.com/BaoFrancisNguyen/Teasy.git
+
 ```
 
 2. Créer et activer un environnement virtuel:
@@ -102,7 +102,8 @@ python init_database.py
 ```bash
 python app.py
 ```
-
+6. Ouvrez un navigateur et aller sur http://localhost:5000/
+   
 ## Utilisation
 
 1. **Charger des données**:
