@@ -5,6 +5,7 @@ import os
 import json
 import tempfile
 import uuid
+import traceback  # Ajouté pour la gestion des erreurs
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 import sqlite3
@@ -13,29 +14,9 @@ from functools import wraps
 from weasyprint import HTML, CSS
 from weasyprint.text.fonts import FontConfiguration
 from jinja2 import Environment, FileSystemLoader
-from flask import render_template, request, redirect, url_for, flash, jsonify
-from modules.loyalty_scheduler_controller import (
-    load_config, save_config, update_task_config, start_scheduler, 
-    stop_scheduler, restart_scheduler, run_specific_task, 
-    get_scheduler_logs, get_scheduler_status, is_scheduler_running
-)
-
-# Importer nos modules personnalisés
-from modules.db_connection import DatabaseManager
-from modules.data_processor_module import DataProcessor
-from modules.clustering_module import ClusteringProcessor
-from modules.visualization_module import create_visualization, generate_report
-from modules.history_manager_module import AnalysisHistory, PDFAnalysisHistory
-from modules.transformations_persistence import TransformationManager
-from modules.maps_module import create_sales_map, analyze_geographical_sales, generate_geographical_insights
-from modules.store_locations import update_store_locations, verify_store_locations
-from modules.loyalty_manager import LoyaltyManager, RewardManager
-
-
-
-import logging
 
 # Configuration du logging
+import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -49,6 +30,22 @@ app.config['ALLOWED_EXTENSIONS'] = {'csv', 'txt', 'xlsx', 'pdf', 'wav', 'mp3'}
 # S'assurer que le dossier d'upload existe
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+# Importer nos modules personnalisés
+from modules.db_connection import DatabaseManager
+from modules.data_processor_module import DataProcessor
+from modules.clustering_module import ClusteringProcessor
+from modules.visualization_module import create_visualization, generate_report
+from modules.history_manager_module import AnalysisHistory, PDFAnalysisHistory
+from modules.transformations_persistence import TransformationManager
+from modules.maps_module import create_sales_map, analyze_geographical_sales, generate_geographical_insights
+from modules.store_locations import update_store_locations, verify_store_locations
+from modules.loyalty_manager import LoyaltyManager, RewardManager
+from modules.loyalty_scheduler_controller import (
+    load_config, save_config, update_task_config, start_scheduler, 
+    stop_scheduler, restart_scheduler, run_specific_task, 
+    get_scheduler_logs, get_scheduler_status, is_scheduler_running
+)
+
 # Initialisation des gestionnaires
 db_manager = DatabaseManager('init_database/fidelity_db')
 data_processor = DataProcessor()
@@ -56,12 +53,23 @@ transformation_manager = TransformationManager('uploads')
 history_manager = AnalysisHistory('analysis_history')
 pdf_history_manager = PDFAnalysisHistory('analysis_history/pdf')
 
+try:
+    from modules.rag_routes import rag_bp, api_rag_bp
+    logger.info("Blueprint RAG importé avec succès")
+    
+    # Enregistrement du blueprint RAG
+    app.register_blueprint(rag_bp, url_prefix='/rag')
+    app.register_blueprint(api_rag_bp, url_prefix='/api/rag')
+    logger.info("Blueprint RAG enregistré avec succès")
+except ImportError as e:
+    logger.error(f"Erreur lors de l'import du blueprint RAG: {e}")
+    logger.error(traceback.format_exc())
+    rag_bp = None
+except Exception as e:
+    logger.error(f"Erreur lors de l'enregistrement du blueprint RAG: {e}")
+    logger.error(traceback.format_exc())
 
-# Fonction pour obtenir une connexion à la base de données
-def get_db_connection(db_path='fidelity_db.sqlite'):
-    conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row
-    return conn
+
 
 # Routes principales
 @app.route('/')
@@ -3925,9 +3933,9 @@ def get_db_connection(db_path='C:/Users/baofr/Desktop/Workspace/MILAN_ticket/mod
     return conn
 
 # Routes pour le programme de fidélité
-@app.route('/loyalty')
+@app.route('/loyalty/dashboard')
 def loyalty_dashboard():
-    """Page principale du programme de fidélité"""
+    """Page principale du programme de fidélité (avec données client anonymisées)"""
     try:
         conn = get_db_connection()
         
@@ -3956,15 +3964,13 @@ def loyalty_dashboard():
             WHERE date_generation >= date('now', '-30 days')
         ''').fetchone()
         
-        # Récupérer les offres récentes
+        # Récupérer les offres récentes (anonymisées)
         offres_recentes = conn.execute('''
             SELECT 
-                oc.offre_id, oc.date_generation, oc.statut,
-                c.prenom || ' ' || c.nom as client_nom,
+                oc.offre_id, oc.client_id, oc.date_generation, oc.statut,
                 r.nom as regle_nom,
                 rec.nom as recompense_nom
             FROM offres_client oc
-            JOIN clients c ON oc.client_id = c.client_id
             JOIN regles_fidelite r ON oc.regle_id = r.regle_id
             LEFT JOIN recompenses rec ON oc.recompense_id = rec.recompense_id
             ORDER BY oc.date_generation DESC
@@ -4228,7 +4234,7 @@ def delete_loyalty_rule(regle_id):
 
 @app.route('/loyalty/offers')
 def loyalty_offers():
-    """Liste des offres générées"""
+    """Liste des offres générées (avec données client anonymisées)"""
     try:
         # Récupérer les paramètres de filtrage
         status_filter = request.args.get('status', 'all')
@@ -4240,13 +4246,11 @@ def loyalty_offers():
         # Construire la requête avec les filtres
         query = '''
             SELECT 
-                oc.offre_id, oc.date_generation, oc.date_envoi, oc.date_expiration,
+                oc.offre_id, oc.client_id, oc.date_generation, oc.date_envoi, oc.date_expiration,
                 oc.statut, oc.code_unique,
-                c.client_id, c.prenom || ' ' || c.nom as client_nom,
                 r.regle_id, r.nom as regle_nom,
                 rec.recompense_id, rec.nom as recompense_nom
             FROM offres_client oc
-            JOIN clients c ON oc.client_id = c.client_id
             JOIN regles_fidelite r ON oc.regle_id = r.regle_id
             LEFT JOIN recompenses rec ON oc.recompense_id = rec.recompense_id
             WHERE oc.date_generation BETWEEN ? AND ?
@@ -4322,7 +4326,7 @@ def send_loyalty_offers():
 
 @app.route('/loyalty/run-rules', methods=['POST'])
 def run_loyalty_rules():
-    """Exécuter manuellement l'évaluation des règles de fidélité"""
+    """Version corrigée de l'exécution des règles de fidélité"""
     try:
         conn = get_db_connection()
         
@@ -4335,77 +4339,71 @@ def run_loyalty_rules():
             ORDER BY priorite DESC
         ''').fetchall()
         
-        # Vérifier si des règles existent
-        if not rules:
-            flash('Aucune règle active trouvée. Veuillez créer des règles actives.', 'warning')
-            conn.close()
-            return redirect(url_for('loyalty_dashboard'))
-        
-        # Log le nombre de règles trouvées
-        print(f"Nombre de règles actives trouvées: {len(rules)}")
-        
         total_offers_generated = 0
         
         # Pour chaque règle, exécuter la logique appropriée
         for rule in rules:
+            rule_dict = dict(rule)
             offers_for_rule = 0
-            print(f"Évaluation de la règle {rule['regle_id']}: {rule['nom']} (type: {rule['type_regle']})")
+            eligible_clients = []
             
-            # Exemple simplifié pour le type 'nombre_achats'
+            # Logique par type de règle
             if rule['type_regle'] == 'nombre_achats':
-                # Vérifier d'abord s'il y a des transactions dans la base de données
-                has_transactions = conn.execute('''
-                    SELECT COUNT(*) as count FROM transactions
-                ''').fetchone()
-                
-                print(f"Nombre total de transactions: {has_transactions['count']}")
-                
-                # Trouver les clients éligibles
-                period_condition = ''
+                # Construire les conditions de période et segment
+                period_condition = ""
                 if rule['periode_jours']:
-                    period_condition = f"AND date_transaction >= date('now', '-{rule['periode_jours']} days')"
+                    period_condition = f"AND t.date_transaction >= date('now', '-{rule['periode_jours']} days')"
                 
-                # Requête pour compter simplement le nombre d'achats par client
-                check_query = f'''
+                segment_condition = ""
+                if rule['segments_cibles'] and rule['segments_cibles'] != '[]':
+                    try:
+                        import json
+                        segments = json.loads(rule['segments_cibles'])
+                        if segments:
+                            segments_str = ','.join([f"'{s.strip()}'" for s in segments])
+                            segment_condition = f"AND c.segment IN ({segments_str})"
+                    except Exception as e:
+                        print(f"Erreur de traitement segments: {e}")
+                
+                # CORRECTION: Utiliser une approche différente pour trouver les clients éligibles
+                # 1. D'abord identifier les clients qui ont le nombre requis de transactions
+                clients_with_transactions = conn.execute(f'''
                     SELECT 
-                        client_id, 
-                        COUNT(DISTINCT transaction_id) as nb_achats
-                    FROM transactions t
-                    WHERE 1=1 {period_condition}
-                    GROUP BY client_id
-                    HAVING nb_achats >= ?
-                '''
-                
-                potential_clients = conn.execute(check_query, (rule['condition_valeur'],)).fetchall()
-                print(f"Clients potentiellement éligibles: {len(potential_clients)}")
-                
-                # Maintenant exécuter la requête complète
-                eligible_clients = conn.execute(f'''
-                    SELECT 
-                        c.client_id
+                        c.client_id,
+                        c.prenom || ' ' || c.nom as client_nom,
+                        COUNT(DISTINCT t.transaction_id) as nb_achats
                     FROM clients c
-                    JOIN (
-                        SELECT 
-                            client_id, 
-                            COUNT(DISTINCT transaction_id) as nb_achats
-                        FROM transactions t
-                        WHERE 1=1 {period_condition}
-                        GROUP BY client_id
-                        HAVING nb_achats >= ?
-                    ) achats ON c.client_id = achats.client_id
-                    LEFT JOIN offres_client oc ON c.client_id = oc.client_id AND oc.regle_id = ?
-                    WHERE oc.offre_id IS NULL
-                ''', (rule['condition_valeur'], rule['regle_id'])).fetchall()
+                    JOIN transactions t ON c.client_id = t.client_id
+                    WHERE c.statut = 'actif'
+                    {period_condition}
+                    {segment_condition}
+                    GROUP BY c.client_id
+                    HAVING nb_achats >= ?
+                ''', (rule['condition_valeur'],)).fetchall()
                 
-                print(f"Clients éligibles après filtrage des offres existantes: {len(eligible_clients)}")
+                print(f"Clients avec transactions suffisantes: {len(clients_with_transactions)}")
+                
+                # 2. Vérifier quels clients n'ont pas déjà reçu l'offre
+                for client in clients_with_transactions:
+                    # Vérifier si le client a déjà reçu cette offre
+                    existing_offer = conn.execute('''
+                        SELECT offre_id FROM offres_client 
+                        WHERE client_id = ? AND regle_id = ?
+                    ''', (client['client_id'], rule['regle_id'])).fetchone()
+                    
+                    if not existing_offer:
+                        eligible_clients.append(client)
+                
+                print(f"Clients éligibles (après vérification des offres): {len(eligible_clients)}")
                 
                 # Créer des offres pour chaque client éligible
                 for client in eligible_clients:
+                    # Insérer la nouvelle offre
                     conn.execute('''
                         INSERT INTO offres_client (
                             client_id, regle_id, recompense_id, date_generation, date_expiration, 
                             statut, commentaire
-                        ) VALUES (?, ?, ?, CURRENT_TIMESTAMP, date('now', '+30 days'), 'generee', ?)
+                        ) VALUES (?, ?, ?, date('now'), date('now', '+30 days'), 'generee', ?)
                     ''', (
                         client['client_id'],
                         rule['regle_id'],
@@ -4413,8 +4411,137 @@ def run_loyalty_rules():
                         f"Offre générée après {rule['condition_valeur']} achats"
                     ))
                     offers_for_rule += 1
+                    print(f"Offre créée pour client ID={client['client_id']}")
             
-            # Autres types de règles seraient implémentés ici
+            elif rule['type_regle'] == 'montant_cumule':
+                # Construire les conditions de période et segment
+                period_condition = ""
+                if rule['periode_jours']:
+                    period_condition = f"AND t.date_transaction >= date('now', '-{rule['periode_jours']} days')"
+                
+                segment_condition = ""
+                if rule['segments_cibles'] and rule['segments_cibles'] != '[]':
+                    try:
+                        import json
+                        segments = json.loads(rule['segments_cibles'])
+                        if segments:
+                            segments_str = ','.join([f"'{s.strip()}'" for s in segments])
+                            segment_condition = f"AND c.segment IN ({segments_str})"
+                    except Exception as e:
+                        print(f"Erreur de traitement segments: {e}")
+                
+                # CORRECTION: Approche similaire pour montant_cumule
+                clients_with_amount = conn.execute(f'''
+                    SELECT 
+                        c.client_id,
+                        c.prenom || ' ' || c.nom as client_nom,
+                        SUM(t.montant_total) as montant_cumule
+                    FROM clients c
+                    JOIN transactions t ON c.client_id = t.client_id
+                    WHERE c.statut = 'actif'
+                    {period_condition}
+                    {segment_condition}
+                    GROUP BY c.client_id
+                    HAVING montant_cumule >= ?
+                ''', (rule['condition_valeur'],)).fetchall()
+                
+                print(f"Clients avec montant suffisant: {len(clients_with_amount)}")
+                
+                # Vérifier quels clients n'ont pas déjà reçu l'offre
+                for client in clients_with_amount:
+                    existing_offer = conn.execute('''
+                        SELECT offre_id FROM offres_client 
+                        WHERE client_id = ? AND regle_id = ?
+                    ''', (client['client_id'], rule['regle_id'])).fetchone()
+                    
+                    if not existing_offer:
+                        eligible_clients.append(client)
+                
+                print(f"Clients éligibles (après vérification des offres): {len(eligible_clients)}")
+                
+                # Créer des offres pour chaque client éligible
+                for client in eligible_clients:
+                    conn.execute('''
+                        INSERT INTO offres_client (
+                            client_id, regle_id, recompense_id, date_generation, date_expiration, 
+                            statut, commentaire
+                        ) VALUES (?, ?, ?, date('now'), date('now', '+30 days'), 'generee', ?)
+                    ''', (
+                        client['client_id'],
+                        rule['regle_id'],
+                        rule['recompense_id'],
+                        f"Offre générée après {rule['condition_valeur']}€ d'achats cumulés"
+                    ))
+                    offers_for_rule += 1
+                    print(f"Offre créée pour client ID={client['client_id']}")
+            
+            # AJOUTÉ: Implémentation pour produit_specifique
+            elif rule['type_regle'] == 'produit_specifique':
+                period_condition = ""
+                if rule['periode_jours']:
+                    period_condition = f"AND t.date_transaction >= date('now', '-{rule['periode_jours']} days')"
+                
+                segment_condition = ""
+                if rule['segments_cibles'] and rule['segments_cibles'] != '[]':
+                    try:
+                        import json
+                        segments = json.loads(rule['segments_cibles'])
+                        if segments:
+                            segments_str = ','.join([f"'{s.strip()}'" for s in segments])
+                            segment_condition = f"AND c.segment IN ({segments_str})"
+                    except Exception as e:
+                        print(f"Erreur de traitement segments: {e}")
+                
+                # Trouver les clients qui ont acheté le produit spécifique
+                clients_with_product = conn.execute(f'''
+                    SELECT DISTINCT
+                        c.client_id,
+                        c.prenom || ' ' || c.nom as client_nom
+                    FROM clients c
+                    JOIN transactions t ON c.client_id = t.client_id
+                    JOIN details_transactions dt ON t.transaction_id = dt.transaction_id
+                    WHERE c.statut = 'actif'
+                    AND dt.produit_id = ?
+                    {period_condition}
+                    {segment_condition}
+                ''', (rule['condition_valeur'],)).fetchall()
+                
+                print(f"Clients ayant acheté le produit {rule['condition_valeur']}: {len(clients_with_product)}")
+                
+                # Vérifier quels clients n'ont pas déjà reçu l'offre
+                for client in clients_with_product:
+                    existing_offer = conn.execute('''
+                        SELECT offre_id FROM offres_client 
+                        WHERE client_id = ? AND regle_id = ?
+                    ''', (client['client_id'], rule['regle_id'])).fetchone()
+                    
+                    if not existing_offer:
+                        eligible_clients.append(client)
+                
+                print(f"Clients éligibles (après vérification des offres): {len(eligible_clients)}")
+                
+                # Créer des offres pour chaque client éligible
+                for client in eligible_clients:
+                    # Rechercher le nom du produit pour le commentaire
+                    produit_info = conn.execute('''
+                        SELECT nom FROM produits WHERE produit_id = ?
+                    ''', (rule['condition_valeur'],)).fetchone()
+                    
+                    produit_nom = produit_info['nom'] if produit_info else f"produit #{rule['condition_valeur']}"
+                    
+                    conn.execute('''
+                        INSERT INTO offres_client (
+                            client_id, regle_id, recompense_id, date_generation, date_expiration, 
+                            statut, commentaire
+                        ) VALUES (?, ?, ?, date('now'), date('now', '+30 days'), 'generee', ?)
+                    ''', (
+                        client['client_id'],
+                        rule['regle_id'],
+                        rule['recompense_id'],
+                        f"Offre générée pour l'achat de {produit_nom}"
+                    ))
+                    offers_for_rule += 1
+                    print(f"Offre créée pour client ID={client['client_id']}")
             
             # Enregistrer les statistiques d'évaluation
             conn.execute('''
@@ -4423,19 +4550,18 @@ def run_loyalty_rules():
                 ) VALUES (?, ?, ?, ?)
             ''', (
                 rule['regle_id'],
-                len(eligible_clients) if 'eligible_clients' in locals() else 0,
+                len(eligible_clients),
                 offers_for_rule,
                 f"Exécution manuelle le {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
             ))
             
             total_offers_generated += offers_for_rule
-            print(f"Offres générées pour cette règle: {offers_for_rule}")
         
         # Générer des codes uniques pour toutes les nouvelles offres
         conn.execute('''
             UPDATE offres_client
             SET code_unique = 'OF-' || offre_id || '-' || substr(hex(randomblob(4)), 1, 8)
-            WHERE code_unique IS NULL
+            WHERE code_unique IS NULL OR code_unique = ''
         ''')
         
         conn.commit()
@@ -4444,8 +4570,9 @@ def run_loyalty_rules():
         flash(f'Évaluation des règles terminée. {total_offers_generated} offres générées.', 'success')
         
     except Exception as e:
-        print(f"ERREUR: {str(e)}")
         flash(f'Erreur lors de l\'exécution des règles: {str(e)}', 'danger')
+        import traceback
+        print(traceback.format_exc())
     
     return redirect(url_for('loyalty_dashboard'))
 
@@ -4476,8 +4603,8 @@ def client_loyalty(client_id):
         offres = conn.execute('''
             SELECT 
                 oc.*,
-                r.nom as regle_nom,
-                rec.nom as recompense_nom
+                r.nom as nom_regle,
+                rec.nom as nom_recompense
             FROM offres_client oc
             JOIN regles_fidelite r ON oc.regle_id = r.regle_id
             LEFT JOIN recompenses rec ON oc.recompense_id = rec.recompense_id
@@ -4498,15 +4625,39 @@ def client_loyalty(client_id):
             LIMIT 20
         ''', (client_id,)).fetchall()
         
+        # Statistiques supplémentaires
+        stats = conn.execute('''
+            SELECT 
+                COUNT(t.transaction_id) as nb_transactions,
+                SUM(t.montant_total) as montant_total,
+                AVG(t.montant_total) as panier_moyen,
+                SUM(t.points_gagnes) as points_gagnes_total,
+                MAX(t.date_transaction) as derniere_transaction
+            FROM transactions t
+            WHERE t.client_id = ?
+        ''', (client_id,)).fetchone()
+        
         conn.close()
+        
+        # Créer l'objet client_info avec les statistiques
+        client_info = {
+            'statistiques': dict(stats) if stats else {
+                'nb_transactions': 0,
+                'montant_total': 0,
+                'panier_moyen': 0,
+                'points_gagnes_total': 0,
+                'derniere_transaction': None
+            }
+        }
         
         return render_template(
             'loyalty/client_loyalty.html',
-            client=client,
+            client=dict(client),
             offres=offres,
-            historique_points=historique_points
+            historique_points=historique_points,
+            client_info=client_info  # Assurez-vous de passer cette variable au template
         )
-    
+        
     except Exception as e:
         flash(f'Erreur lors du chargement des données de fidélité: {str(e)}', 'danger')
         return redirect(url_for('loyalty_dashboard'))
@@ -4578,6 +4729,208 @@ def api_loyalty_stats():
             'success': False,
             'error': str(e)
         })
+    
+@app.route('/loyalty/db-diagnosis')
+def loyalty_db_diagnosis():
+    """Page de diagnostic de la base de données du programme de fidélité"""
+    try:
+        # Connexion à la base de données
+        conn = get_db_connection()
+        
+        # Dictionnaire pour stocker les résultats du diagnostic
+        diagnosis = {
+            'tables': {},
+            'rules': [],
+            'transactions_sample': [],
+            'clients_sample': [],
+            'eligible_clients': [],
+            'errors': []
+        }
+        
+        # 1. Vérifier les tables principales et leur nombre d'enregistrements
+        for table_name in ['clients', 'transactions', 'regles_fidelite', 'offres_client', 
+                          'cartes_fidelite', 'details_transactions', 'historique_points']:
+            try:
+                result = conn.execute(f"SELECT COUNT(*) as count FROM {table_name}").fetchone()
+                count = result['count'] if result else 0
+                diagnosis['tables'][table_name] = count
+            except Exception as e:
+                diagnosis['errors'].append(f"Erreur lors du comptage de {table_name}: {str(e)}")
+        
+        # 2. Récupérer les règles actives avec leurs détails
+        try:
+            rules_query = '''
+                SELECT 
+                    r.regle_id, r.nom, r.type_regle, r.condition_valeur, r.periode_jours,
+                    r.est_active, r.date_debut, r.date_fin, r.priorite, r.segments_cibles,
+                    COUNT(o.offre_id) as offres_existantes
+                FROM regles_fidelite r
+                LEFT JOIN offres_client o ON r.regle_id = o.regle_id
+                GROUP BY r.regle_id
+                ORDER BY r.est_active DESC, r.priorite DESC
+            '''
+            rules = conn.execute(rules_query).fetchall()
+            diagnosis['rules'] = [dict(rule) for rule in rules]
+        except Exception as e:
+            diagnosis['errors'].append(f"Erreur lors de la récupération des règles: {str(e)}")
+        
+        # 3. Échantillon de transactions récentes
+        try:
+            transactions_query = '''
+                SELECT 
+                    t.transaction_id, t.client_id, t.date_transaction, t.montant_total,
+                    c.prenom || ' ' || c.nom as client_nom,
+                    c.statut as client_statut,
+                    c.segment as client_segment
+                FROM transactions t
+                JOIN clients c ON t.client_id = c.client_id
+                ORDER BY t.date_transaction DESC
+                LIMIT 10
+            '''
+            transactions = conn.execute(transactions_query).fetchall()
+            diagnosis['transactions_sample'] = [dict(tx) for tx in transactions]
+        except Exception as e:
+            diagnosis['errors'].append(f"Erreur lors de la récupération des transactions: {str(e)}")
+        
+        # 4. Échantillon de clients
+        try:
+            clients_query = '''
+                SELECT 
+                    c.client_id, c.prenom, c.nom, c.email, c.statut, c.segment,
+                    cf.points_actuels, cf.niveau_fidelite,
+                    COUNT(DISTINCT t.transaction_id) as nb_transactions,
+                    COUNT(DISTINCT o.offre_id) as nb_offres
+                FROM clients c
+                LEFT JOIN cartes_fidelite cf ON c.client_id = cf.client_id
+                LEFT JOIN transactions t ON c.client_id = t.client_id
+                LEFT JOIN offres_client o ON c.client_id = o.client_id
+                WHERE c.statut = 'actif'
+                GROUP BY c.client_id
+                ORDER BY nb_transactions DESC
+                LIMIT 10
+            '''
+            clients = conn.execute(clients_query).fetchall()
+            diagnosis['clients_sample'] = [dict(client) for client in clients]
+        except Exception as e:
+            diagnosis['errors'].append(f"Erreur lors de la récupération des clients: {str(e)}")
+        
+        # 5. Pour chaque règle active, trouver des clients potentiellement éligibles
+        try:
+            active_rules = [r for r in diagnosis['rules'] if r['est_active']]
+            
+            for rule in active_rules[:3]:  # Limitons à 3 règles pour ne pas surcharger
+                if rule['type_regle'] == 'nombre_achats':
+                    # Requête spécifique pour les règles par nombre d'achats
+                    period_condition = ""
+                    if rule['periode_jours']:
+                        period_condition = f"AND t.date_transaction >= date('now', '-{rule['periode_jours']} days')"
+                    
+                    eligible_query = f'''
+                        SELECT 
+                            c.client_id, c.prenom || ' ' || c.nom as client_nom, 
+                            c.segment, c.statut,
+                            COUNT(DISTINCT t.transaction_id) as nb_achats,
+                            (SELECT COUNT(*) FROM offres_client 
+                             WHERE client_id = c.client_id AND regle_id = ?) as offres_recues
+                        FROM clients c
+                        JOIN transactions t ON c.client_id = t.client_id
+                        WHERE c.statut = 'actif'
+                        {period_condition}
+                        GROUP BY c.client_id
+                        HAVING nb_achats >= ? AND offres_recues = 0
+                        LIMIT 5
+                    '''
+                    eligible_clients = conn.execute(eligible_query, 
+                                                  (rule['regle_id'], rule['condition_valeur'])).fetchall()
+                    
+                    diagnosis['eligible_clients'].append({
+                        'rule_id': rule['regle_id'],
+                        'rule_name': rule['nom'],
+                        'rule_type': rule['type_regle'],
+                        'condition': rule['condition_valeur'],
+                        'clients': [dict(c) for c in eligible_clients]
+                    })
+                
+                # Ajouter des requêtes similaires pour d'autres types de règles...
+        except Exception as e:
+            diagnosis['errors'].append(f"Erreur lors de la recherche des clients éligibles: {str(e)}")
+        
+        conn.close()
+        
+        # Conversion des données pour l'affichage
+        import json
+        diagnosis_json = json.dumps(diagnosis, indent=2, default=str)
+        
+        return render_template('loyalty/db_diagnosis.html', 
+                              diagnosis=diagnosis,
+                              diagnosis_json=diagnosis_json)
+        
+    except Exception as e:
+        import traceback
+        error_trace = traceback.format_exc()
+        return render_template('error.html', 
+                              message=f"Erreur lors du diagnostic: {str(e)}",
+                              details=error_trace)
+    
+@app.route('/loyalty/debug-insert', methods=['GET', 'POST'])
+def debug_insert_offer():
+    """Page pour déboguer l'insertion d'offres"""
+    try:
+        if request.method == 'POST':
+            # Tenter d'insérer une offre de test
+            conn = get_db_connection()
+            
+            # 1. Récupérer un client et une règle valides
+            client = conn.execute("SELECT client_id FROM clients WHERE statut = 'actif' LIMIT 1").fetchone()
+            rule = conn.execute("SELECT regle_id FROM regles_fidelite WHERE est_active = 1 LIMIT 1").fetchone()
+            
+            if not client or not rule:
+                return "Erreur: Impossible de trouver un client actif ou une règle active"
+            
+            # 2. Tenter d'insérer l'offre avec un try-except explicite
+            try:
+                cursor = conn.execute('''
+                    INSERT INTO offres_client (
+                        client_id, regle_id, date_generation, date_expiration, 
+                        statut, commentaire
+                    ) VALUES (?, ?, date('now'), date('now', '+30 days'), 'generee', ?)
+                ''', (
+                    client['client_id'],
+                    rule['regle_id'],
+                    "Offre de test pour débogage"
+                ))
+                
+                # Vérifier si l'insertion a fonctionné
+                if cursor.rowcount > 0:
+                    # Récupérer l'ID de l'offre insérée
+                    last_id = cursor.lastrowid
+                    
+                    # Valider la transaction
+                    conn.commit()
+                    
+                    return f"Insertion réussie! Offre ID: {last_id}"
+                else:
+                    return "Échec de l'insertion: aucune ligne affectée."
+                
+            except sqlite3.Error as e:
+                return f"Erreur SQLite lors de l'insertion: {e}"
+            
+        # Page de formulaire simple en GET
+        return '''
+        <html>
+            <body>
+                <h1>Déboguer l'insertion d'offres</h1>
+                <form method="post">
+                    <button type="submit">Tester l'insertion d'une offre</button>
+                </form>
+            </body>
+        </html>
+        '''
+    
+    except Exception as e:
+        import traceback
+        return f"Erreur: {str(e)}<br><pre>{traceback.format_exc()}</pre>"
+
 
 # ---------------------------------------------------SCHEDULER --------------------------------------------------
 
